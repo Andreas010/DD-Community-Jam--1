@@ -17,6 +17,11 @@ public class LevelGenerator : MonoBehaviour
     public Vector2Int size;
     [Header("Noise scale")]
     public Vector2Int noiseScale;
+    [Header("Round2Int")]
+    public bool round;
+    [Header("Draw Gizmos")]
+    public bool gizmos;
+    public bool extras;
 
     private bool[,] level;
 
@@ -32,23 +37,40 @@ public class LevelGenerator : MonoBehaviour
         {
             for (int y = 0; y < (int)(size.y * masterScale.y); y++)
             {
-                level[x, y] = Mathf.PerlinNoise((((float)x / size.x * noiseScale.x) + posX) + transform.position.x / size.x * noiseScale.x, (((float)y / size.y * noiseScale.y) + posY) + transform.position.y / size.y * noiseScale.y) > threshhold;
+                level[x, y] = Mathf.PerlinNoise((((float)x / size.x * noiseScale.x) + posX) + (round ? (int)transform.position.x : transform.position.x) / size.x * noiseScale.x, (((float)y / size.y * noiseScale.y) + posY) + (round ? (int)transform.position.y : transform.position.y) / size.y * noiseScale.y) > threshhold;
             }
         }
     }
 
     void OnDrawGizmos()
     {
-        if (level == null)
+        if (level == null || !gizmos)
             return;
+
+        Gizmos.color = Color.white;
 
         for (int x = 0; x < (int)(size.x * masterScale.x); x++)
         {
             for (int y = 0; y < (int)(size.y * masterScale.y); y++)
             {
                 if(level[x, y])
-                    Gizmos.DrawWireCube(new Vector3((int)(x + transform.position.x) - size.x * masterScale.x / 2, (int)(y + transform.position.y) - size.y * masterScale.y / 2), Vector3.one);
+                {
+                    if(round)
+                        Gizmos.DrawWireCube(new Vector3((int)(x + transform.position.x - size.x * masterScale.x / 2), (int)(y + transform.position.y - size.y * masterScale.y / 2)), Vector3.one);
+                    else
+                        Gizmos.DrawWireCube(new Vector3(x + transform.position.x - size.x * masterScale.x / 2, y + transform.position.y - size.y * masterScale.y / 2), Vector3.one);
+                }
             }
         }
+
+        if (!extras)
+            return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube((Vector2)transform.position, new Vector3(size.x * masterScale.x, size.y * masterScale.y, 1));
+        Gizmos.DrawWireSphere(new Vector3(transform.position.x, transform.position.y), 1);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube((Vector2)new Vector2Int((int)transform.position.x, (int)transform.position.y), new Vector3(size.x * masterScale.x, size.y * masterScale.y, 1));
+        Gizmos.DrawWireSphere(new Vector3((int)transform.position.x, (int)transform.position.y), 1);
     }
 }

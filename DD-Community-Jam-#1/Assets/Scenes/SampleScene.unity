@@ -238,6 +238,9 @@ MonoBehaviour:
   masterScale: {x: 1, y: 1}
   size: {x: 50, y: 50}
   noiseScale: {x: 10, y: 10}
+  round: 1
+  gizmos: 1
+  extras: 0
 --- !u!4 &767726095
 Transform:
   m_ObjectHideFlags: 0
