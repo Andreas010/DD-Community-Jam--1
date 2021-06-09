@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
+[RequireComponent(typeof(TileMapGenerator))]
 public class LevelGenerator : MonoBehaviour
 {
     public int seed;
@@ -22,12 +22,24 @@ public class LevelGenerator : MonoBehaviour
     [Header("Draw Gizmos")]
     public bool gizmos;
     public bool extras;
+    public bool update;
 
-    private bool[,] level;
+    private float[,] level;
+
+    void OnEnable()
+    {
+        Generate();
+    }
 
     void Update()
     {
-        level = new bool[(int)(size.x * masterScale.x), (int)(size.y * masterScale.y)];
+        if (update)
+            Generate();
+    }
+
+    public void Generate()
+    {
+        level = new float[(int)(size.x * masterScale.x), (int)(size.y * masterScale.y)];
         r = new System.Random(seed);
 
         float posX = r.Next(0, 1000000);
@@ -37,12 +49,16 @@ public class LevelGenerator : MonoBehaviour
         {
             for (int y = 0; y < (int)(size.y * masterScale.y); y++)
             {
-                level[x, y] = Mathf.PerlinNoise((((float)x / size.x * noiseScale.x) + posX) + (round ? (int)transform.position.x : transform.position.x) / size.x * noiseScale.x, (((float)y / size.y * noiseScale.y) + posY) + (round ? (int)transform.position.y : transform.position.y) / size.y * noiseScale.y) > threshhold;
+                float value = Mathf.PerlinNoise((((float)x / size.x * noiseScale.x) + posX) + (round ? (int)transform.position.x : transform.position.x) / size.x * noiseScale.x, (((float)y / size.y * noiseScale.y) + posY) + (round ? (int)transform.position.y : transform.position.y) / size.y * noiseScale.y);
+
+                level[x, y] = (value > threshhold ? value : 0f);
             }
         }
+
+        GetComponent<TileMapGenerator>().Generate(level, threshhold);
     }
 
-    void OnDrawGizmos()
+    void OnDrawGizmosSelected()
     {
         if (level == null || !gizmos)
             return;
@@ -53,12 +69,19 @@ public class LevelGenerator : MonoBehaviour
         {
             for (int y = 0; y < (int)(size.y * masterScale.y); y++)
             {
-                if(level[x, y])
+                if(level[x, y] != 0)
                 {
-                    if(round)
-                        Gizmos.DrawWireCube(new Vector3((int)(x + transform.position.x - size.x * masterScale.x / 2), (int)(y + transform.position.y - size.y * masterScale.y / 2)), Vector3.one);
+                    float posX = x + transform.position.x - size.x * masterScale.x / 2;
+                    float posY = y + transform.position.y - size.y * masterScale.y / 2;
+
+                    float value = level[x, y];
+
+                    Gizmos.color = new Color(value, value, value);
+
+                    if (round)
+                        Gizmos.DrawWireCube(new Vector3((int)posX, (int)posY), Vector3.one);
                     else
-                        Gizmos.DrawWireCube(new Vector3(x + transform.position.x - size.x * masterScale.x / 2, y + transform.position.y - size.y * masterScale.y / 2), Vector3.one);
+                        Gizmos.DrawWireCube(new Vector3(posX, posY), Vector3.one);
                 }
             }
         }
