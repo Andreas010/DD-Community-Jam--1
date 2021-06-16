@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     SpriteRenderer sr;
     [SerializeField] LayerMask groundLayer;
     [SerializeField] Animator weaponAnimator;
+    [SerializeField] Slider weaponCooldownSlider;
 
     [Header("Parameters")]
     [SerializeField] Vector2 speeds; //speeds.x = normal speed speeds.y = running speed
@@ -19,11 +21,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float fallMultiplier = 2.5f;
     [SerializeField] float downwardJumpForce = -3;
     [SerializeField] float minDistFromGround = 0.6f;
+    float atkCooldown;
 
     //bools
     bool sprinting;
     bool isJumping;
     bool facingRight;
+
+    //Current weapon params
+    float weaponCooldown = 1;
+    float weaponSpeed = 1;
+    float weaponDamage = .5f;
 
     void Start()
     {
@@ -118,13 +126,32 @@ public class PlayerMovement : MonoBehaviour
 
         //attack
         #region
-        if(Input.GetButtonDown("Fire1"))
+        if(Input.GetButtonDown("Fire1") && atkCooldown <= 0)
         {
+            //Set params
+            weaponCooldownSlider.maxValue = weaponCooldown;
+            atkCooldown = weaponCooldown;
+            weaponAnimator.speed = weaponSpeed;
+
+            //Animation
             if (y < 0) weaponAnimator.SetTrigger("Down");
             else if (y > 0) weaponAnimator.SetTrigger("Up");
             else if (x > 0 || facingRight) weaponAnimator.SetTrigger("Right");
             else if (x < 0 || !facingRight) weaponAnimator.SetTrigger("Left");
         }
+
+        if (atkCooldown > 0) atkCooldown -= Time.deltaTime;
+        else if (atkCooldown < 0) atkCooldown = 0;
+
+        weaponCooldownSlider.value = atkCooldown;
         #endregion
     }
+
+    public void UpgradeWeapon(float addDmg, float addCooldown, float addSpeed)
+    {
+        weaponDamage += addDmg;
+        weaponCooldown += addCooldown;
+        weaponSpeed += addSpeed;
+    }
+
 }
