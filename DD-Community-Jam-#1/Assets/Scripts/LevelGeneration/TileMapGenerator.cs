@@ -29,6 +29,12 @@ namespace DD_JAM.LevelGeneration
         private float[,] prevLevel;
         private float prevThreshhold;
 
+        public void ReGenerate(float[,] level)
+        {
+            Generate(level, prevThreshhold);
+            prevLevel = level;
+        }
+
         public void Refresh()
         {
             Generate(prevLevel, prevThreshhold);
@@ -90,6 +96,11 @@ namespace DD_JAM.LevelGeneration
 
             tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y)), tmpTile);
             prevLevel[x, y] = tile.r + tile.g + tile.b / 3f;
+        }
+
+        public float[,] GetLevel()
+        {
+            return prevLevel;
         }
 
         public Tile GetTile(int x, int y)
