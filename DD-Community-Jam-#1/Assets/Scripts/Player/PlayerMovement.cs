@@ -7,7 +7,9 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("References")]
     Rigidbody2D rig;
+    SpriteRenderer sr;
     [SerializeField] LayerMask groundLayer;
+    [SerializeField] Animator weaponAnimator;
 
     [Header("Parameters")]
     [SerializeField] Vector2 speeds; //speeds.x = normal speed speeds.y = running speed
@@ -20,11 +22,13 @@ public class PlayerMovement : MonoBehaviour
 
     //bools
     bool sprinting;
-    private bool isJumping;
+    bool isJumping;
+    bool facingRight;
 
     void Start()
     {
         rig = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -63,6 +67,9 @@ public class PlayerMovement : MonoBehaviour
         sprinting = Input.GetButton("Sprint");
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
+
+        if (x > 0) facingRight = true; else if (x < 0) facingRight = false;
+        sr.flipX = !facingRight;
 
         //horizontal Movement
         if (!sprinting) rig.velocity = new Vector2(x * speeds.x, rig.velocity.y); //speeds.x = normal speed
@@ -107,6 +114,17 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (rig.velocity.y > 0 && !(Input.GetButton("Jump")))
         { rig.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime; }
+        #endregion
+
+        //attack
+        #region
+        if(Input.GetButtonDown("Fire1"))
+        {
+            if (y < 0) weaponAnimator.SetTrigger("Down");
+            else if (y > 0) weaponAnimator.SetTrigger("Up");
+            else if (x > 0 || facingRight) weaponAnimator.SetTrigger("Right");
+            else if (x < 0 || !facingRight) weaponAnimator.SetTrigger("Left");
+        }
         #endregion
     }
 }
