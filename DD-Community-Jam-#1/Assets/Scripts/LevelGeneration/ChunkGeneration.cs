@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+//Potential Script name: I_hate_myself
 namespace DD_JAM.LevelGeneration
 {
     public class ChunkGeneration : MonoBehaviour
@@ -10,12 +11,15 @@ namespace DD_JAM.LevelGeneration
         public Transform objectToCheck;
         public GameObject chunk;
 
+        public Dictionary<Vector2Int, float[,]> savedChunks;
         public Dictionary<Vector2Int, GameObject> currentChunks;
 
-        private Vector2Int lastChunk = new Vector2Int(100, 0);
+        private Vector2Int lastChunk = new Vector2Int(int.MaxValue, int.MaxValue);
+        private bool firstFrame;
 
         void Start()
         {
+            savedChunks = new Dictionary<Vector2Int, float[,]>();
             currentChunks = new Dictionary<Vector2Int, GameObject>();
         }
 
@@ -33,7 +37,7 @@ namespace DD_JAM.LevelGeneration
                 new Vector2Int(0, 0),
             };
 
-            Vector2Int currentChunk = new Vector2Int((int)(objectToCheck.position.x / 25f), (int)(objectToCheck.position.y / 25f));
+            Vector2Int currentChunk = new Vector2Int((int)(objectToCheck.position.x / 50f), (int)(objectToCheck.position.y / 50f));
 
             if(currentChunk != lastChunk)
             {
@@ -41,36 +45,49 @@ namespace DD_JAM.LevelGeneration
 
                 for (int i = 0; i < chunkPositions.Length; i++)
                 {
+                    if (!firstFrame)
+                        continue;
+
+                    float[,] chunkData;
                     GameObject chunkToDelete;
-                    currentChunks.TryGetValue(chunkPositions[i] + currentChunk, out chunkToDelete);
+                    Vector2Int key = chunkPositions[i] + lastChunk;
+                    currentChunks.TryGetValue(key, out chunkToDelete);
+
                     if (chunkToDelete != null)
-                        chunkToDelete.SetActive(false);
+                    {
+                        chunkData = chunkToDelete.GetComponent<TileMapGenerator>().GetLevel();
+                        if (savedChunks.ContainsKey(key))
+                            savedChunks[key] = chunkData;
+                        else
+                            savedChunks.Add(key, chunkData);
+                        Destroy(chunkToDelete);
+                        currentChunks.Remove(key);
+                    }
                 }
 
-                //currentChunks.Clear();
-
+                //Generate new chunk
                 for (int i = 0; i < chunkPositions.Length; i++)
                 {
-                    GameObject tmpChunk;
-                    GameObject curChunk;
                     Vector3 pos = new Vector3((currentChunk.x + chunkPositions[i].x) * 50, (currentChunk.y + chunkPositions[i].y) * 50);
-                    if (currentChunks.TryGetValue(currentChunk + chunkPositions[i], out tmpChunk))
+                    Vector2Int key = chunkPositions[i] + currentChunk;
+                    GameObject newChunk = Instantiate(chunk, pos, Quaternion.identity);
+                    newChunk.transform.parent = transform;
+                    if (savedChunks.ContainsKey(key))
                     {
-                        curChunk = Instantiate(tmpChunk, pos, Quaternion.identity);
+                        newChunk.GetComponent<TileMapGenerator>().ReGenerate(savedChunks[key]);
                     } else
                     {
-                        curChunk = Instantiate(chunk, pos, Quaternion.identity);
-                        currentChunks.Add(currentChunk + chunkPositions[i], curChunk);
+                        newChunk.GetComponent<LevelGenerator>().Generate();
                     }
 
-                    curChunk.GetComponent<LevelGenerator>().enabled = true;
-                    curChunk.GetComponent<Grid>().enabled = true;
-                    curChunk.GetComponent<Tilemap>().enabled = true;
-                    curChunk.GetComponent<TilemapCollider2D>().enabled = true;
-                    curChunk.GetComponent<TilemapRenderer>().enabled = true;
+                    newChunk.name = "CHUNK: " + key.x + "/" + key.y;
 
-                    curChunk.GetComponent<TileMapGenerator>().Refresh();
-                    curChunk.transform.parent = transform;
+                    if (currentChunks.ContainsKey(key))
+                        currentChunks[key] = newChunk;
+                    else
+                        currentChunks.Add(key, newChunk);
+
+                    firstFrame = true;
                 }
             }
 
