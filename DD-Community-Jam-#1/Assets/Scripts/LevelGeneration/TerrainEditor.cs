@@ -19,10 +19,10 @@ public class TerrainEditor : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetMouseButton(1))
+        if(Input.GetMouseButton(0))
         {
             Work(new Color(0, 0, 1));
-        } else if (Input.GetMouseButton(0))
+        } else if (Input.GetMouseButton(1))
         {
             Work(tileToPlace);
         }
