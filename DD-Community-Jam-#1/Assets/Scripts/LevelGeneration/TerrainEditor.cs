@@ -20,13 +20,10 @@ public class TerrainEditor : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetMouseButton(1))
-        {
+		if (Input.GetMouseButton(0))
             Work(airTile);
-        } else if (Input.GetMouseButton(0))
-        {
+        else if (Input.GetMouseButton(1))
             Work(placeTile);
-        }
     }
 
     void Work(TerrainType tile)
