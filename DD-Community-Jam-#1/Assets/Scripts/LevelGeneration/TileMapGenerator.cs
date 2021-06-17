@@ -100,9 +100,9 @@ namespace DD_JAM.LevelGeneration
         {
             return curLevel;
         }
-        public Tile GetTile(int x, int y)
+        public TerrainType GetTile(int x, int y)
         {
-            return tilemap.GetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y))) as Tile;
+            return curLevel[x, y];
         }
         float QuickMaths(float val, float min)
         {

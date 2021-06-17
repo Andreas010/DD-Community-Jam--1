@@ -26,7 +26,7 @@ public class TerrainEditor : MonoBehaviour
             Work(placeTile);
     }
 
-    void Work(TerrainType tile)
+    public void Work(TerrainType tile)
     {
         Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
 
@@ -48,8 +48,10 @@ public class TerrainEditor : MonoBehaviour
                 {
                     float distance = Vector2.Distance(new Vector2(generators[i].transform.position.x - 25 + x + 0.5f, generators[i].transform.position.y - 25 + y + 0.5f), mousePosition);
 
-                    if (distance < range / 2)
-                        generators[i].SetTile(x, y, tile);
+                    if (distance < range / 2) {
+						GetComponent<Inventory>().AddItem(generators[i].GetTile(x, y));
+						generators[i].SetTile(x, y, tile);
+					}
                 }
             }
         }
