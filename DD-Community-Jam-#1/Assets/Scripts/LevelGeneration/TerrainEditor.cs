@@ -8,7 +8,8 @@ public class TerrainEditor : MonoBehaviour
 {
     public float range;
     private Camera cam;
-    public Color tileToPlace;
+    public TerrainType placeTile;
+    public TerrainType airTile;
 
     public LayerMask chunkLayer;
 
@@ -21,14 +22,14 @@ public class TerrainEditor : MonoBehaviour
     {
         if(Input.GetMouseButton(1))
         {
-            Work(new Color(0, 0, 1));
+            Work(airTile);
         } else if (Input.GetMouseButton(0))
         {
-            Work(tileToPlace);
+            Work(placeTile);
         }
     }
 
-    void Work(Color tile)
+    void Work(TerrainType tile)
     {
         Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
 

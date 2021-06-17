@@ -11,7 +11,7 @@ namespace DD_JAM.LevelGeneration
         public Transform objectToCheck;
         public GameObject chunk;
 
-        public Dictionary<Vector2Int, float[,]> savedChunks;
+        public Dictionary<Vector2Int, TerrainType[,]> savedChunks;
         public Dictionary<Vector2Int, GameObject> currentChunks;
 
         private Vector2Int lastChunk = new Vector2Int(int.MaxValue, int.MaxValue);
@@ -19,7 +19,7 @@ namespace DD_JAM.LevelGeneration
 
         void Start()
         {
-            savedChunks = new Dictionary<Vector2Int, float[,]>();
+            savedChunks = new Dictionary<Vector2Int, TerrainType[,]>();
             currentChunks = new Dictionary<Vector2Int, GameObject>();
         }
 
@@ -48,7 +48,7 @@ namespace DD_JAM.LevelGeneration
                     if (!firstFrame)
                         continue;
 
-                    float[,] chunkData;
+                    TerrainType[,] chunkData;
                     GameObject chunkToDelete;
                     Vector2Int key = chunkPositions[i] + lastChunk;
                     currentChunks.TryGetValue(key, out chunkToDelete);

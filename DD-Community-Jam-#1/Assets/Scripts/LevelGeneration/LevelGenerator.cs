@@ -57,7 +57,8 @@ namespace DD_JAM.LevelGeneration
                 }
             }
 
-            GetComponent<TileMapGenerator>().Generate(level, threshhold);
+            GetComponent<TileMapGenerator>().Build(level, threshhold);
+            GetComponent<TileMapGenerator>().Generate();
         }
 
         void OnDrawGizmosSelected()

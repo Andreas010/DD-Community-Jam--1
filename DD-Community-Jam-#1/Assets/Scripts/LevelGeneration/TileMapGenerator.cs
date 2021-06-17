@@ -10,15 +10,6 @@ namespace DD_JAM.LevelGeneration
     [RequireComponent(typeof(Grid))]
     public class TileMapGenerator : MonoBehaviour
     {
-        [System.Serializable]
-        public class TerrainType
-        {
-            [Header("The tile to be placed")]
-            public Tile tile;
-            [Header("The color value of the Tile")]
-            public Color value;
-        }
-
         [Header("What color takes which spot?")]
         public Gradient colorLevel;
         [Header("What does exist?")]
@@ -26,44 +17,38 @@ namespace DD_JAM.LevelGeneration
 
         private Tilemap tilemap;
         private Vector2Int levelSize;
-        private float[,] prevLevel;
-        private float prevThreshhold;
+        private TerrainType[,] curLevel;
+        private float curThreshhold;
 
-        public void ReGenerate(float[,] level)
+        public void ReGenerate(TerrainType[,] level)
         {
-            Generate(level, prevThreshhold);
-            prevLevel = level;
+            curLevel = level;
+            Generate();
         }
 
-        public void Refresh()
+        public void Build(float[,] level, float threshhold)
         {
-            Generate(prevLevel, prevThreshhold);
-        }
-
-        public void Generate(float[,] level, float threshhold)
-        {
-            prevLevel = level;
-            prevThreshhold = threshhold;
-
             if (types.Length == 0)
                 return;
 
             levelSize = new Vector2Int(level.GetLength(0), level.GetLength(1));
-            tilemap = GetComponent<Tilemap>();
+
+            curLevel = new TerrainType[levelSize.x, levelSize.y];
 
             for (int x = 0; x < levelSize.x; x++)
             {
                 for (int y = 0; y < levelSize.y; y++)
                 {
+                    if (types.Length == 1)
+                    {
+                        //tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, x - (levelSize.x / 2) + transform.position.y)), types[0].tile);
+                        curLevel[x, y] = types[0];
+                        continue;
+                    }
+
                     float value = level[x, y];
 
                     value = QuickMaths(value, threshhold);
-
-                    if (types.Length == 1)
-                    {
-                        tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, x - (levelSize.x / 2) + transform.position.y)), types[0].tile);
-                        continue;
-                    }
 
                     Color tmpColor = colorLevel.Evaluate(value);
                     int index = 0xDEAD;
@@ -76,38 +61,49 @@ namespace DD_JAM.LevelGeneration
 
                     if (index != 0xDEAD)
                     {
-                        tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y)), types[index].tile);
+                        //tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y)), types[index].tile);
+                        curLevel[x, y] = types[index];
                     }
                 }
             }
         }
 
-        public void SetTile(int x, int y, Color tile)
+        public void Generate()
+        {
+            tilemap = GetComponent<Tilemap>();
+
+            for (int x = 0; x < levelSize.x; x++)
+            {
+                for (int y = 0; y < levelSize.y; y++)
+                {
+                    tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y)), curLevel[x, y].tile);
+                }
+            }
+        }
+
+        public void SetTile(int x, int y, TerrainType tile)
         {
             Tile tmpTile = null;
 
             for (int i = 0; i < types.Length; i++)
             {
-                if (IsColor(types[i].value, tile))
+                if (IsColor(types[i].value, tile.value))
                 {
                     tmpTile = types[i].tile;
                 }
             }
 
             tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y)), tmpTile);
-            prevLevel[x, y] = tile.r + tile.g + tile.b / 3f;
+            curLevel[x, y] = tile;
         }
-
-        public float[,] GetLevel()
+        public TerrainType[,] GetLevel()
         {
-            return prevLevel;
+            return curLevel;
         }
-
         public Tile GetTile(int x, int y)
         {
             return tilemap.GetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y))) as Tile;
         }
-
         float QuickMaths(float val, float min)
         {
             if (val == 0)
@@ -116,7 +112,6 @@ namespace DD_JAM.LevelGeneration
             float value = (val - min) / (1 - min);
             return value;
         }
-
         bool IsColor(Color color1, Color color2)
         {
             return (color1.r == color2.r) && (color1.g == color2.g) && (color1.b == color2.b);

@@ -290,8 +290,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 199038783}
+  m_Children: []
   m_Father: {fileID: 1306417885}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -575,7 +574,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 1
-  tileToPlace: {r: 1, g: 0, b: 0, a: 1}
+  placeTile: {fileID: 11400000, guid: cc0d9c3259f21b44da48a751bbdde0d9, type: 2}
+  airTile: {fileID: 11400000, guid: 20d4f9c97e9b29f499512888f0226359, type: 2}
   chunkLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -833,9 +833,9 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 0
-  m_TargetGraphic: {fileID: 199038784}
+  m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 584509986}
-  m_HandleRect: {fileID: 199038783}
+  m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
   m_MaxValue: 1
