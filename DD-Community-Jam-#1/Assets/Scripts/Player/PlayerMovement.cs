@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
     [SerializeField] Animator weaponAnimator;
     [SerializeField] Slider weaponCooldownSlider;
+    [SerializeField] WeaponObject weaponScript;
 
     [Header("Parameters")]
     [SerializeField] Vector2 speeds; //speeds.x = normal speed speeds.y = running speed
@@ -31,7 +32,8 @@ public class PlayerMovement : MonoBehaviour
     //Current weapon params
     float weaponCooldown = 1;
     float weaponSpeed = 1;
-    float weaponDamage = .5f;
+    [System.NonSerialized] public float weaponDamage = .5f;
+    [System.NonSerialized] public float weaponKnockback = 8;
 
     void Start()
     {
@@ -126,7 +128,7 @@ public class PlayerMovement : MonoBehaviour
 
         //attack
         #region
-        if(Input.GetButtonDown("Fire1") && atkCooldown <= 0)
+        if(Input.GetButton("Fire1") && atkCooldown <= 0)
         {
             //Set params
             weaponCooldownSlider.maxValue = weaponCooldown;
@@ -140,6 +142,10 @@ public class PlayerMovement : MonoBehaviour
             else if (x < 0 || !facingRight) weaponAnimator.SetTrigger("Left");
         }
 
+        weaponScript.enabled = weaponAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name != "Idle";
+        weaponScript.GetComponent<BoxCollider2D>().enabled = weaponAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name != "Idle";
+        Debug.Log(weaponAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name != "Idle");
+
         if (atkCooldown > 0) atkCooldown -= Time.deltaTime;
         else if (atkCooldown < 0) atkCooldown = 0;
 
@@ -147,11 +153,12 @@ public class PlayerMovement : MonoBehaviour
         #endregion
     }
 
-    public void UpgradeWeapon(float addDmg, float addCooldown, float addSpeed)
+    public void UpgradeWeapon(float addDmg, float addCooldown, float addSpeed, float addKnockback)
     {
         weaponDamage += addDmg;
         weaponCooldown += addCooldown;
         weaponSpeed += addSpeed;
+        addKnockback += addKnockback;
     }
 
 }
