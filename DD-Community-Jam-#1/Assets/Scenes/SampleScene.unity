@@ -673,7 +673,7 @@ MonoBehaviour:
     m_Bits: 768
   weaponAnimator: {fileID: 1147717831}
   weaponCooldownSlider: {fileID: 1306417886}
-  weaponScript: {fileID: 0}
+  weaponScript: {fileID: 1147717833}
   speeds: {x: 8, y: 10}
   jumpForce: 10
   jumpTime: 0.17

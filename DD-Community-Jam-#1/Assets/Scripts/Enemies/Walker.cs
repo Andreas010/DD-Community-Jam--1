@@ -51,7 +51,7 @@ public class Walker : MonoBehaviour
             else if (player.position.x < transform.position.x)
                 xVel = -speed;
 
-            if (player.position.y > transform.position.y + 1 && IsGrounded())
+            if (player.position.y > transform.position.y + 1 && IsGrounded() && Vector2.Distance(transform.position, player.position) < 7)
                 rig.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
 
             rig.velocity = new Vector2(xVel, rig.velocity.y);
