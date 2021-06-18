@@ -144,7 +144,6 @@ public class PlayerMovement : MonoBehaviour
 
         weaponScript.enabled = weaponAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name != "Idle";
         weaponScript.GetComponent<BoxCollider2D>().enabled = weaponAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name != "Idle";
-        Debug.Log(weaponAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name != "Idle");
 
         if (atkCooldown > 0) atkCooldown -= Time.deltaTime;
         else if (atkCooldown < 0) atkCooldown = 0;
