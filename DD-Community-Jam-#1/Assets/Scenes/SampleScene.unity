@@ -474,7 +474,7 @@ MonoBehaviour:
     m_Bits: 768
   weaponAnimator: {fileID: 1147717831}
   weaponCooldownSlider: {fileID: 1306417886}
-  weaponScript: {fileID: 1147717833}
+  weaponScript: {fileID: 0}
   speeds: {x: 8, y: 10}
   jumpForce: 10
   jumpTime: 0.17
@@ -1368,7 +1368,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
