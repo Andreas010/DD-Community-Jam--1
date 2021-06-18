@@ -6,11 +6,22 @@ public class CameraScript : MonoBehaviour
 {
 
     [SerializeField] Transform player;
+    Vector3 originalPos;
 
     [SerializeField] float lerpTime;
 
     void FixedUpdate()
     {
         transform.position = Vector3.Lerp(transform.position, new Vector3(player.position.x, player.position.y, -10), lerpTime);
+    }
+
+    public void CameraShake(float frequency)
+    {
+        
+        for (int i = 0; i < 30; i++)
+        {
+            originalPos = player.position;
+            transform.position = originalPos + Random.insideUnitSphere * frequency;
+        }
     }
 }

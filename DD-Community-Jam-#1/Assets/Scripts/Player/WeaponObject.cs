@@ -21,6 +21,8 @@ public class WeaponObject : MonoBehaviour
             Debug.Log(collision.GetComponent<Rigidbody2D>());
             collision.GetComponent<Rigidbody2D>().AddForce((collision.gameObject.transform.position - transform.position) * pm.weaponKnockback, ForceMode2D.Impulse);
             collision.GetComponent<Rigidbody2D>().AddForce(Vector2.up * pm.weaponKnockback, ForceMode2D.Impulse);
+            collision.GetComponent<Enemy>().TakeKnockback();
+            collision.GetComponent<Enemy>().UpdateHealth(-pm.weaponDamage);
             Invoke("CanAtkTrue", .2f);
         }
     }
