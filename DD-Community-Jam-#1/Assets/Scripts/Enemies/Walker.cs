@@ -14,6 +14,10 @@ public class Walker : MonoBehaviour
     [SerializeField] float jumpForce;
     [SerializeField] float speed;
     [SerializeField] float minDistFromGround = 1;
+    [SerializeField] float damage;
+
+    [SerializeField] bool damageInAir;
+    bool grounded;
 
 
     void Start()
@@ -42,6 +46,7 @@ public class Walker : MonoBehaviour
 
             return false;
         }
+        grounded = IsGrounded();
         #endregion
 
         if (!enemyScript.takingKnockback)
@@ -57,6 +62,20 @@ public class Walker : MonoBehaviour
             rig.velocity = new Vector2(xVel, rig.velocity.y);
         }
 
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Player"))
+        {
+            if (!damageInAir) { if (grounded) DamagePlayer(collision); }
+            else DamagePlayer(collision);
+        }
+    }
+
+    void DamagePlayer(Collider2D collision)
+    {
+        collision.GetComponent<PlayerMovement>().TakeDamage(damage);
     }
 
 }

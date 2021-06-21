@@ -10,7 +10,7 @@ public class WeaponObject : MonoBehaviour
 
     private void Start()
     {
-        pm = transform.parent.GetComponent<PlayerMovement>();
+        pm = transform.parent.parent.GetComponent<PlayerMovement>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

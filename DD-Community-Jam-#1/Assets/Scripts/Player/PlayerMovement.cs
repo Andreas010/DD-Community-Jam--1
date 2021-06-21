@@ -2,17 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
 
     [Header("References")]
+    GameObject cam;
     Rigidbody2D rig;
     SpriteRenderer sr;
     [SerializeField] LayerMask groundLayer;
     [SerializeField] Animator weaponAnimator;
+    Animator animator;
     [SerializeField] Slider weaponCooldownSlider;
     [SerializeField] WeaponObject weaponScript;
+    [SerializeField] Transform healthCanvas;
+    [SerializeField] GameObject heartCanvasObject;
 
     [Header("Parameters")]
     [SerializeField] Vector2 speeds; //speeds.x = normal speed speeds.y = running speed
@@ -22,23 +27,30 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float fallMultiplier = 2.5f;
     [SerializeField] float downwardJumpForce = -3;
     [SerializeField] float minDistFromGround = 0.6f;
+    [SerializeField] float invincibleTime;
     float atkCooldown;
 
     //bools
     bool sprinting;
     bool isJumping;
     bool facingRight;
+    bool invincible;
 
     //Current weapon params
     float weaponCooldown = 1;
     float weaponSpeed = 1;
     [System.NonSerialized] public float weaponDamage = .5f;
     [System.NonSerialized] public float weaponKnockback = 8;
+    float health = 3;
 
     void Start()
     {
         rig = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        animator = transform.parent.GetComponent<Animator>();
+        cam = transform.parent.GetComponentInChildren<Camera>().gameObject;
+
+        UpdateHealthDisplay();
     }
 
     void Update()
@@ -73,6 +85,8 @@ public class PlayerMovement : MonoBehaviour
         }
         #endregion
         ////////////////////////////////////////////////
+        
+        //movement
         #region
         sprinting = Input.GetButton("Sprint");
         float x = Input.GetAxisRaw("Horizontal");
@@ -150,6 +164,41 @@ public class PlayerMovement : MonoBehaviour
 
         weaponCooldownSlider.value = atkCooldown;
         #endregion
+
+        //animation
+        #region
+        animator.SetBool("Grounded", IsGrounded());
+        animator.SetFloat("YVel", rig.velocity.y);
+        animator.SetFloat("Magnitude", rig.velocity.magnitude);
+        #endregion
+    }
+
+    void UpdateHealthDisplay()
+    {
+        for (int i = 0; i < healthCanvas.transform.childCount; i++) 
+        {
+            Destroy(healthCanvas.transform.GetChild(i).gameObject); 
+        }
+        for (int i = 0; i < Mathf.RoundToInt(health); i++)
+        { Instantiate( heartCanvasObject , healthCanvas); }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (!invincible)
+        {
+            health -= damage;
+            if (health <= 0) SceneManager.LoadScene("Died");
+            cam.GetComponent<CameraScript>().CameraShake(1);
+            invincible = true;
+            Invoke("UnInvincible", invincibleTime);
+            UpdateHealthDisplay();
+        }
+    }
+
+    void UnInvincible()
+    {
+        invincible = false;
     }
 
     public void UpgradeWeapon(float addDmg, float addCooldown, float addSpeed, float addKnockback)
