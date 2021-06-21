@@ -11,7 +11,7 @@ public class EnergyCrystalPickup : MonoBehaviour
             PlayerMovement pm = collision.GetComponent<PlayerMovement>();
             pm.energyCrystals++;
             pm.UpdateEnergyCrystalsDisplay();
-            Destroy(gameObject);
+            Destroy(transform.parent.gameObject);
         }
     }
 }

@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
 
     [System.NonSerialized] public Vector4 costForUpgrade = new Vector4(5, 5, 5, 5);
 
-    [System.NonSerialized] public int energyCrystals;
+    [System.NonSerialized] public int energyCrystals = 999;
 
     //bools
     bool sprinting;
@@ -227,7 +227,7 @@ public class PlayerMovement : MonoBehaviour
         weapon.weaponCooldown += addCooldown;
         weapon.weaponSpeed += addSpeed;
         weapon.weaponKnockback += addKnockback;
-        if (weapon.weaponCooldown < 1.5f) weapon.weaponCooldown = 1.5f;
+        if (weapon.weaponCooldown < .15f) weapon.weaponCooldown = .15f;
         energyCrystals -= 5;
     }
 

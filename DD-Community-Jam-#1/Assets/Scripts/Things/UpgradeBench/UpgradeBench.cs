@@ -76,7 +76,7 @@ public class UpgradeBench : MonoBehaviour
         switch (toUpgrade)
         {
             case "Speed":
-                if (pm.weapon.weaponCooldown > 1.5 && pm.energyCrystals >= pm.costForUpgrade.x)
+                if (pm.weapon.weaponCooldown > .15f && pm.energyCrystals >= pm.costForUpgrade.x)
                 { pm.UpgradeWeapon(0, -.1f, 0, 0); pm.energyCrystals -= Mathf.RoundToInt(pm.costForUpgrade.x); pm.UpdateEnergyCrystalsDisplay(); pm.costForUpgrade.x += 2; }
                 break;
             case "Damage":
