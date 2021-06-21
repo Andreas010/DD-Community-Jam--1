@@ -18,11 +18,10 @@ public class WeaponObject : MonoBehaviour
         if (collision.gameObject.layer == 10 && canAtk)
         {
             canAtk = false;
-            Debug.Log(collision.GetComponent<Rigidbody2D>());
-            collision.GetComponent<Rigidbody2D>().AddForce((collision.gameObject.transform.position - transform.position) * pm.weaponKnockback, ForceMode2D.Impulse);
-            collision.GetComponent<Rigidbody2D>().AddForce(Vector2.up * pm.weaponKnockback, ForceMode2D.Impulse);
+            collision.GetComponent<Rigidbody2D>().AddForce((collision.gameObject.transform.position - transform.position) * pm.weapon.weaponKnockback, ForceMode2D.Impulse);
+            collision.GetComponent<Rigidbody2D>().AddForce(Vector2.up * pm.weapon.weaponKnockback, ForceMode2D.Impulse);
             collision.GetComponent<Enemy>().TakeKnockback();
-            collision.GetComponent<Enemy>().UpdateHealth(-pm.weaponDamage);
+            collision.GetComponent<Enemy>().UpdateHealth(-pm.weapon.weaponDamage);
             Invoke("CanAtkTrue", .2f);
         }
     }

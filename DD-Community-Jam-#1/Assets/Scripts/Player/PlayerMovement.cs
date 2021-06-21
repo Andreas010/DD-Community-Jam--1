@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] WeaponObject weaponScript;
     [SerializeField] Transform healthCanvas;
     [SerializeField] GameObject heartCanvasObject;
+    [SerializeField] GameObject eButton;
+    [SerializeField] TextMeshProUGUI energyCrystalsText;
 
     [Header("Parameters")]
     [SerializeField] Vector2 speeds; //speeds.x = normal speed speeds.y = running speed
@@ -29,19 +32,26 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float minDistFromGround = 0.6f;
     [SerializeField] float invincibleTime;
     float atkCooldown;
+    float health = 3;
+    float maxHealth = 3;
+
+    [System.NonSerialized] public Vector4 costForUpgrade = new Vector4(5, 5, 5, 5);
+
+    [System.NonSerialized] public int energyCrystals;
 
     //bools
     bool sprinting;
     bool isJumping;
     bool facingRight;
     bool invincible;
+    bool canInteract;
 
     //Current weapon params
+    public Weapon weapon;
     float weaponCooldown = 1;
     float weaponSpeed = 1;
     [System.NonSerialized] public float weaponDamage = .5f;
     [System.NonSerialized] public float weaponKnockback = 8;
-    float health = 3;
 
     void Start()
     {
@@ -51,6 +61,7 @@ public class PlayerMovement : MonoBehaviour
         cam = transform.parent.GetComponentInChildren<Camera>().gameObject;
 
         UpdateHealthDisplay();
+        UpdateEnergyCrystalsDisplay();
     }
 
     void Update()
@@ -145,9 +156,9 @@ public class PlayerMovement : MonoBehaviour
         if(Input.GetButton("Fire1") && atkCooldown <= 0)
         {
             //Set params
-            weaponCooldownSlider.maxValue = weaponCooldown;
-            atkCooldown = weaponCooldown;
-            weaponAnimator.speed = weaponSpeed;
+            weaponCooldownSlider.maxValue = weapon.weaponCooldown;
+            atkCooldown = weapon.weaponCooldown;
+            weaponAnimator.speed = weapon.weaponSpeed;
 
             //Animation
             if (y < 0) weaponAnimator.SetTrigger("Down");
@@ -171,6 +182,8 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("YVel", rig.velocity.y);
         animator.SetFloat("Magnitude", rig.velocity.magnitude);
         #endregion
+
+        eButton.SetActive(canInteract);
     }
 
     void UpdateHealthDisplay()
@@ -181,6 +194,13 @@ public class PlayerMovement : MonoBehaviour
         }
         for (int i = 0; i < Mathf.RoundToInt(health); i++)
         { Instantiate( heartCanvasObject , healthCanvas); }
+    }
+
+    public void UpgradeHealth()
+    {
+        maxHealth++;
+        health = maxHealth;
+        UpdateHealthDisplay();
     }
 
     public void TakeDamage(float damage)
@@ -203,10 +223,39 @@ public class PlayerMovement : MonoBehaviour
 
     public void UpgradeWeapon(float addDmg, float addCooldown, float addSpeed, float addKnockback)
     {
-        weaponDamage += addDmg;
-        weaponCooldown += addCooldown;
-        weaponSpeed += addSpeed;
-        addKnockback += addKnockback;
+        weapon.weaponDamage += addDmg;
+        weapon.weaponCooldown += addCooldown;
+        weapon.weaponSpeed += addSpeed;
+        weapon.weaponKnockback += addKnockback;
+        if (weapon.weaponCooldown < 1.5f) weapon.weaponCooldown = 1.5f;
+        energyCrystals -= 5;
+    }
+
+    void ChangeWeapon(Weapon newWeapon)
+    {
+        weapon = newWeapon;
+        weaponScript.gameObject.GetComponent<SpriteRenderer>().sprite = weapon.sprite;
+    }
+
+    public void UpdateEnergyCrystalsDisplay()
+    {
+        energyCrystalsText.text = energyCrystals.ToString();
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Interactable"))
+        {
+            canInteract = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Interactable"))
+        {
+            canInteract = false;
+        }
     }
 
 }

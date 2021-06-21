@@ -14,7 +14,7 @@ public class Weapon : ScriptableObject
     public Sprite sprite;
 
     public float weaponCooldown = 1;
-    float weaponSpeed = 1;
+    public float weaponSpeed = 1;
     public float weaponDamage = .5f;
     public float weaponKnockback = 8;
     public float mineSpeed = 5;
