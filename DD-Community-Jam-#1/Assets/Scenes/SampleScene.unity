@@ -152,6 +152,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToCheck: {fileID: 713126523}
   chunk: {fileID: 4112230609855774737, guid: 83e25237dcc689540b44443371dca147, type: 3}
+  publicCurrentChunks: []
+  masks:
+  - {fileID: 2800000, guid: cc9de61a7eba14d49a3785887536a317, type: 3}
+  - {fileID: 2800000, guid: 524ba88584b6b52478d2e5554efb0d80, type: 3}
+  maskApplyanceChance: 20
 --- !u!4 &178698887
 Transform:
   m_ObjectHideFlags: 0

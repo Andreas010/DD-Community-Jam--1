@@ -14,12 +14,16 @@ namespace DD_JAM.LevelGeneration
         public Gradient colorLevel;
         [Header("What does exist?")]
         public TerrainType[] types;
+        public TerrainType airTile;
+        [HideInInspector]
+        public ChunkGeneration cg;
 
         private Tilemap tilemap;
         private Vector2Int levelSize;
         private TerrainType[,] curLevel;
         private float curThreshhold;
         public Vector2[] possibleEnemyPositions;
+        public bool isChosen;
 
         public void ReGenerate(TerrainType[,] level)
         {
@@ -73,11 +77,29 @@ namespace DD_JAM.LevelGeneration
         {
             tilemap = GetComponent<Tilemap>();
 
+            Texture2D mask = cg.masks[Random.Range(0, cg.masks.Length-1)];
+            if (!mask.isReadable)
+                return;
+
+            System.Random r = new System.Random((int)(transform.position.x * 45558 + transform.position.y * 1452));
+
             for (int x = 0; x < levelSize.x; x++)
             {
                 for (int y = 0; y < levelSize.y; y++)
                 {
-                    tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y)), curLevel[x, y].tile);
+                    Vector3Int pos = tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y));
+
+                    if (!isChosen || transform.position == Vector3.zero)
+                        tilemap.SetTile(pos, curLevel[x, y].tile);
+                    else
+                    {
+                        float mapColor = mask.GetPixel(x, y).r;
+
+                        if (r.Next(0, 1000) / 1000f <= mapColor)
+                            tilemap.SetTile(pos, airTile.tile);
+                        else
+                            tilemap.SetTile(pos, curLevel[x, y].tile);
+                    }
                 }
             }
 
