@@ -19,6 +19,7 @@ namespace DD_JAM.LevelGeneration
         private Vector2Int levelSize;
         private TerrainType[,] curLevel;
         private float curThreshhold;
+        public Vector2[] possibleEnemyPositions;
 
         public void ReGenerate(TerrainType[,] level)
         {
@@ -79,6 +80,8 @@ namespace DD_JAM.LevelGeneration
                     tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y)), curLevel[x, y].tile);
                 }
             }
+
+            GenerateEnemyPositions();
         }
 
         public void SetTile(int x, int y, TerrainType tile)
@@ -115,6 +118,37 @@ namespace DD_JAM.LevelGeneration
         bool IsColor(Color color1, Color color2)
         {
             return (color1.r == color2.r) && (color1.g == color2.g) && (color1.b == color2.b);
+        }
+
+        public Vector2[] GenerateEnemyPositions()
+        {
+            List<Vector2> positions = new List<Vector2>();
+
+            for (int x = 0; x < levelSize.x; x++)
+            {
+                for (int y = 0; y < levelSize.y; y++)
+                {
+                    if (y >= levelSize.y - 1)
+                        continue;
+
+                    if (GetTile(x, y).name != "Air" && GetTile(x, y + 1).name == "Air")
+                        positions.Add(new Vector2((x - (levelSize.x / 2)) + transform.position.x + 0.5f, ((y+1) - (levelSize.y / 2)) + transform.position.y + 0.5f));
+                }
+            }
+
+            possibleEnemyPositions = positions.ToArray();
+            return positions.ToArray();
+        }
+
+        void OnDrawGizmosSelected()
+        {
+            if (possibleEnemyPositions == null)
+                return;
+
+            for (int i = 0; i < possibleEnemyPositions.Length; i++)
+            {
+                Gizmos.DrawWireSphere(possibleEnemyPositions[i], 0.5f);
+            }
         }
     }
 }
