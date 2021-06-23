@@ -14,11 +14,24 @@ namespace DD_JAM.LevelGeneration
         public Gradient colorLevel;
         [Header("What does exist?")]
         public TerrainType[] types;
+        public TerrainType airTile;
+        [HideInInspector]
+        public ChunkGeneration cg;
 
         private Tilemap tilemap;
         private Vector2Int levelSize;
         private TerrainType[,] curLevel;
         private float curThreshhold;
+        public Vector2[] possibleEnemyPositions;
+        public bool isChosen;
+
+        [SerializeReference] GameObject enemy;
+
+        private void Update()
+        {
+            if (GameObject.FindGameObjectsWithTag("Enemy").Length < 20)
+                Instantiate(enemy, possibleEnemyPositions[Random.Range(0, possibleEnemyPositions.Length)], Quaternion.identity);
+        }
 
         public void ReGenerate(TerrainType[,] level)
         {
@@ -72,13 +85,33 @@ namespace DD_JAM.LevelGeneration
         {
             tilemap = GetComponent<Tilemap>();
 
+            Texture2D mask = cg.masks[Random.Range(0, cg.masks.Length-1)];
+            if (!mask.isReadable)
+                return;
+
+            System.Random r = new System.Random((int)(transform.position.x * 45558 + transform.position.y * 1452));
+
             for (int x = 0; x < levelSize.x; x++)
             {
                 for (int y = 0; y < levelSize.y; y++)
                 {
-                    tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y)), curLevel[x, y].tile);
+                    Vector3Int pos = tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y));
+
+                    if (!isChosen || transform.position == Vector3.zero)
+                        tilemap.SetTile(pos, curLevel[x, y].tile);
+                    else
+                    {
+                        float mapColor = mask.GetPixel(x, y).r;
+
+                        if (r.Next(0, 1000) / 1000f <= mapColor)
+                            tilemap.SetTile(pos, airTile.tile);
+                        else
+                            tilemap.SetTile(pos, curLevel[x, y].tile);
+                    }
                 }
             }
+
+            GenerateEnemyPositions();
         }
 
         public void SetTile(int x, int y, TerrainType tile)
@@ -115,6 +148,43 @@ namespace DD_JAM.LevelGeneration
         bool IsColor(Color color1, Color color2)
         {
             return (color1.r == color2.r) && (color1.g == color2.g) && (color1.b == color2.b);
+        }
+
+        public Vector2[] GenerateEnemyPositions()
+        {
+            List<Vector2> positions = new List<Vector2>();
+
+            for (int x = 0; x < levelSize.x; x++)
+            {
+                for (int y = 0; y < levelSize.y; y++)
+                {
+                    if (y >= levelSize.y - 1)
+                        continue;
+
+                    if (GetTile(x, y).name != "Air" && GetTile(x, y + 1).name == "Air")
+                        positions.Add(new Vector2((x - (levelSize.x / 2)) + transform.position.x + 0.5f, ((y+1) - (levelSize.y / 2)) + transform.position.y + 0.5f));
+                }
+            }
+
+            possibleEnemyPositions = positions.ToArray();
+            return positions.ToArray();
+        }
+
+        void OnDrawGizmosSelected()
+        {
+            if (possibleEnemyPositions == null)
+                return;
+
+            for (int i = 0; i < possibleEnemyPositions.Length; i++)
+            {
+                Gizmos.DrawWireSphere(possibleEnemyPositions[i], 0.5f);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Enemy"))   
+            { if(go.GetComponent<SetActiveInRange>().distance >15) Destroy(go); }
         }
     }
 }

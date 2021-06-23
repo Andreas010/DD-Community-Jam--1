@@ -11,11 +11,17 @@ namespace DD_JAM.LevelGeneration
         public Transform objectToCheck;
         public GameObject chunk;
 
+        public GameObject[] publicCurrentChunks;
+
         public Dictionary<Vector2Int, TerrainType[,]> savedChunks;
         public Dictionary<Vector2Int, GameObject> currentChunks;
 
         private Vector2Int lastChunk = new Vector2Int(int.MaxValue, int.MaxValue);
         private bool firstFrame;
+
+        public Texture2D[] masks;
+        [Range(0f, 100f)]
+        public float maskApplyanceChance;
 
         void Start()
         {
@@ -65,6 +71,8 @@ namespace DD_JAM.LevelGeneration
                     }
                 }
 
+                publicCurrentChunks = new GameObject[chunkPositions.Length];
+
                 //Generate new chunk
                 for (int i = 0; i < chunkPositions.Length; i++)
                 {
@@ -72,8 +80,18 @@ namespace DD_JAM.LevelGeneration
                     Vector2Int key = chunkPositions[i] + currentChunk;
                     GameObject newChunk = Instantiate(chunk, pos, Quaternion.identity);
                     newChunk.transform.parent = transform;
+
+                    System.Random r = new System.Random(key.x * key.y);
+
+                    if (r.Next(0, 100000) / 1000f <= maskApplyanceChance)
+                        newChunk.GetComponent<TileMapGenerator>().isChosen = true;
+
+                    newChunk.GetComponent<TileMapGenerator>().cg = this;
+
                     if (savedChunks.ContainsKey(key))
                     {
+                        //TODO: Find out why
+                        newChunk.GetComponent<LevelGenerator>().Generate();
                         newChunk.GetComponent<TileMapGenerator>().ReGenerate(savedChunks[key]);
                     } else
                     {
@@ -86,6 +104,8 @@ namespace DD_JAM.LevelGeneration
                         currentChunks[key] = newChunk;
                     else
                         currentChunks.Add(key, newChunk);
+
+                    publicCurrentChunks[i] = newChunk;
 
                     firstFrame = true;
                 }
