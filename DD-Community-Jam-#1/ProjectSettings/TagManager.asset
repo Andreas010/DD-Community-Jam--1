@@ -3,8 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Interactable
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -17,7 +16,7 @@ TagManager:
   - Ground
   - Level
   - Hittable
-  - NoCollideWithPlayer
+  - 
   - 
   - 
   - 
@@ -39,24 +38,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Background
-    uniqueID: 540724527
-    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Foreground
-    uniqueID: 3486211439
-    locked: 0
   - name: Entity
     uniqueID: 1184234219
-    locked: 0
-  - name: FrontGround
-    uniqueID: 398757465
-    locked: 0
-  - name: FronterGround
-    uniqueID: 3433129705
-    locked: 0
-  - name: FrontiestGround
-    uniqueID: 4092183615
     locked: 0

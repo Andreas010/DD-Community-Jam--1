@@ -28,16 +28,16 @@ namespace DD_JAM.LevelGeneration
 
         private float[,] level;
 
-        //void OnEnable()
-        //{
-        //    Generate();
-        //}
+        void OnEnable()
+        {
+            Generate();
+        }
 
-        //void Update()
-        //{
-        //    if (update)
-        //        Generate();
-        //}
+        void Update()
+        {
+            if (update)
+                Generate();
+        }
 
         public void Generate()
         {

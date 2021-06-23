@@ -2,25 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
 
     [Header("References")]
-    GameObject cam;
     Rigidbody2D rig;
     SpriteRenderer sr;
     [SerializeField] LayerMask groundLayer;
     [SerializeField] Animator weaponAnimator;
-    Animator animator;
     [SerializeField] Slider weaponCooldownSlider;
     [SerializeField] WeaponObject weaponScript;
-    [SerializeField] Transform healthCanvas;
-    [SerializeField] GameObject heartCanvasObject;
-    [SerializeField] GameObject eButton;
-    [SerializeField] TextMeshProUGUI energyCrystalsText;
 
     [Header("Parameters")]
     [SerializeField] Vector2 speeds; //speeds.x = normal speed speeds.y = running speed
@@ -30,24 +22,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float fallMultiplier = 2.5f;
     [SerializeField] float downwardJumpForce = -3;
     [SerializeField] float minDistFromGround = 0.6f;
-    [SerializeField] float invincibleTime;
     float atkCooldown;
-    float health = 3;
-    float maxHealth = 3;
-
-    [System.NonSerialized] public Vector4 costForUpgrade = new Vector4(5, 5, 5, 5);
-
-    [System.NonSerialized] public int energyCrystals = 999;
 
     //bools
     bool sprinting;
     bool isJumping;
     bool facingRight;
-    bool invincible;
-    bool canInteract;
 
     //Current weapon params
-    public Weapon weapon;
     float weaponCooldown = 1;
     float weaponSpeed = 1;
     [System.NonSerialized] public float weaponDamage = .5f;
@@ -57,11 +39,6 @@ public class PlayerMovement : MonoBehaviour
     {
         rig = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-        animator = transform.parent.GetComponent<Animator>();
-        cam = transform.parent.GetComponentInChildren<Camera>().gameObject;
-
-        UpdateHealthDisplay();
-        UpdateEnergyCrystalsDisplay();
     }
 
     void Update()
@@ -96,8 +73,6 @@ public class PlayerMovement : MonoBehaviour
         }
         #endregion
         ////////////////////////////////////////////////
-        
-        //movement
         #region
         sprinting = Input.GetButton("Sprint");
         float x = Input.GetAxisRaw("Horizontal");
@@ -156,9 +131,9 @@ public class PlayerMovement : MonoBehaviour
         if(Input.GetButton("Fire1") && atkCooldown <= 0)
         {
             //Set params
-            weaponCooldownSlider.maxValue = weapon.weaponCooldown;
-            atkCooldown = weapon.weaponCooldown;
-            weaponAnimator.speed = weapon.weaponSpeed;
+            weaponCooldownSlider.maxValue = weaponCooldown;
+            atkCooldown = weaponCooldown;
+            weaponAnimator.speed = weaponSpeed;
 
             //Animation
             if (y < 0) weaponAnimator.SetTrigger("Down");
@@ -175,87 +150,14 @@ public class PlayerMovement : MonoBehaviour
 
         weaponCooldownSlider.value = atkCooldown;
         #endregion
-
-        //animation
-        #region
-        animator.SetBool("Grounded", IsGrounded());
-        animator.SetFloat("YVel", rig.velocity.y);
-        animator.SetFloat("Magnitude", rig.velocity.magnitude);
-        #endregion
-
-        eButton.SetActive(canInteract);
-    }
-
-    void UpdateHealthDisplay()
-    {
-        for (int i = 0; i < healthCanvas.transform.childCount; i++) 
-        {
-            Destroy(healthCanvas.transform.GetChild(i).gameObject); 
-        }
-        for (int i = 0; i < Mathf.RoundToInt(health); i++)
-        { Instantiate( heartCanvasObject , healthCanvas); }
-    }
-
-    public void UpgradeHealth()
-    {
-        maxHealth++;
-        health = maxHealth;
-        UpdateHealthDisplay();
-    }
-
-    public void TakeDamage(float damage)
-    {
-        if (!invincible)
-        {
-            health -= damage;
-            if (health <= 0) SceneManager.LoadScene("Died");
-            cam.GetComponent<CameraScript>().CameraShake(1);
-            invincible = true;
-            Invoke("UnInvincible", invincibleTime);
-            UpdateHealthDisplay();
-        }
-    }
-
-    void UnInvincible()
-    {
-        invincible = false;
     }
 
     public void UpgradeWeapon(float addDmg, float addCooldown, float addSpeed, float addKnockback)
     {
-        weapon.weaponDamage += addDmg;
-        weapon.weaponCooldown += addCooldown;
-        weapon.weaponSpeed += addSpeed;
-        weapon.weaponKnockback += addKnockback;
-        if (weapon.weaponCooldown < .15f) weapon.weaponCooldown = .15f;
-        energyCrystals -= 5;
-    }
-
-    void ChangeWeapon(Weapon newWeapon)
-    {
-        weapon = newWeapon;
-        weaponScript.gameObject.GetComponent<SpriteRenderer>().sprite = weapon.sprite;
-    }
-
-    public void UpdateEnergyCrystalsDisplay()
-    {
-        energyCrystalsText.text = energyCrystals.ToString();
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if(collision.CompareTag("Interactable"))
-        {
-            canInteract = true;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Interactable"))
-        {
-            canInteract = false;
-        }
+        weaponDamage += addDmg;
+        weaponCooldown += addCooldown;
+        weaponSpeed += addSpeed;
+        addKnockback += addKnockback;
     }
 
 }

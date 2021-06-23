@@ -10,10 +10,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] GameObject hitParticles;
     Rigidbody2D rig;
     [SerializeField] PhysicsMaterial2D[] physicsMaterials; // i 0 = no friction i 1 = has friction
-    [SerializeField] GameObject energyCrystalPickup;
 
-    [SerializeField] float chanceToDropEnergyCrystal;
-    [SerializeField] float maxEnergyCrystalDropAmt;
     float health;
     [SerializeField] float maxHealth;
     float sliderA; //alpha colour
@@ -49,17 +46,7 @@ public class Enemy : MonoBehaviour
     public void UpdateHealth(float addHealth)
     {
         health += addHealth;
-        if (health <= 0)
-        {
-            Destroy(transform.parent.gameObject);
-            if( Mathf.RoundToInt(Random.Range(0, chanceToDropEnergyCrystal)) == 0)
-            {
-                for(int i = 0; i < Mathf.RoundToInt(Random.Range(1, maxEnergyCrystalDropAmt)); i++ )
-                {
-                    Instantiate(energyCrystalPickup, transform.position, Quaternion.identity);
-                }
-            }
-        }
+        if (health <= 0) Destroy(transform.parent.gameObject);
         sliderA = 1;
         healthBar.value = health;
         Instantiate(hitParticles, transform.position, transform.rotation);

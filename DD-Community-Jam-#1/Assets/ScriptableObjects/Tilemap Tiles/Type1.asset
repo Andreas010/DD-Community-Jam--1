@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Type1
   m_EditorClassIdentifier: 
   name: Type1
-  tile: {fileID: 11400000, guid: 0055c4db478ab764d94518ab7039e109, type: 2}
+  tile: {fileID: 11400000, guid: 81de82761d5186a4b91fe8ca2cf79953, type: 2}
   value: {r: 1, g: 0, b: 0, a: 1}
   timeToBreak: 1
