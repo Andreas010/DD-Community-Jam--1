@@ -8,7 +8,6 @@ public class Item : ScriptableObject
         None, Weapon, Block, Resource
     }
 
-    public string displayName;
     public ItemType type;
     public int maxCount;
     public ScriptableObject scriptObject;
