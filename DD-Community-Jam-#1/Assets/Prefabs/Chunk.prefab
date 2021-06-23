@@ -103,8 +103,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8bc9bd5c60985a743996414f2c2b4ebc, type: 2}
   - {fileID: 11400000, guid: 20d4f9c97e9b29f499512888f0226359, type: 2}
   airTile: {fileID: 11400000, guid: 20d4f9c97e9b29f499512888f0226359, type: 2}
+  cg: {fileID: 0}
   possibleEnemyPositions: []
   isChosen: 0
+  enemy: {fileID: 6026918391313126627, guid: 3c8c14bc7ce0da94e83b6e3a3aebdeaf, type: 3}
 --- !u!1839735485 &4112230609855774734
 Tilemap:
   m_ObjectHideFlags: 0

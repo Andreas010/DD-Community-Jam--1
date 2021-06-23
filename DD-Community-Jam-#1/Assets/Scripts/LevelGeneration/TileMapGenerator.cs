@@ -25,6 +25,14 @@ namespace DD_JAM.LevelGeneration
         public Vector2[] possibleEnemyPositions;
         public bool isChosen;
 
+        [SerializeReference] GameObject enemy;
+
+        private void Update()
+        {
+            if (GameObject.FindGameObjectsWithTag("Enemy").Length < 20)
+                Instantiate(enemy, possibleEnemyPositions[Random.Range(0, possibleEnemyPositions.Length)], Quaternion.identity);
+        }
+
         public void ReGenerate(TerrainType[,] level)
         {
             curLevel = level;
@@ -171,6 +179,12 @@ namespace DD_JAM.LevelGeneration
             {
                 Gizmos.DrawWireSphere(possibleEnemyPositions[i], 0.5f);
             }
+        }
+
+        private void OnDestroy()
+        {
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Enemy"))   
+            { if(go.GetComponent<SetActiveInRange>().distance >15) Destroy(go); }
         }
     }
 }
