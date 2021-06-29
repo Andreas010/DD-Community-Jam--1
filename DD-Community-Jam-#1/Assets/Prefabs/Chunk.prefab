@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4112230609855774733}
   - component: {fileID: 4112230609855774735}
   - component: {fileID: 4112230609855774728}
+  - component: {fileID: 416096769176673731}
   m_Layer: 9
   m_Name: Chunk
   m_TagString: Untagged
@@ -102,6 +103,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cc0d9c3259f21b44da48a751bbdde0d9, type: 2}
   - {fileID: 11400000, guid: 8bc9bd5c60985a743996414f2c2b4ebc, type: 2}
   - {fileID: 11400000, guid: 20d4f9c97e9b29f499512888f0226359, type: 2}
+  forcedGround: {fileID: 11400000, guid: cc0d9c3259f21b44da48a751bbdde0d9, type: 2}
   airTile: {fileID: 11400000, guid: 20d4f9c97e9b29f499512888f0226359, type: 2}
   cg: {fileID: 0}
   possibleEnemyPositions: []
@@ -220,3 +222,17 @@ TilemapCollider2D:
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0.00001
+--- !u!114 &416096769176673731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4112230609855774737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30a7485f41f4dbb43a098ec9bd4eac36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bossThink: {fileID: 0}
+  canUpdate: 0

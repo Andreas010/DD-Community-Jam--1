@@ -654,10 +654,14 @@ MonoBehaviour:
   objectToCheck: {fileID: 713126523}
   chunk: {fileID: 4112230609855774737, guid: 83e25237dcc689540b44443371dca147, type: 3}
   publicCurrentChunks: []
-  masks:
-  - {fileID: 2800000, guid: cc9de61a7eba14d49a3785887536a317, type: 3}
-  - {fileID: 2800000, guid: 524ba88584b6b52478d2e5554efb0d80, type: 3}
-  maskApplyanceChance: 20
+  rooms:
+  - name: Default
+    texture: {fileID: 2800000, guid: cc9de61a7eba14d49a3785887536a317, type: 3}
+    chunkThink: {fileID: 2031454830}
+  - name: Spikes
+    texture: {fileID: 2800000, guid: 524ba88584b6b52478d2e5554efb0d80, type: 3}
+    chunkThink: {fileID: 2031454828}
+  maskApplyanceChance: 100
 --- !u!4 &178698887
 Transform:
   m_ObjectHideFlags: 0
@@ -668,7 +672,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 2031454829}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4902,6 +4907,67 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+--- !u!1 &2031454827
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2031454829}
+  - component: {fileID: 2031454830}
+  - component: {fileID: 2031454828}
+  m_Layer: 9
+  m_Name: ChunkThink
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2031454828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031454827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a78dab64b48298e43879ff587507aad1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bossObject: {fileID: 0}
+  minionTypes: []
+  spikeTypes: []
+  minionSpawnTime: 2.6666665
+  spikeSpawnTime: 2
+--- !u!4 &2031454829
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031454827}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 178698887}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2031454830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031454827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b36311731704de41ab8d08d2ccfb9d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2050271871
 GameObject:
   m_ObjectHideFlags: 0

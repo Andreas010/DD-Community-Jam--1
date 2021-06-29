@@ -14,9 +14,11 @@ namespace DD_JAM.LevelGeneration
         public Gradient colorLevel;
         [Header("What does exist?")]
         public TerrainType[] types;
+        public TerrainType forcedGround;
         public TerrainType airTile;
         [HideInInspector]
         public ChunkGeneration cg;
+        private BossRoomThinker bossRoomThinker;
 
         private Tilemap tilemap;
         private Vector2Int levelSize;
@@ -85,9 +87,15 @@ namespace DD_JAM.LevelGeneration
         {
             tilemap = GetComponent<Tilemap>();
 
-            Texture2D mask = cg.masks[Random.Range(0, cg.masks.Length-1)];
+            BossRoomType type = cg.rooms[Random.Range(0, cg.rooms.Length)];
+            Texture2D mask = type.texture;
             if (!mask.isReadable)
                 return;
+
+            bossRoomThinker = GetComponent<BossRoomThinker>();
+
+            if (isChosen)
+                bossRoomThinker.bossThink = type.chunkThink;
 
             System.Random r = new System.Random((int)(transform.position.x * 45558 + transform.position.y * 1452));
 
@@ -101,9 +109,13 @@ namespace DD_JAM.LevelGeneration
                         tilemap.SetTile(pos, curLevel[x, y].tile);
                     else
                     {
-                        float mapColor = mask.GetPixel(x, y).r;
+                        float red = mask.GetPixel(x, y).r;
+                        float green = mask.GetPixel(x, y).g;
+                        //float blue = mask.GetPixel(x, y).b;
 
-                        if (r.Next(0, 1000) / 1000f <= mapColor)
+                        if (green != 0)
+                            tilemap.SetTile(pos, forcedGround.tile);
+                        else if (r.Next(0, 1000) / 1000f <= red)
                             tilemap.SetTile(pos, airTile.tile);
                         else
                             tilemap.SetTile(pos, curLevel[x, y].tile);
@@ -112,6 +124,16 @@ namespace DD_JAM.LevelGeneration
             }
 
             GenerateEnemyPositions();
+
+            if(isChosen)
+            {
+                /* BLUE CHANNEL COLO(u)RS
+                 * BLUE = 255 = Boss Position
+                 * BLUE = 200 = Hazard Position
+                 * BLUE = 150 = Minion Position
+                 */
+                bossRoomThinker.StartThinking(GenerateBossPosition(mask), GenerateMinionPositions(mask), GenerateHazardPositions(mask));
+            }
         }
 
         public void SetTile(int x, int y, TerrainType tile)
@@ -168,6 +190,51 @@ namespace DD_JAM.LevelGeneration
 
             possibleEnemyPositions = positions.ToArray();
             return positions.ToArray();
+        }
+        
+        public Vector2[] GenerateMinionPositions(Texture2D mask)
+        {
+            List<Vector2> pos = new List<Vector2>();
+
+            for (int x = 0; x < mask.width; x++)
+            {
+                for (int y = 0; y < mask.height; y++)
+                {
+                    if (mask.GetPixel(x, y).b * 255f == 150f)
+                        pos.Add(new Vector2(x + transform.position.x, y + transform.position.y));
+                }
+            }
+
+            return pos.ToArray();
+        }
+        public Vector2[] GenerateHazardPositions(Texture2D mask)
+        {
+            List<Vector2> pos = new List<Vector2>();
+
+            for (int x = 0; x < mask.width; x++)
+            {
+                for (int y = 0; y < mask.height; y++)
+                {
+                    if (mask.GetPixel(x, y).b * 255f == 200f)
+                        pos.Add(new Vector2(x + transform.position.x, y + transform.position.y));
+                }
+            }
+
+            return pos.ToArray();
+        }
+        public Vector2 GenerateBossPosition(Texture2D mask)
+        {
+            for (int x = 0; x < mask.width; x++)
+            {
+                for (int y = 0; y < mask.height; y++)
+                {
+                    if(mask.GetPixel(x, y).b * 255f == 1f)
+                        return new Vector2(x + transform.position.x, y + transform.position.y);
+                }
+            }
+
+            Debug.LogError("NO VALID BOSS POSITION", gameObject);
+            return new Vector2(float.NaN, float.NaN);
         }
 
         void OnDrawGizmosSelected()

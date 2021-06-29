@@ -19,7 +19,7 @@ namespace DD_JAM.LevelGeneration
         private Vector2Int lastChunk = new Vector2Int(int.MaxValue, int.MaxValue);
         private bool firstFrame;
 
-        public Texture2D[] masks;
+        public BossRoomType[] rooms;
         [Range(0f, 100f)]
         public float maskApplyanceChance;
 
@@ -66,6 +66,11 @@ namespace DD_JAM.LevelGeneration
                             savedChunks[key] = chunkData;
                         else
                             savedChunks.Add(key, chunkData);
+                        if(chunkToDelete.GetComponent<BossRoomThinker>() != null)
+                        {
+                            chunkToDelete.GetComponent<BossRoomThinker>().canUpdate = false;
+                            chunkToDelete.GetComponent<BossRoomThinker>().StopThinking();
+                        }
                         Destroy(chunkToDelete);
                         currentChunks.Remove(key);
                     }

@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using DD_JAM.LevelGeneration;
 
-namespace DD_JAM.LevelGeneration
+[CustomEditor(typeof(LevelGenerator))]
+public class LevelGenerationEditor : Editor
 {
-    [CustomEditor(typeof(LevelGenerator))]
-    public class LevelGenerationEditor : Editor
+    public override void OnInspectorGUI()
     {
-        public override void OnInspectorGUI()
-        {
-            base.OnInspectorGUI();
+        base.OnInspectorGUI();
 
-            if (GUILayout.Button("Update"))
-            {
-                LevelGenerator gen = target as LevelGenerator;
-                gen.Generate();
-            }
+        if (GUILayout.Button("Update"))
+        {
+            LevelGenerator gen = target as LevelGenerator;
+            gen.Generate();
         }
     }
 }
