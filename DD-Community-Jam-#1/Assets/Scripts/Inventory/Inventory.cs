@@ -22,19 +22,24 @@ public class Inventory : MonoBehaviour
     InventoryItem[] items;
     public GameObject[] slots;
     public Image[] slotImg;
-    [HideInInspector]
-    public Color defColor;
+    Color defColor;
     public GameObject info;
     public Item test1;
     public Item test2;
+    public Item testWeapon;
 
     InventoryItem selected;
+    InventoryItem selectedWeapon;
     InventoryItem currItem;
+
     TerrainEditor editor;
+    PlayerMovement movement;
+
     Item defaultItem;
 
     bool isInventory = false;
     bool first = true;
+    bool firstWeapon = true;
 
     float defRange;
 
@@ -42,6 +47,7 @@ public class Inventory : MonoBehaviour
     {
         items = new InventoryItem[slots.Length];
         editor = FindObjectOfType<TerrainEditor>();
+        movement = FindObjectOfType<PlayerMovement>();
         selected = null;
         defRange = editor.range;
 
@@ -63,6 +69,7 @@ public class Inventory : MonoBehaviour
 
         AddItem(test1, 6);
         AddItem(test2, 2);
+        AddItem(testWeapon, 1);
     }
 
     void Update()
@@ -84,16 +91,22 @@ public class Inventory : MonoBehaviour
     {
         for (int i = 0; i < items.Length; i++)
         {
-            if (items[i].item.type == Item.ItemType.Block)
+            if(items[i].item.type == Item.ItemType.None)
+            {
+                slotImg[i].color = defColor;
+                slotImg[i].sprite = null;
+            }
+
+            else if (items[i].item.type == Item.ItemType.Block)
             {
                 slotImg[i].sprite = (items[i].item.scriptObject as TerrainType).tile.sprite;
                 slotImg[i].color = new Color(1, 1, 1, 1);
             }
 
-            else if(items[i].item.type == Item.ItemType.None)
+            else if(items[i].item.type == Item.ItemType.Weapon)
             {
-                slotImg[i].color = defColor;
-                slotImg[i].sprite = null;
+                slotImg[i].sprite = (items[i].item.scriptObject as Weapon).sprite;
+                slotImg[i].color = new Color(1, 1, 1, 1);
             }
         }
     }
@@ -109,7 +122,7 @@ public class Inventory : MonoBehaviour
                 terrainType = item.scriptObject as TerrainType;
                 break;
             default:
-                return;
+                break;
         }
 
         //Spagetti-Code
@@ -119,11 +132,13 @@ public class Inventory : MonoBehaviour
 
         for(int i = 0; i < items.Length; i++)
         {
-            if(items[i].item.type == Item.ItemType.None)
+            if (items[i].item.type == Item.ItemType.None)
             {
                 voidIndex = i;
                 continue;
             }
+            if (type == Item.ItemType.Weapon)
+                continue;
             if (items[i].item.type != type)
                 continue;
             if (items[i].count + count > maxCount)
@@ -145,17 +160,22 @@ public class Inventory : MonoBehaviour
 
         items[index] = new InventoryItem(item, count + items[index].count, index);
 
-        if (first)
+        if (first && type == Item.ItemType.Block)
         {
-            switch (items[index].item.type)
-            {
-                case Item.ItemType.Block:
-                    SelectAsBlock(items[index]);
-                    break;
-                default:
-                    break;
-            }
+            SelectAsBlock(items[index]);
             first = false;
+        }
+
+        else if(firstWeapon && type == Item.ItemType.Weapon)
+        {
+            SelectAsWeapon(items[index]);
+            firstWeapon = false;
+        }
+
+        if (isInventory)
+        {
+            info.SetActive(false);
+            InventoryGUI();
         }
     }
 
@@ -177,19 +197,38 @@ public class Inventory : MonoBehaviour
 
         info.transform.GetChild(2).gameObject.GetComponent<Button>().interactable = true;
 
+        bool hasValidID = false;
+
         if(selected != null)
         {
             if (selected.slotID == item.slotID)
             {
                 info.transform.GetChild(2).GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Already Selected";
                 info.transform.GetChild(2).gameObject.GetComponent<Button>().interactable = false;
-                return;
+                hasValidID = true;
             }
         }
 
-        if(item.item.type == Item.ItemType.Block)
+        if(selectedWeapon != null)
+        {
+            if (selectedWeapon.slotID == item.slotID)
+            {
+                info.transform.GetChild(2).GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Already Selected";
+                info.transform.GetChild(2).gameObject.GetComponent<Button>().interactable = false;
+                hasValidID = true;
+            }
+        }
+
+        if(item.item.type == Item.ItemType.Block && !hasValidID)
         {
             info.transform.GetChild(2).GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Select As Building Block";
+        }
+
+        else if(item.item.type == Item.ItemType.Weapon)
+        {
+            info.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = "Show Stats";
+            if(!hasValidID)
+                info.transform.GetChild(2).GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Select As Weapon";
         }
     }
 
@@ -197,7 +236,15 @@ public class Inventory : MonoBehaviour
     {
         editor.placeTile = item.item.scriptObject as TerrainType;
         selected = item;
-        if (currItem == selected)
+        if (currItem == item)
+            Clicked(item.slotID);
+    }
+
+    void SelectAsWeapon(InventoryItem item)
+    {
+        movement.weapon = item.item.scriptObject as Weapon;
+        selectedWeapon = item;
+        if (currItem == item)
             Clicked(item.slotID);
     }
 
@@ -209,6 +256,9 @@ public class Inventory : MonoBehaviour
         {
             case Item.ItemType.Block:
                 SelectAsBlock(currItem);
+                break;
+            case Item.ItemType.Weapon:
+                SelectAsWeapon(currItem);
                 break;
             default:
                 break;
@@ -228,6 +278,12 @@ public class Inventory : MonoBehaviour
             {
                 selected = null;
                 editor.range = 0;
+            }
+
+            else if(slotID == selectedWeapon.slotID)
+            {
+                selectedWeapon = null;
+                //TODO: Deactivate Weapon usage
             }
 
             item.item = defaultItem;
