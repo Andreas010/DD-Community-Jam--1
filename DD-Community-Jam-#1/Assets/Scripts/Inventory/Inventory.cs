@@ -177,10 +177,14 @@ public class Inventory : MonoBehaviour
 
         info.transform.GetChild(2).gameObject.GetComponent<Button>().interactable = true;
 
-        if (selected.slotID == item.slotID)
+        if(selected != null)
         {
-            info.transform.GetChild(2).GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Already Selected";
-            info.transform.GetChild(2).gameObject.GetComponent<Button>().interactable = false;
+            if (selected.slotID == item.slotID)
+            {
+                info.transform.GetChild(2).GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Already Selected";
+                info.transform.GetChild(2).gameObject.GetComponent<Button>().interactable = false;
+                return;
+            }
         }
 
         if(item.item.type == Item.ItemType.Block)
@@ -193,6 +197,8 @@ public class Inventory : MonoBehaviour
     {
         editor.placeTile = item.item.scriptObject as TerrainType;
         selected = item;
+        if (currItem == selected)
+            Clicked(item.slotID);
     }
 
     public void ClickedToSelect()
@@ -213,6 +219,9 @@ public class Inventory : MonoBehaviour
     {
         InventoryItem item = items[slotID];
 
+        if (item.item.type == Item.ItemType.None || currItem == null)
+            return;
+
         if (item.count - count <= 0)
         {
             if(slotID == selected.slotID)
@@ -221,9 +230,19 @@ public class Inventory : MonoBehaviour
                 editor.range = 0;
             }
 
-            item = new InventoryItem(defaultItem, 0, slotID);
+            item.item = defaultItem;
+            item.count = 0;
+
+            if (isInventory)
+            {
+                info.SetActive(false);
+                InventoryGUI();
+            }
         }
         else
             item.count -= count;
+
+        if (currItem.slotID == slotID)
+            Clicked(slotID);
     }
 }
