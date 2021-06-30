@@ -462,10 +462,10 @@ MonoBehaviour:
   - {fileID: 8782183611129121217}
   - {fileID: 8782183611440163527}
   - {fileID: 8782183611238223654}
-  defColor: {r: 0, g: 0, b: 0, a: 0}
   info: {fileID: 334552486}
   test1: {fileID: 11400000, guid: c6eb27634aae4214e90ce7dcdb6a48b9, type: 2}
   test2: {fileID: 11400000, guid: 39553a37363a826489a41044730522b6, type: 2}
+  testWeapon: {fileID: 11400000, guid: a141fc99f854ee442a80f523b7f398c3, type: 2}
 --- !u!1 &104187649
 GameObject:
   m_ObjectHideFlags: 0

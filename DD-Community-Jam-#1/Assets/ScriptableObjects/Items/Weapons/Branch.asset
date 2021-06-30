@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d240df0f7d7471439fa27f4ad3572dc, type: 3}
-  m_Name: Brunch
+  m_Name: Branch
   m_EditorClassIdentifier: 
-  displayName: 
-  type: 0
-  maxCount: 0
-  scriptObject: {fileID: 0}
+  displayName: Branch
+  type: 1
+  maxCount: 1
+  scriptObject: {fileID: 11400000, guid: 02f9da6071604854498d4af879de9990, type: 2}
