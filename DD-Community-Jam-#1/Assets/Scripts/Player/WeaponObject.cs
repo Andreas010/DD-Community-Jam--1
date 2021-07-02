@@ -7,6 +7,7 @@ public class WeaponObject : MonoBehaviour
 
     PlayerMovement pm;
     bool canAtk = true;
+    [SerializeField] Inventory inventory;
 
     private void Start()
     {
@@ -15,7 +16,7 @@ public class WeaponObject : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == 10 && canAtk)
+        if (collision.gameObject.layer == 10 && canAtk && inventory.CanAttack())
         {
             canAtk = false;
             collision.GetComponent<Rigidbody2D>().AddForce((collision.gameObject.transform.position - transform.position) * pm.weapon.weaponKnockback, ForceMode2D.Impulse);

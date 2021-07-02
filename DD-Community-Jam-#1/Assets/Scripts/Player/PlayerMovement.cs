@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject heartCanvasObject;
     [SerializeField] GameObject eButton;
     [SerializeField] TextMeshProUGUI energyCrystalsText;
+    [SerializeField] Inventory inventory;
 
     [Header("Parameters")]
     [SerializeField] Vector2 speeds; //speeds.x = normal speed speeds.y = running speed
@@ -153,7 +154,7 @@ public class PlayerMovement : MonoBehaviour
 
         //attack
         #region
-        if(Input.GetButton("Fire1") && atkCooldown <= 0)
+        if(Input.GetButton("Fire1") && atkCooldown <= 0 && inventory.CanAttack())
         {
             //Set params
             weaponCooldownSlider.maxValue = weapon.weaponCooldown;

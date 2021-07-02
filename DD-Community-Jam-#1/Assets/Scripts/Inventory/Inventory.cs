@@ -21,16 +21,19 @@ public class Inventory : MonoBehaviour
 
     InventoryItem[] items;
     public GameObject[] slots;
-    public Image[] slotImg;
+    [SerializeField] Image[] slotImg;
     Color defColor;
-    public GameObject info;
-    public Item test1;
-    public Item test2;
-    public Item testWeapon;
+    [SerializeField] GameObject info;
+    [SerializeField] GameObject stats;
+
+    [SerializeField] Item test1;
+    [SerializeField] Item test2;
+    [SerializeField] Item testWeapon;
 
     InventoryItem selected;
     InventoryItem selectedWeapon;
     InventoryItem currItem;
+    InventoryItem currStatItem;
 
     TerrainEditor editor;
     PlayerMovement movement;
@@ -38,8 +41,12 @@ public class Inventory : MonoBehaviour
     Item defaultItem;
 
     bool isInventory = false;
+    bool isStatsActive = false;
     bool first = true;
     bool firstWeapon = true;
+
+    bool slotIsLeft;
+    bool slotIsTop;
 
     float defRange;
 
@@ -53,6 +60,7 @@ public class Inventory : MonoBehaviour
 
         transform.GetChild(0).gameObject.SetActive(false);
         info.SetActive(false);
+        stats.SetActive(false);
 
         defColor = slotImg[0].color;
 
@@ -81,7 +89,10 @@ public class Inventory : MonoBehaviour
             if(isInventory)
                 InventoryGUI();
             else
+            {
                 info.SetActive(false);
+                stats.SetActive(false);
+            }
         }
 
         
@@ -89,6 +100,9 @@ public class Inventory : MonoBehaviour
 
     void InventoryGUI()
     {
+        info.SetActive(false);
+        stats.SetActive(false);
+
         for (int i = 0; i < items.Length; i++)
         {
             if(items[i].item.type == Item.ItemType.None)
@@ -186,14 +200,30 @@ public class Inventory : MonoBehaviour
         if (item.item.type == Item.ItemType.None)
             return;
 
+        if (isStatsActive && currStatItem != item)
+        {
+            stats.SetActive(false);
+            isStatsActive = false;
+        }
+
         currItem = item;
 
-        info.transform.position = new Vector3(slots[index].transform.position.x - 90, slots[index].transform.position.y - 90, 0);
+        ComputeSlotPosition(index);
+
+        int offX = 0;
+        int offY = 0;
+
+        if (slotIsLeft && !slotIsTop) { offX = 90; offY = 90; }
+        else if (!slotIsLeft && !slotIsTop) { offX = -90; offY = 90; }
+        else if (slotIsLeft && slotIsTop) { offX = 90; offY = -90; }
+        else if (!slotIsLeft && slotIsTop) { offX = -90; offY = -90; }
+
+        info.transform.position = new Vector3(slots[index].transform.position.x + offX, slots[index].transform.position.y + offY, 0);
         info.SetActive(true);
 
         info.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = item.item.displayName;
 
-        info.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = $"Count: {item.count}";
+        info.transform.GetChild(1).GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"Count: {item.count}";
 
         info.transform.GetChild(2).gameObject.GetComponent<Button>().interactable = true;
 
@@ -219,17 +249,55 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        if(item.item.type == Item.ItemType.Block && !hasValidID)
+        if(item.item.type == Item.ItemType.Block)
         {
-            info.transform.GetChild(2).GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Select As Building Block";
+            info.transform.GetChild(1).GetComponent<Button>().interactable = false;
+
+            if(!hasValidID)
+                info.transform.GetChild(2).GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Select As Building Block";
         }
 
         else if(item.item.type == Item.ItemType.Weapon)
         {
-            info.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = "Show Stats";
+            info.transform.GetChild(1).GetComponent<Button>().interactable = true;
+
+            if(isStatsActive)
+                info.transform.GetChild(1).GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Hide Stats";
+            else
+                info.transform.GetChild(1).GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Show Stats";
+
             if(!hasValidID)
                 info.transform.GetChild(2).GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Select As Weapon";
         }
+    }
+
+    void ComputeSlotPosition(int slotID)
+    {
+        switch (slotID)
+        {
+            case 0:
+            case 1:
+            case 2:
+            case 5:
+            case 6:
+            case 7:
+            case 10:
+            case 11:
+            case 12:
+            case 15:
+            case 16:
+            case 17:
+                slotIsLeft = true;
+                break;
+            default:
+                slotIsLeft = false;
+                break;
+        }
+
+        if (slotID > 9)
+            slotIsTop = true;
+        else
+            slotIsTop = false;
     }
 
     void SelectAsBlock(InventoryItem item)
@@ -262,6 +330,66 @@ public class Inventory : MonoBehaviour
                 break;
             default:
                 break;
+        }
+    }
+
+    public void ShowStats()
+    {
+        isStatsActive = !isStatsActive;
+
+        if (!isStatsActive)
+        {
+            stats.SetActive(false);
+            Clicked(currItem.slotID);
+            return;
+        }
+
+        InventoryItem item = currItem;
+
+        currStatItem = item;
+
+        if (item.item.type == Item.ItemType.None || item.item.type == Item.ItemType.Block)
+            return;
+
+        Clicked(currStatItem.slotID);
+
+        stats.SetActive(true);
+
+        ComputeSlotPosition(item.slotID);
+
+        int offX = 0;
+        int offY = 0;
+
+        if (slotIsLeft && !slotIsTop) { offX = 250; offY = 200; }
+        else if (!slotIsLeft && !slotIsTop) { offX = -250; offY = 200; }
+        else if (slotIsLeft && slotIsTop) { offX = 250; offY = -200; }
+        else if (!slotIsLeft && slotIsTop) { offX = -250; offY = -200; }
+
+        if (IsMiddleBar(currStatItem.slotID))
+            offX = 0;
+
+        stats.transform.position = new Vector3(info.transform.position.x + offX, info.transform.position.y + offY, 0);
+
+        info.transform.GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = "Hide Stats";
+
+        stats.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"Cooldown: {(currStatItem.item.scriptObject as Weapon).weaponCooldown}";
+        stats.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = $"Speed: {(currStatItem.item.scriptObject as Weapon).weaponSpeed}";
+        stats.transform.GetChild(2).gameObject.GetComponent<TMP_Text>().text = $"Damage: {(currStatItem.item.scriptObject as Weapon).weaponDamage}";
+        stats.transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = $"Knockback: {(currStatItem.item.scriptObject as Weapon).weaponKnockback}";
+        stats.transform.GetChild(4).gameObject.GetComponent<TMP_Text>().text = $"Mine Speed: {(currStatItem.item.scriptObject as Weapon).mineSpeed}";
+    }
+
+    bool IsMiddleBar(int slotID)
+    {
+        switch (slotID)
+        {
+            case 2:
+            case 7:
+            case 12:
+            case 17:
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -300,5 +428,12 @@ public class Inventory : MonoBehaviour
 
         if (currItem.slotID == slotID)
             Clicked(slotID);
+    }
+
+    public bool CanAttack()
+    {
+        if (selectedWeapon == null)
+            return false;
+        return true;
     }
 }

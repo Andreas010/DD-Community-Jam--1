@@ -10,6 +10,7 @@ public class TerrainEditor : MonoBehaviour
     private Camera cam;
     public TerrainType placeTile;
     public TerrainType airTile;
+    public Inventory inventory;
 
     public LayerMask chunkLayer;
 
@@ -20,10 +21,13 @@ public class TerrainEditor : MonoBehaviour
 
     void Update()
     {
-		if (Input.GetMouseButton(0))
-            Work(airTile);
-        else if (Input.GetMouseButton(1))
-            Work(placeTile);
+        if (inventory.CanAttack())
+        {
+		    if (Input.GetMouseButton(0))
+                Work(airTile);
+            else if (Input.GetMouseButton(1))
+                Work(placeTile);
+        }
     }
 
     public void Work(TerrainType tile)
