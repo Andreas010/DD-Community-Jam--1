@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class Inventory : MonoBehaviour
 {
-    class InventoryItem
+    public class InventoryItem
     {
         public Item item;
         public int count;
@@ -360,10 +360,10 @@ public class Inventory : MonoBehaviour
         int offX = 0;
         int offY = 0;
 
-        if (slotIsLeft && !slotIsTop) { offX = 250; offY = 200; }
-        else if (!slotIsLeft && !slotIsTop) { offX = -250; offY = 200; }
-        else if (slotIsLeft && slotIsTop) { offX = 250; offY = -200; }
-        else if (!slotIsLeft && slotIsTop) { offX = -250; offY = -200; }
+        if (slotIsLeft && !slotIsTop) { offX = 250; offY = 250; }
+        else if (!slotIsLeft && !slotIsTop) { offX = -250; offY = 250; }
+        else if (slotIsLeft && slotIsTop) { offX = 250; offY = -250; }
+        else if (!slotIsLeft && slotIsTop) { offX = -250; offY = -250; }
 
         if (IsMiddleBar(currStatItem.slotID))
             offX = 0;
@@ -411,7 +411,6 @@ public class Inventory : MonoBehaviour
             else if(slotID == selectedWeapon.slotID)
             {
                 selectedWeapon = null;
-                //TODO: Deactivate Weapon usage
             }
 
             item.item = defaultItem;
@@ -428,6 +427,42 @@ public class Inventory : MonoBehaviour
 
         if (currItem.slotID == slotID)
             Clicked(slotID);
+    }
+
+    public void DeleteItem(int slotID)
+    {
+        InventoryItem item = null;
+
+        if (slotID == -1)
+            item = currItem;
+        else
+            item = items[slotID];
+
+        if (selected != null)
+        {
+            if (item.slotID == selected.slotID)
+            {
+                selected = null;
+                editor.range = 0;
+            }
+        }
+
+        if (selectedWeapon != null)
+        {
+            if (item.slotID == selectedWeapon.slotID)
+            {
+                selectedWeapon = null;
+            }
+        }
+
+        item.item = defaultItem;
+        item.count = 0;
+
+        if (isInventory)
+        {
+            info.SetActive(false);
+            InventoryGUI();
+        }
     }
 
     public bool CanAttack()
