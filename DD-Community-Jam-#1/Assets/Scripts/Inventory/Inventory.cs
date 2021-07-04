@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System.Collections;
 
 public class Inventory : MonoBehaviour
 {
@@ -52,9 +53,9 @@ public class Inventory : MonoBehaviour
     bool slotIsLeft;
     bool slotIsTop;
 
-    bool dropMode;
-
     float defRange;
+
+    int itemsToDrop;
 
     void Start()
     {
@@ -102,8 +103,6 @@ public class Inventory : MonoBehaviour
                 drop.SetActive(false);
             }
         }
-
-        
     }
 
     void InventoryGUI()
@@ -412,25 +411,7 @@ public class Inventory : MonoBehaviour
 
         if (item.count - count <= 0)
         {
-            if(slotID == selected.slotID)
-            {
-                selected = null;
-                editor.range = 0;
-            }
-
-            else if(slotID == selectedWeapon.slotID)
-            {
-                selectedWeapon = null;
-            }
-
-            item.item = defaultItem;
-            item.count = 0;
-
-            if (isInventory)
-            {
-                info.SetActive(false);
-                InventoryGUI();
-            }
+            DeleteItem(slotID);
         }
         else
             item.count -= count;
@@ -489,16 +470,48 @@ public class Inventory : MonoBehaviour
         if (item == null)
             return;
 
-        dropMode = true;
+        if(item.item.type == Item.ItemType.Weapon || item.count == 1)
+        {
+            DeleteItem(item.slotID);
+            return;
+        }
 
         drop.SetActive(true);
 
-        slider = drop.transform.GetChild(1).gameObject.GetComponent<Slider>();
-        altInput = drop.transform.GetChild(2).gameObject.GetComponent<TMP_InputField>();
+        slider = drop.transform.GetChild(2).gameObject.GetComponent<Slider>();
+        altInput = drop.transform.GetChild(3).gameObject.GetComponent<TMP_InputField>();
+
+        slider.maxValue = item.count;
+        altInput.text = "0";
     }
 
     public void EndDrop()
     {
+        drop.SetActive(false);
 
+        RemoveItem(currItem.slotID, itemsToDrop);
+    }
+
+    public void UpdateDropCounter(bool isSlider)
+    {
+        if (isSlider)
+        {
+            itemsToDrop = (int)slider.value;
+            altInput.text = itemsToDrop.ToString();
+        }
+
+        else if(altInput.text != itemsToDrop.ToString())
+        {
+            int parser;
+
+            if(int.TryParse(altInput.text, out parser))
+            {
+                slider.value = parser;
+                itemsToDrop = parser;
+            }
+
+            else
+                altInput.text = itemsToDrop.ToString();
+        }
     }
 }
