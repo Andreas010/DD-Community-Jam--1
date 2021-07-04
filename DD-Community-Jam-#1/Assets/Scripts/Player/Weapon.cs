@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Weapon", menuName = "Weapon", order = 1)]
+[CreateAssetMenu(fileName = "Weapon", menuName = "ScriptableObjects/Weapon")]
 public class Weapon : ScriptableObject
 {
     //Current weapon params
     public string name;
 
-    public enum weaponType { Melee, Ranged };
-    public weaponType type;
+    public enum WeaponType { Melee, Ranged };
+    public WeaponType type;
 
     public Sprite sprite;
 

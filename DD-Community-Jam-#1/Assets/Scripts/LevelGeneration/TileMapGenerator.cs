@@ -97,6 +97,15 @@ namespace DD_JAM.LevelGeneration
             if (isChosen)
                 bossRoomThinker.bossThink = type.chunkThink;
 
+            MapManager.ChunkType chunkType = MapManager.ChunkType.None;
+
+            if (isChosen)
+                chunkType = MapManager.ChunkType.BossSeen;
+            else
+                chunkType = MapManager.ChunkType.Seen;
+
+            GetComponentInParent<MapManager>().PlaceChunk(new Vector2Int((int)(transform.position.x / 50f), (int)(transform.position.y / 50f)), chunkType);
+
             System.Random r = new System.Random((int)(transform.position.x * 45558 + transform.position.y * 1452));
 
             for (int x = 0; x < levelSize.x; x++)

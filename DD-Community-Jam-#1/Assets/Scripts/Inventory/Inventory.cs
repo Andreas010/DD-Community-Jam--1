@@ -25,6 +25,7 @@ public class Inventory : MonoBehaviour
     Color defColor;
     [SerializeField] GameObject info;
     [SerializeField] GameObject stats;
+    [SerializeField] GameObject drop;
 
     [SerializeField] Item test1;
     [SerializeField] Item test2;
@@ -40,6 +41,9 @@ public class Inventory : MonoBehaviour
 
     Item defaultItem;
 
+    Slider slider;
+    TMP_InputField altInput;
+
     bool isInventory = false;
     bool isStatsActive = false;
     bool first = true;
@@ -47,6 +51,8 @@ public class Inventory : MonoBehaviour
 
     bool slotIsLeft;
     bool slotIsTop;
+
+    bool dropMode;
 
     float defRange;
 
@@ -61,6 +67,7 @@ public class Inventory : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(false);
         info.SetActive(false);
         stats.SetActive(false);
+        drop.SetActive(false);
 
         defColor = slotImg[0].color;
 
@@ -92,6 +99,7 @@ public class Inventory : MonoBehaviour
             {
                 info.SetActive(false);
                 stats.SetActive(false);
+                drop.SetActive(false);
             }
         }
 
@@ -368,15 +376,17 @@ public class Inventory : MonoBehaviour
         if (IsMiddleBar(currStatItem.slotID))
             offX = 0;
 
-        stats.transform.position = new Vector3(info.transform.position.x + offX, info.transform.position.y + offY, 0);
+        //stats.transform.position = new Vector3(info.transform.position.x + offX, info.transform.position.y /*+ offY*/, 0);
 
         info.transform.GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = "Hide Stats";
 
-        stats.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = $"Cooldown: {(currStatItem.item.scriptObject as Weapon).weaponCooldown}";
-        stats.transform.GetChild(1).gameObject.GetComponent<TMP_Text>().text = $"Speed: {(currStatItem.item.scriptObject as Weapon).weaponSpeed}";
-        stats.transform.GetChild(2).gameObject.GetComponent<TMP_Text>().text = $"Damage: {(currStatItem.item.scriptObject as Weapon).weaponDamage}";
-        stats.transform.GetChild(3).gameObject.GetComponent<TMP_Text>().text = $"Knockback: {(currStatItem.item.scriptObject as Weapon).weaponKnockback}";
-        stats.transform.GetChild(4).gameObject.GetComponent<TMP_Text>().text = $"Mine Speed: {(currStatItem.item.scriptObject as Weapon).mineSpeed}";
+        Transform statsText = stats.transform.GetChild(0);
+
+        statsText.gameObject.GetComponent<TMP_Text>().text = $"Cooldown: {(currStatItem.item.scriptObject as Weapon).weaponCooldown}\n";
+        statsText.gameObject.GetComponent<TMP_Text>().text += $"Speed: {(currStatItem.item.scriptObject as Weapon).weaponSpeed}\n";
+        statsText.gameObject.GetComponent<TMP_Text>().text += $"Damage: {(currStatItem.item.scriptObject as Weapon).weaponDamage}\n";
+        statsText.gameObject.GetComponent<TMP_Text>().text += $"Knockback: {(currStatItem.item.scriptObject as Weapon).weaponKnockback}\n";
+        statsText.gameObject.GetComponent<TMP_Text>().text += $"Mine Speed: {(currStatItem.item.scriptObject as Weapon).mineSpeed}";
     }
 
     bool IsMiddleBar(int slotID)
@@ -470,5 +480,25 @@ public class Inventory : MonoBehaviour
         if (selectedWeapon == null)
             return false;
         return true;
+    }
+
+    public void Drop()
+    {
+        InventoryItem item = currItem;
+
+        if (item == null)
+            return;
+
+        dropMode = true;
+
+        drop.SetActive(true);
+
+        slider = drop.transform.GetChild(1).gameObject.GetComponent<Slider>();
+        altInput = drop.transform.GetChild(2).gameObject.GetComponent<TMP_InputField>();
+    }
+
+    public void EndDrop()
+    {
+
     }
 }
