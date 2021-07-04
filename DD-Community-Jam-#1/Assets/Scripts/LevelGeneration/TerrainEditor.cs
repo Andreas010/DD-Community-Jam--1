@@ -21,11 +21,11 @@ public class TerrainEditor : MonoBehaviour
 
     void Update()
     {
-        if (inventory.CanAttack())
+        if (!inventory.isInventory)
         {
-		    if (Input.GetMouseButton(0))
+		    if (Input.GetMouseButton(0) && inventory.CanAttack())
                 Work(airTile);
-            else if (Input.GetMouseButton(1))
+            else if (Input.GetMouseButton(1) && inventory.CanPlaceBlock())
                 Work(placeTile);
         }
     }

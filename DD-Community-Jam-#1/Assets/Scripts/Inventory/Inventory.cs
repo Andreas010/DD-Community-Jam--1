@@ -45,7 +45,7 @@ public class Inventory : MonoBehaviour
     Slider slider;
     TMP_InputField altInput;
 
-    bool isInventory = false;
+    public bool isInventory = false;
     bool isStatsActive = false;
     bool first = true;
     bool firstWeapon = true;
@@ -104,6 +104,8 @@ public class Inventory : MonoBehaviour
             }
         }
     }
+
+    public bool CanPlaceBlock() => selected != null;
 
     void InventoryGUI()
     {
@@ -205,7 +207,10 @@ public class Inventory : MonoBehaviour
         InventoryItem item = items[index];
 
         if (item.item.type == Item.ItemType.None)
+        {
+            info.SetActive(false);
             return;
+        }
 
         if (isStatsActive && currStatItem != item)
         {
@@ -420,6 +425,17 @@ public class Inventory : MonoBehaviour
             Clicked(slotID);
     }
 
+    public InventoryItem GetFirstItem(Item.ItemType type)
+    {
+        foreach(InventoryItem i in items)
+        {
+            if (i.item.type == type)
+                return i;
+        }
+
+        return null;
+    }
+
     public void DeleteItem(int slotID)
     {
         InventoryItem item = null;
@@ -429,25 +445,35 @@ public class Inventory : MonoBehaviour
         else
             item = items[slotID];
 
+        item.item = defaultItem;
+        item.count = 0;
+
         if (selected != null)
         {
-            if (item.slotID == selected.slotID)
+            if (item == selected)
             {
-                selected = null;
-                editor.range = 0;
+                InventoryItem altItem = GetFirstItem(Item.ItemType.Block);
+
+                if (altItem != null)
+                    selected = altItem;
+                else
+                    selected = null;
             }
         }
 
         if (selectedWeapon != null)
         {
-            if (item.slotID == selectedWeapon.slotID)
+            if (item == selectedWeapon)
             {
-                selectedWeapon = null;
+                InventoryItem altItem = GetFirstItem(Item.ItemType.Weapon);
+
+                if (altItem != null)
+                    selectedWeapon = altItem;
+                else
+                    selectedWeapon = null;
             }
         }
 
-        item.item = defaultItem;
-        item.count = 0;
 
         if (isInventory)
         {
@@ -456,12 +482,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public bool CanAttack()
-    {
-        if (selectedWeapon == null)
-            return false;
-        return true;
-    }
+    public bool CanAttack() => selectedWeapon != null;
 
     public void Drop()
     {
