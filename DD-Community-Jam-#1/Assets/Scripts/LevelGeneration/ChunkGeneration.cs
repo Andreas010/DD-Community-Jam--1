@@ -27,6 +27,7 @@ namespace DD_JAM.LevelGeneration
         {
             savedChunks = new Dictionary<Vector2Int, TerrainType[,]>();
             currentChunks = new Dictionary<Vector2Int, GameObject>();
+            GetComponent<MapManager>().Init();
         }
 
         void LateUpdate()
@@ -92,6 +93,7 @@ namespace DD_JAM.LevelGeneration
                         newChunk.GetComponent<TileMapGenerator>().isChosen = true;
 
                     newChunk.GetComponent<TileMapGenerator>().cg = this;
+                    newChunk.GetComponent<TileMapGenerator>().isPlayerChunk = chunkPositions[i] == new Vector2Int(0, 0);
 
                     if (savedChunks.ContainsKey(key))
                     {

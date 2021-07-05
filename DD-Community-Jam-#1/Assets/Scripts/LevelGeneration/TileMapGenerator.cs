@@ -26,6 +26,7 @@ namespace DD_JAM.LevelGeneration
         private float curThreshhold;
         public Vector2[] possibleEnemyPositions;
         public bool isChosen;
+        public bool isPlayerChunk;
 
         [SerializeReference] GameObject enemy;
 
@@ -99,10 +100,14 @@ namespace DD_JAM.LevelGeneration
 
             MapManager.ChunkType chunkType = MapManager.ChunkType.None;
 
-            if (isChosen)
+            if (isChosen && !isPlayerChunk)
                 chunkType = MapManager.ChunkType.BossSeen;
-            else
+            else if (!isChosen && !isPlayerChunk)
                 chunkType = MapManager.ChunkType.Seen;
+            else if (isChosen && isPlayerChunk)
+                chunkType = MapManager.ChunkType.BossExplored;
+            else
+                chunkType = MapManager.ChunkType.Explored;
 
             GetComponentInParent<MapManager>().PlaceChunk(new Vector2Int((int)(transform.position.x / 50f), (int)(transform.position.y / 50f)), chunkType);
 
