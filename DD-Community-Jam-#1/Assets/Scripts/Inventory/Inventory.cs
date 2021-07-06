@@ -23,10 +23,13 @@ public class Inventory : MonoBehaviour
     InventoryItem[] items;
     public GameObject[] slots;
     [SerializeField] Image[] slotImg;
+
     Color defColor;
+
     [SerializeField] GameObject info;
     [SerializeField] GameObject stats;
     [SerializeField] GameObject drop;
+    public GameObject droppedItem;
 
     [SerializeField] Item test1;
     [SerializeField] Item test2;
@@ -56,6 +59,8 @@ public class Inventory : MonoBehaviour
     float defRange;
 
     int itemsToDrop;
+
+    [SerializeField] Transform player;
 
     void Start()
     {
@@ -510,6 +515,16 @@ public class Inventory : MonoBehaviour
     {
         drop.SetActive(false);
 
+        GameObject item = Instantiate(droppedItem, player.position, Quaternion.identity);
+        if(currItem.item.type == Item.ItemType.Block)
+            item.GetComponent<SpriteRenderer>().sprite = (currItem.item.scriptObject as TerrainType).tile.sprite;
+        else if (currItem.item.type == Item.ItemType.Weapon)
+            item.GetComponent<SpriteRenderer>().sprite = (currItem.item.scriptObject as Weapon).sprite;
+
+        item.GetComponentInChildren<DroppedItem>().inventory = this;
+        item.GetComponentInChildren<DroppedItem>().item = currItem.item;
+        item.GetComponentInChildren<DroppedItem>().count = itemsToDrop;
+
         RemoveItem(currItem.slotID, itemsToDrop);
     }
 
@@ -523,9 +538,8 @@ public class Inventory : MonoBehaviour
 
         else if(altInput.text != itemsToDrop.ToString())
         {
-            int parser;
 
-            if(int.TryParse(altInput.text, out parser))
+            if (int.TryParse(altInput.text, out int parser))
             {
                 slider.value = parser;
                 itemsToDrop = parser;
