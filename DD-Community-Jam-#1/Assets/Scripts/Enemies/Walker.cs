@@ -8,15 +8,15 @@ public class Walker : MonoBehaviour
     Transform player;
     Rigidbody2D rig;
     Enemy enemyScript;
-    [SerializeField] LayerMask groundLayer;
+    public LayerMask groundLayer;
 
     float xVel;
-    [SerializeField] float jumpForce;
-    [SerializeField] float speed;
-    [SerializeField] float minDistFromGround = 1;
-    [SerializeField] float damage;
+    public float jumpForce;
+    public float speed;
+    public float minDistFromGround = 1;
+    public float damage;
 
-    [SerializeField] bool damageInAir;
+    public bool damageInAir;
     bool grounded;
 
 

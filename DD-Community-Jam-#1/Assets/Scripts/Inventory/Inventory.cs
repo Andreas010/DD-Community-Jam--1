@@ -22,18 +22,18 @@ public class Inventory : MonoBehaviour
 
     InventoryItem[] items;
     public GameObject[] slots;
-    [SerializeField] Image[] slotImg;
+    public Image[] slotImg;
 
     Color defColor;
 
-    [SerializeField] GameObject info;
-    [SerializeField] GameObject stats;
-    [SerializeField] GameObject drop;
+    public GameObject info;
+    public GameObject stats;
+    public GameObject drop;
     public GameObject droppedItem;
 
-    [SerializeField] Item test1;
-    [SerializeField] Item test2;
-    [SerializeField] Item testWeapon;
+    public Item test1;
+    public Item test2;
+    public Item testWeapon;
 
     InventoryItem selected;
     InventoryItem selectedWeapon;
@@ -60,7 +60,7 @@ public class Inventory : MonoBehaviour
 
     int itemsToDrop;
 
-    [SerializeField] Transform player;
+    public Transform player;
 
     void Start()
     {
@@ -371,21 +371,6 @@ public class Inventory : MonoBehaviour
         Clicked(currStatItem.slotID);
 
         stats.SetActive(true);
-
-        ComputeSlotPosition(item.slotID);
-
-        int offX = 0;
-        int offY = 0;
-
-        if (slotIsLeft && !slotIsTop) { offX = 250; offY = 250; }
-        else if (!slotIsLeft && !slotIsTop) { offX = -250; offY = 250; }
-        else if (slotIsLeft && slotIsTop) { offX = 250; offY = -250; }
-        else if (!slotIsLeft && slotIsTop) { offX = -250; offY = -250; }
-
-        if (IsMiddleBar(currStatItem.slotID))
-            offX = 0;
-
-        //stats.transform.position = new Vector3(info.transform.position.x + offX, info.transform.position.y /*+ offY*/, 0);
 
         info.transform.GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = "Hide Stats";
 

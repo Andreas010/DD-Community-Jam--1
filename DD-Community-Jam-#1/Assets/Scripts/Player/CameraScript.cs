@@ -5,10 +5,10 @@ using UnityEngine;
 public class CameraScript : MonoBehaviour
 {
 
-    [SerializeField] Transform player;
+    public Transform player;
     Vector3 originalPos;
 
-    [SerializeField] float lerpTime;
+    public float lerpTime;
 
     void FixedUpdate()
     {

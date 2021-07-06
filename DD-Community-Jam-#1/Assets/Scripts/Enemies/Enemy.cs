@@ -6,16 +6,16 @@ using UnityEngine.UI;
 public class Enemy : MonoBehaviour
 {
 
-    [SerializeField] Slider healthBar;
-    [SerializeField] GameObject hitParticles;
+    public Slider healthBar;
+    public GameObject hitParticles;
     Rigidbody2D rig;
-    [SerializeField] PhysicsMaterial2D[] physicsMaterials; // i 0 = no friction i 1 = has friction
-    [SerializeField] GameObject energyCrystalPickup;
+    public PhysicsMaterial2D[] physicsMaterials; // i 0 = no friction i 1 = has friction
+    public GameObject energyCrystalPickup;
 
-    [SerializeField] float chanceToDropEnergyCrystal;
-    [SerializeField] float maxEnergyCrystalDropAmt;
+    public float chanceToDropEnergyCrystal;
+    public float maxEnergyCrystalDropAmt;
     float health;
-    [SerializeField] float maxHealth;
+    public float maxHealth;
     float sliderA; //alpha colour
 
     [System.NonSerialized] public bool takingKnockback;

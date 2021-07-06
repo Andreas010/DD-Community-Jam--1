@@ -28,7 +28,7 @@ namespace DD_JAM.LevelGeneration
         public bool isChosen;
         public bool isPlayerChunk;
 
-        [SerializeReference] GameObject enemy;
+        public GameObject enemy;
 
         private void Update()
         {

@@ -7,7 +7,7 @@ public class DroppedItem : MonoBehaviour
     public Inventory inventory;
     public Item item;
     public int count;
-    [SerializeField] float timeToPickUp;
+    public float timeToPickUp;
     float curTime;
 
     void Start()

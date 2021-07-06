@@ -6,9 +6,9 @@ using TMPro;
 public class UpgradeBench : MonoBehaviour
 {
 
-    [SerializeField] GameObject canvas;
+    public GameObject canvas;
     PlayerMovement pm;
-    [SerializeField] TextMeshProUGUI[] costs;
+    public TextMeshProUGUI[] costs;
 
     bool canInteract;
 

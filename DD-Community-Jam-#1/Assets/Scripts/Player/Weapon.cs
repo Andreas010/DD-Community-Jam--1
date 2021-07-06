@@ -6,7 +6,7 @@ using UnityEngine;
 public class Weapon : ScriptableObject
 {
     //Current weapon params
-    public string name;
+    public new string name;
 
     public enum WeaponType { Melee, Ranged };
     public WeaponType type;

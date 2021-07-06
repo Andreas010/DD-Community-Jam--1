@@ -5,12 +5,12 @@ using UnityEngine;
 public class SetActiveInRange : MonoBehaviour
 {
 
-    [SerializeReference] GameObject objectToActivify;
-    [SerializeReference] Transform distanceObject;
-    [SerializeReference] float maxDistance;
-    [System.NonSerialized] public float distance;
+    public GameObject objectToActivify;
+    public Transform distanceObject;
+    public float maxDistance;
+    [HideInInspector] public float distance;
 
-    [SerializeReference] bool usePlayerPosAsDistanceObject;
+    public bool usePlayerPosAsDistanceObject;
 
     void Start()
     {

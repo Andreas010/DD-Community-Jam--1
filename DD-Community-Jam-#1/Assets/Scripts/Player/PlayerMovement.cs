@@ -12,31 +12,31 @@ public class PlayerMovement : MonoBehaviour
     GameObject cam;
     Rigidbody2D rig;
     SpriteRenderer sr;
-    [SerializeField] LayerMask groundLayer;
-    [SerializeField] Animator weaponAnimator;
+    public LayerMask groundLayer;
+    public Animator weaponAnimator;
     Animator animator;
-    [SerializeField] Slider weaponCooldownSlider;
-    [SerializeField] WeaponObject weaponScript;
-    [SerializeField] Transform healthCanvas;
-    [SerializeField] GameObject heartCanvasObject;
-    [SerializeField] GameObject eButton;
-    [SerializeField] TextMeshProUGUI energyCrystalsText;
-    [SerializeField] Inventory inventory;
+    public Slider weaponCooldownSlider;
+    public WeaponObject weaponScript;
+    public Transform healthCanvas;
+    public GameObject heartCanvasObject;
+    public GameObject eButton;
+    public TextMeshProUGUI energyCrystalsText;
+    public Inventory inventory;
 
     [Header("Parameters")]
-    [SerializeField] Vector2 speeds; //speeds.x = normal speed speeds.y = running speed
-    [SerializeField] float jumpForce = 16;
+    public Vector2 speeds; //speeds.x = normal speed speeds.y = running speed
+    public float jumpForce = 16;
     float jumpTimeCounter;
-    [SerializeField] float jumpTime = 0.2f;
-    [SerializeField] float fallMultiplier = 2.5f;
-    [SerializeField] float downwardJumpForce = -3;
-    [SerializeField] float minDistFromGround = 0.6f;
-    [SerializeField] float invincibleTime;
+    public float jumpTime = 0.2f;
+    public float fallMultiplier = 2.5f;
+    public float downwardJumpForce = -3;
+    public float minDistFromGround = 0.6f;
+    public float invincibleTime;
     float atkCooldown;
     float health = 3;
     float maxHealth = 3;
 
-    [System.NonSerialized] public Vector4 costForUpgrade = new Vector4(5, 5, 5, 5);
+    [HideInInspector] public Vector4 costForUpgrade = new Vector4(5, 5, 5, 5);
 
     [System.NonSerialized] public int energyCrystals = 999;
 
@@ -49,10 +49,8 @@ public class PlayerMovement : MonoBehaviour
 
     //Current weapon params
     public Weapon weapon;
-    float weaponCooldown = 1;
-    float weaponSpeed = 1;
-    [System.NonSerialized] public float weaponDamage = .5f;
-    [System.NonSerialized] public float weaponKnockback = 8;
+    [HideInInspector] public float weaponDamage = .5f;
+    [HideInInspector] public float weaponKnockback = 8;
 
     void Start()
     {

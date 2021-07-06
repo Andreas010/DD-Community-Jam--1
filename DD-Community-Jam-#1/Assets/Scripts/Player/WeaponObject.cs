@@ -7,7 +7,7 @@ public class WeaponObject : MonoBehaviour
 
     PlayerMovement pm;
     bool canAtk = true;
-    [SerializeField] Inventory inventory;
+    public Inventory inventory;
 
     private void Start()
     {
