@@ -108,6 +108,7 @@ MonoBehaviour:
   cg: {fileID: 0}
   possibleEnemyPositions: []
   isChosen: 0
+  isPlayerChunk: 0
   enemy: {fileID: 6026918391313126627, guid: 3c8c14bc7ce0da94e83b6e3a3aebdeaf, type: 3}
 --- !u!1839735485 &4112230609855774734
 Tilemap:
@@ -165,7 +166,7 @@ TilemapRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
