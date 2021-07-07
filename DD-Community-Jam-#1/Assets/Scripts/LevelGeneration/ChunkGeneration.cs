@@ -97,7 +97,6 @@ namespace DD_JAM.LevelGeneration
 
                     if (savedChunks.ContainsKey(key))
                     {
-                        //TODO: Find out why
                         newChunk.GetComponent<LevelGenerator>().Generate();
                         newChunk.GetComponent<TileMapGenerator>().ReGenerate(savedChunks[key]);
                     } else

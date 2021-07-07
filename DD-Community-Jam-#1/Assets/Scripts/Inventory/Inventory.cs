@@ -483,7 +483,8 @@ public class Inventory : MonoBehaviour
 
         if(item.item.type == Item.ItemType.Weapon || item.count == 1)
         {
-            DeleteItem(item.slotID);
+            itemsToDrop = 1;
+            EndDrop();
             return;
         }
 
@@ -509,6 +510,8 @@ public class Inventory : MonoBehaviour
         item.GetComponentInChildren<DroppedItem>().inventory = this;
         item.GetComponentInChildren<DroppedItem>().item = currItem.item;
         item.GetComponentInChildren<DroppedItem>().count = itemsToDrop;
+
+        item.GetComponent<Rigidbody2D>().velocity = new Vector2(player.GetComponent<SpriteRenderer>().flipX ? -5 : 5, 3);
 
         RemoveItem(currItem.slotID, itemsToDrop);
     }

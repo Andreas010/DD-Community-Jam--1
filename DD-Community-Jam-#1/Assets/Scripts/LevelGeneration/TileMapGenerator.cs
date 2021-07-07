@@ -13,6 +13,9 @@ namespace DD_JAM.LevelGeneration
         [Header("What color takes which spot?")]
         public Gradient colorLevel;
         [Header("What does exist?")]
+        public StoneRender render;
+        public StoneRender forceRender;
+        public TerrainType renderReplacement;
         public TerrainType[] types;
         public TerrainType forcedGround;
         public TerrainType airTile;
@@ -30,11 +33,11 @@ namespace DD_JAM.LevelGeneration
 
         public GameObject enemy;
 
-        private void Update()
-        {
-            if (GameObject.FindGameObjectsWithTag("Enemy").Length < 20)
-                Instantiate(enemy, possibleEnemyPositions[Random.Range(0, possibleEnemyPositions.Length)], Quaternion.identity);
-        }
+        //private void Update()
+        //{
+        //    if (GameObject.FindGameObjectsWithTag("Enemy").Length < 20)
+        //        Instantiate(enemy, possibleEnemyPositions[Random.Range(0, possibleEnemyPositions.Length)], Quaternion.identity);
+        //}
 
         public void ReGenerate(TerrainType[,] level)
         {
@@ -120,26 +123,25 @@ namespace DD_JAM.LevelGeneration
                     Vector3Int pos = tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y));
 
                     if (!isChosen || transform.position == Vector3.zero)
-                        tilemap.SetTile(pos, curLevel[x, y].tile);
+                        tilemap.SetTile(pos, CalculateTile(render, x, y));
                     else
                     {
                         float red = mask.GetPixel(x, y).r;
                         float green = mask.GetPixel(x, y).g;
-                        //float blue = mask.GetPixel(x, y).b;
 
                         if (green != 0)
-                            tilemap.SetTile(pos, forcedGround.tile);
+                            tilemap.SetTile(pos, CalculateTile(forceRender, x, y));
                         else if (r.Next(0, 1000) / 1000f <= red)
                             tilemap.SetTile(pos, airTile.tile);
                         else
-                            tilemap.SetTile(pos, curLevel[x, y].tile);
+                            tilemap.SetTile(pos, CalculateTile(render, x, y));
                     }
                 }
             }
 
             GenerateEnemyPositions();
 
-            if(isChosen)
+            if(isChosen && isPlayerChunk)
             {
                 /* BLUE CHANNEL COLO(u)RS
                  * BLUE = 255 = Boss Position
@@ -148,6 +150,67 @@ namespace DD_JAM.LevelGeneration
                  */
                 bossRoomThinker.StartThinking(GenerateBossPosition(mask), GenerateMinionPositions(mask), GenerateHazardPositions(mask));
             }
+        }
+
+        Tile CalculateTile(StoneRender curRender, int x, int y)
+        {
+            if (curLevel[x, y] == airTile)
+                return airTile.tile;
+
+            bool MU = GetTile(x    , y + 1) != airTile;
+            bool LM = GetTile(x - 1, y    ) != airTile;
+            bool RM = GetTile(x + 1, y    ) != airTile;
+            bool MB = GetTile(x    , y - 1) != airTile;
+
+            bool LU = GetTile(x - 1, y + 1) != airTile;
+            bool RU = GetTile(x + 1, y + 1) != airTile;
+            bool LB = GetTile(x - 1, y - 1) != airTile;
+            bool RB = GetTile(x + 1, y - 1) != airTile;
+
+            if (MU && !LM && !RM && !MB)
+                return curRender.VB;
+            else if (!MU && LM && !RM && !MB)
+                return curRender.HR;
+            else if (MU && LM && !RM && !MB)
+                return curRender.RB;
+            else if (!MU && !LM && RM && !MB)
+                return curRender.HL;
+            else if (MU && !LM && RM && !MB)
+                return curRender.LB;
+            else if (!MU && LM && RM && !MB)
+                return curRender.HM;
+            else if (MU && LM && RM && !MB)
+                return curRender.MB;
+            else if (!MU && !LM && !RM && MB)
+                return curRender.VU;
+            else if (MU && !LM && !RM && MB) //
+                return curRender.VM;
+            else if (!MU && LM && !RM && MB)
+                return curRender.RU;
+            else if (MU && LM && !RM && MB)
+                return curRender.RM;
+            else if (!MU && !LM && RM && MB)
+                return curRender.LU;
+            else if (MU && !LM && RM && MB)
+                return curRender.LM;
+            else if (!MU && LM && RM && MB)
+                return curRender.MU;
+            else if (MU && LM && RM && MB)
+            {
+                if (LU && RU && LB && RB)
+                    return curRender.MM;
+                else if (!LU && RU && LB && RB)
+                    return curRender.ERB;
+                else if (LU && !RU && LB && RB)
+                    return curRender.ELB;
+                else if (LU && RU && !LB && RB)
+                    return curRender.ERU;
+                else if (LU && RU && LB && !RB)
+                    return curRender.ELU;
+                return curRender.MM;
+            }
+            else
+                return curRender.SG;
         }
 
         public void SetTile(int x, int y, TerrainType tile)
@@ -162,8 +225,18 @@ namespace DD_JAM.LevelGeneration
                 }
             }
 
-            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y)), tmpTile);
             curLevel[x, y] = tile;
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y)), CalculateTile(forceRender, x, y));
+            
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x - 1, y - (levelSize.y / 2) + transform.position.y)), CalculateTile(forceRender, x - 1, y));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x + 1, y - (levelSize.y / 2) + transform.position.y)), CalculateTile(forceRender, x + 1, y));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y - 1)), CalculateTile(forceRender, x, y - 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y + 1)), CalculateTile(forceRender, x, y + 1));
+
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x + 1, y - (levelSize.y / 2) + transform.position.y + 1)), CalculateTile(forceRender, x + 1, y + 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x + 1, y - (levelSize.y / 2) + transform.position.y - 1)), CalculateTile(forceRender, x + 1, y - 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x - 1, y - (levelSize.y / 2) + transform.position.y - 1)), CalculateTile(forceRender, x - 1, y - 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x - 1, y - (levelSize.y / 2) + transform.position.y + 1)), CalculateTile(forceRender, x - 1, y + 1));
         }
         public TerrainType[,] GetLevel()
         {
@@ -171,6 +244,9 @@ namespace DD_JAM.LevelGeneration
         }
         public TerrainType GetTile(int x, int y)
         {
+            if (x < 0 || y < 0 || x >= 50 || y >= 50)
+                return null;
+
             return curLevel[x, y];
         }
         float QuickMaths(float val, float min)
