@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
+using TMPro;
 
 //Potential Script name: I_hate_myself
 namespace DD_JAM.LevelGeneration
@@ -19,6 +19,8 @@ namespace DD_JAM.LevelGeneration
         private Vector2Int lastChunk = new Vector2Int(int.MaxValue, int.MaxValue);
         private bool firstFrame;
 
+        public TMP_Text playerPosText;
+
         public BossRoomType[] rooms;
         [Range(0f, 100f)]
         public float maskApplyanceChance;
@@ -32,6 +34,11 @@ namespace DD_JAM.LevelGeneration
 
         void LateUpdate()
         {
+            if (Input.GetKeyDown(KeyCode.F3))
+                playerPosText.gameObject.SetActive(!playerPosText.gameObject.activeInHierarchy);
+
+
+
             Vector2Int[] chunkPositions = {
                 new Vector2Int(-1, 0),
                 new Vector2Int(-1, 1),
@@ -46,7 +53,12 @@ namespace DD_JAM.LevelGeneration
 
             Vector2Int currentChunk = new Vector2Int((int)(objectToCheck.position.x / 50f), (int)(objectToCheck.position.y / 50f));
 
-            if(currentChunk != lastChunk)
+            if (playerPosText.gameObject.activeInHierarchy)
+            {
+                playerPosText.text = $"X:{currentChunk.x:00} Y:{currentChunk.y:00} x:{(objectToCheck.position.x - (currentChunk.x * 50)):00.00} y:{(objectToCheck.position.y - (currentChunk.y * 50)):00.00}";
+            }
+
+            if (currentChunk != lastChunk)
             {
                 //Something changed
 
