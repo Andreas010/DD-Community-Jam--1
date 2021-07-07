@@ -33,11 +33,11 @@ namespace DD_JAM.LevelGeneration
 
         public GameObject enemy;
 
-        //private void Update()
-        //{
-        //    if (GameObject.FindGameObjectsWithTag("Enemy").Length < 20)
-        //        Instantiate(enemy, possibleEnemyPositions[Random.Range(0, possibleEnemyPositions.Length)], Quaternion.identity);
-        //}
+        private void Update()
+        {
+            if (GameObject.FindGameObjectsWithTag("Enemy").Length < 20)
+                Instantiate(enemy, possibleEnemyPositions[Random.Range(0, possibleEnemyPositions.Length)], Quaternion.identity);
+        }
 
         public void ReGenerate(TerrainType[,] level)
         {
@@ -154,7 +154,7 @@ namespace DD_JAM.LevelGeneration
 
         Tile CalculateTile(StoneRender curRender, int x, int y)
         {
-            if (curLevel[x, y] == airTile)
+            if (GetTile(x, y) == airTile)
                 return airTile.tile;
 
             bool MU = GetTile(x    , y + 1) != airTile;
