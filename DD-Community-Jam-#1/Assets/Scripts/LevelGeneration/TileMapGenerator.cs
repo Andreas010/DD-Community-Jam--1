@@ -156,7 +156,8 @@ namespace DD_JAM.LevelGeneration
 
         Tile CalculateTile(StoneRender curRender, int x, int y)
         {
-            if (GetTile(x, y) == airTile)
+            TerrainType curTile = GetTile(x, y);
+            if (curTile == airTile || curTile == null)
                 return airTile.tile;
 
             bool MU = GetTile(x    , y + 1) != airTile;
@@ -185,7 +186,7 @@ namespace DD_JAM.LevelGeneration
                 return curRender.MB;
             else if (!MU && !LM && !RM && MB)
                 return curRender.VU;
-            else if (MU && !LM && !RM && MB) //
+            else if (MU && !LM && !RM && MB)
                 return curRender.VM;
             else if (!MU && LM && !RM && MB)
                 return curRender.RU;

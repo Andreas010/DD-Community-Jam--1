@@ -61,6 +61,10 @@ namespace DD_JAM.LevelGeneration
             if (currentChunk != lastChunk)
             {
                 //Something changed
+                Rigidbody2D objRb = objectToCheck.GetComponent<Rigidbody2D>();
+                Vector2 position = objRb.position;
+                Vector2 speed = objRb.velocity;
+                objRb.bodyType = RigidbodyType2D.Static;
 
                 for (int i = 0; i < chunkPositions.Length; i++)
                 {
@@ -127,9 +131,12 @@ namespace DD_JAM.LevelGeneration
 
                     firstFrame = true;
                 }
-            }
 
-            lastChunk = currentChunk;
+                lastChunk = currentChunk;
+                objRb.bodyType = RigidbodyType2D.Dynamic;
+                objRb.position = position;
+                objRb.velocity = speed;
+            }
         }
     }
 }
