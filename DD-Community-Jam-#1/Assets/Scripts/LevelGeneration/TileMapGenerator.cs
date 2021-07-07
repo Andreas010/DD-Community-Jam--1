@@ -101,7 +101,7 @@ namespace DD_JAM.LevelGeneration
             if (isChosen)
                 bossRoomThinker.bossThink = type.chunkThink;
 
-            MapManager.ChunkType chunkType = MapManager.ChunkType.None;
+            MapManager.ChunkType chunkType;
 
             if (isChosen && !isPlayerChunk)
                 chunkType = MapManager.ChunkType.BossSeen;
@@ -109,6 +109,8 @@ namespace DD_JAM.LevelGeneration
                 chunkType = MapManager.ChunkType.Seen;
             else if (isChosen && isPlayerChunk)
                 chunkType = MapManager.ChunkType.BossExplored;
+            else if (isPlayerChunk)
+                    chunkType = MapManager.ChunkType.Current;
             else
                 chunkType = MapManager.ChunkType.Explored;
 

@@ -6,7 +6,7 @@ public class MapManager : MonoBehaviour
 {
     public enum ChunkType
     {
-        None, Seen, Explored, BossSeen, BossExplored
+        None, Seen, Explored, BossSeen, BossExplored, Current
     }
 
     [System.Serializable]
@@ -49,6 +49,8 @@ public class MapManager : MonoBehaviour
             return oldType;
         if (oldType == ChunkType.BossExplored && newType == ChunkType.BossSeen)
             return oldType;
+        if (oldType == ChunkType.Current && newType == ChunkType.Seen)
+            return ChunkType.Explored;
         return newType;
     }
 

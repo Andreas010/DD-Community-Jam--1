@@ -37,23 +37,29 @@ public class BossRoomSpikes : IBossChunkable
 
     public override void OnBossChunkExit()
     {
-        for (int i = 0; i < minions.Count; i++)
+        if(minions != null)
         {
-            if (minions[i] == null)
-                minions.RemoveAt(i);
-            else
-                Destroy(minions[i]);
+            for (int i = 0; i < minions.Count; i++)
+            {
+                if (minions[i] == null)
+                    minions.RemoveAt(i);
+                else
+                    Destroy(minions[i]);
+            }
         }
-        //Remove Spikes if they don't exist
-        for (int i = 0; i < spikes.Count; i++)
+        if (spikes != null)
         {
-            if (spikes[i] == null)
-                spikes.RemoveAt(i);
-            else
-                Destroy(spikes[i]);
+            for (int i = 0; i < spikes.Count; i++)
+            {
+                if (spikes[i] == null)
+                    spikes.RemoveAt(i);
+                else
+                    Destroy(spikes[i]);
+            }
         }
 
-        Destroy(bossObject);
+        if(bossObject != null)
+            Destroy(bossObject);
     }
 
     public override void OnBossChunkStay()
