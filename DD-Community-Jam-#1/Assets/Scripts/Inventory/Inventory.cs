@@ -23,6 +23,8 @@ public class Inventory : MonoBehaviour
     InventoryItem[] items;
     public GameObject[] slots;
     public Image[] slotImg;
+    public GameObject currBlockHolder;
+    public GameObject currWeaponHolder;
 
     Color defColor;
 
@@ -205,6 +207,9 @@ public class Inventory : MonoBehaviour
             info.SetActive(false);
             InventoryGUI();
         }
+
+        if (items[index].slotID == selected.slotID)
+            currBlockHolder.transform.GetChild(0).GetComponent<TMP_Text>().text = items[index].count.ToString();
     }
 
     public void Clicked(int index)
@@ -321,6 +326,10 @@ public class Inventory : MonoBehaviour
     {
         editor.placeTile = item.item.scriptObject as TerrainType;
         selected = item;
+        currBlockHolder.GetComponent<Image>().sprite = (item.item.scriptObject as TerrainType).tile.sprite;
+        currBlockHolder.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+        currBlockHolder.transform.GetChild(0).gameObject.SetActive(true);
+        currBlockHolder.transform.GetChild(0).GetComponent<TMP_Text>().text = item.count.ToString();
         if (currItem == item)
             Clicked(item.slotID);
     }
@@ -329,6 +338,8 @@ public class Inventory : MonoBehaviour
     {
         movement.weapon = item.item.scriptObject as Weapon;
         selectedWeapon = item;
+        currWeaponHolder.GetComponent<Image>().sprite = (item.item.scriptObject as Weapon).sprite;
+        currWeaponHolder.GetComponent<Image>().color = new Color(1, 1, 1, 1);
         if (currItem == item)
             Clicked(item.slotID);
     }
@@ -413,6 +424,11 @@ public class Inventory : MonoBehaviour
 
         if (currItem.slotID == slotID)
             Clicked(slotID);
+        if (selected != null)
+        {
+            if (selected.slotID == slotID)
+                currBlockHolder.transform.GetChild(0).GetComponent<TMP_Text>().text = items[slotID].count.ToString();
+        }
     }
 
     public InventoryItem GetFirstItem(Item.ItemType type)
@@ -445,9 +461,15 @@ public class Inventory : MonoBehaviour
                 InventoryItem altItem = GetFirstItem(Item.ItemType.Block);
 
                 if (altItem != null)
-                    selected = altItem;
+                    SelectAsBlock(altItem);
                 else
+                {
                     selected = null;
+                    first = true;
+                    currBlockHolder.GetComponent<Image>().sprite = null;
+                    currBlockHolder.GetComponent<Image>().color = defColor;
+                    currBlockHolder.transform.GetChild(0).gameObject.SetActive(false);
+                }
             }
         }
 
@@ -458,9 +480,14 @@ public class Inventory : MonoBehaviour
                 InventoryItem altItem = GetFirstItem(Item.ItemType.Weapon);
 
                 if (altItem != null)
-                    selectedWeapon = altItem;
+                    SelectAsWeapon(altItem);
                 else
+                {
                     selectedWeapon = null;
+                    firstWeapon = true;
+                    currWeaponHolder.GetComponent<Image>().sprite = null;
+                    currWeaponHolder.GetComponent<Image>().color = defColor;
+                }
             }
         }
 
