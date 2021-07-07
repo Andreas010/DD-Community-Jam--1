@@ -528,6 +528,9 @@ public class Inventory : MonoBehaviour
     {
         drop.SetActive(false);
 
+        if (itemsToDrop <= 0)
+            return;
+
         GameObject item = Instantiate(droppedItem, player.position, Quaternion.identity);
         if(currItem.item.type == Item.ItemType.Block)
             item.GetComponent<SpriteRenderer>().sprite = (currItem.item.scriptObject as TerrainType).tile.sprite;
