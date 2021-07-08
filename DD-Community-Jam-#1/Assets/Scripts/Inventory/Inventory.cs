@@ -129,7 +129,7 @@ public class Inventory : MonoBehaviour
 
             else if (items[i].item.type == Item.ItemType.Block)
             {
-                slotImg[i].sprite = (items[i].item.scriptObject as TerrainType).tile.sprite;
+                slotImg[i].sprite = (items[i].item.scriptObject as StoneRender).SG.sprite;
                 slotImg[i].color = new Color(1, 1, 1, 1);
             }
 
@@ -143,13 +143,13 @@ public class Inventory : MonoBehaviour
 
     public void AddItem(Item item, int count)
     {
-        TerrainType terrainType = null;
+        StoneRender terrainType = null;
         Item.ItemType type = item.type;
         int maxCount = item.maxCount;
 
         switch(type){
             case Item.ItemType.Block:
-                terrainType = item.scriptObject as TerrainType;
+                terrainType = item.scriptObject as StoneRender;
                 break;
             default:
                 break;
@@ -167,13 +167,14 @@ public class Inventory : MonoBehaviour
                 voidIndex = i;
                 continue;
             }
+
             if (type == Item.ItemType.Weapon)
                 continue;
             if (items[i].item.type != type)
                 continue;
             if (items[i].count + count > maxCount)
                 continue;
-            if ((items[i].item.scriptObject as TerrainType).name != terrainType.name)
+            if ((items[i].item.scriptObject as StoneRender).internalValue.name != terrainType.internalValue.name)
                 continue;
             index = i;
         }
@@ -324,9 +325,9 @@ public class Inventory : MonoBehaviour
 
     void SelectAsBlock(InventoryItem item)
     {
-        editor.placeTile = item.item.scriptObject as TerrainType;
+        editor.placeTile = item.item.scriptObject as StoneRender;
         selected = item;
-        currBlockHolder.GetComponent<Image>().sprite = (item.item.scriptObject as TerrainType).tile.sprite;
+        currBlockHolder.GetComponent<Image>().sprite = (item.item.scriptObject as StoneRender).internalValue.tile.sprite;
         currBlockHolder.GetComponent<Image>().color = new Color(1, 1, 1, 1);
         currBlockHolder.transform.GetChild(0).gameObject.SetActive(true);
         currBlockHolder.transform.GetChild(0).GetComponent<TMP_Text>().text = item.count.ToString();
@@ -533,7 +534,7 @@ public class Inventory : MonoBehaviour
 
         GameObject item = Instantiate(droppedItem, player.position, Quaternion.identity);
         if(currItem.item.type == Item.ItemType.Block)
-            item.GetComponent<SpriteRenderer>().sprite = (currItem.item.scriptObject as TerrainType).tile.sprite;
+            item.GetComponent<SpriteRenderer>().sprite = (currItem.item.scriptObject as StoneRender).SG.sprite;
         else if (currItem.item.type == Item.ItemType.Weapon)
             item.GetComponent<SpriteRenderer>().sprite = (currItem.item.scriptObject as Weapon).sprite;
 

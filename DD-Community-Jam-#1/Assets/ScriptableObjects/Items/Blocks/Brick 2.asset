@@ -15,4 +15,4 @@ MonoBehaviour:
   displayName: Light Brick
   type: 2
   maxCount: 64
-  scriptObject: {fileID: 11400000, guid: 8bc9bd5c60985a743996414f2c2b4ebc, type: 2}
+  scriptObject: {fileID: 11400000, guid: b0cc901c84ae502419ed8de68279afff, type: 2}

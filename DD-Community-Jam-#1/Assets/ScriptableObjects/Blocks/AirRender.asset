@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af8153268b2d38a4294c4d92dbdfb3bf, type: 3}
+  m_Name: AirRender
+  m_EditorClassIdentifier: 
+  LU: {fileID: 0}
+  MU: {fileID: 0}
+  RU: {fileID: 0}
+  LM: {fileID: 0}
+  MM: {fileID: 0}
+  RM: {fileID: 0}
+  LB: {fileID: 0}
+  MB: {fileID: 0}
+  RB: {fileID: 0}
+  VU: {fileID: 0}
+  VM: {fileID: 0}
+  VB: {fileID: 0}
+  HL: {fileID: 0}
+  HM: {fileID: 0}
+  HR: {fileID: 0}
+  ELU: {fileID: 0}
+  ERU: {fileID: 0}
+  ELB: {fileID: 0}
+  ERB: {fileID: 0}
+  SG: {fileID: 0}
+  canPlaceInAir: 1
+  internalValue: {fileID: 11400000, guid: 20d4f9c97e9b29f499512888f0226359, type: 2}

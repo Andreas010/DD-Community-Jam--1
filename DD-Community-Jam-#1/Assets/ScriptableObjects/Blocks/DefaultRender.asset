@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af8153268b2d38a4294c4d92dbdfb3bf, type: 3}
-  m_Name: Default
+  m_Name: DefaultRender
   m_EditorClassIdentifier: 
   LU: {fileID: 11400000, guid: c6543d42eaaa50144866ad130372144f, type: 2}
   MU: {fileID: 11400000, guid: b26c8393aa891b94ab02cac3a7e664f7, type: 2}
@@ -32,3 +32,5 @@ MonoBehaviour:
   ELB: {fileID: 11400000, guid: 2520b7e7b6a0088428ce93384a34c98d, type: 2}
   ERB: {fileID: 11400000, guid: f82b1e9863415ab488279e467b63eee6, type: 2}
   SG: {fileID: 11400000, guid: eaf2befb377cea548aa4880cb5811e5f, type: 2}
+  canPlaceInAir: 1
+  internalValue: {fileID: 11400000, guid: cc0d9c3259f21b44da48a751bbdde0d9, type: 2}

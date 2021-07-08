@@ -2536,8 +2536,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 1
-  placeTile: {fileID: 11400000, guid: cc0d9c3259f21b44da48a751bbdde0d9, type: 2}
-  airTile: {fileID: 11400000, guid: 20d4f9c97e9b29f499512888f0226359, type: 2}
+  placeTile: {fileID: 11400000, guid: b0cc901c84ae502419ed8de68279afff, type: 2}
+  airTile: {fileID: 11400000, guid: b29655f35e2610e4187dd9d3ca7c8341, type: 2}
   inventory: {fileID: 27856113}
   chunkLayer:
     serializedVersion: 2
@@ -3442,8 +3442,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensity: 0
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
-  m_PointLightInnerRadius: 2
-  m_PointLightOuterRadius: 6
+  m_PointLightInnerRadius: 4
+  m_PointLightOuterRadius: 8
   m_PointLightDistance: 3
   m_PointLightQuality: 1
   m_ShapeLightParametricSides: 5
@@ -4420,7 +4420,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -207.00002, y: -275}
+  m_AnchoredPosition: {x: 128, y: -275}
   m_SizeDelta: {x: 450, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1610964872

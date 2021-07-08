@@ -30,4 +30,6 @@ public class StoneRender : ScriptableObject
     public Tile ERB;
 
     public Tile SG;
+    public bool canPlaceInAir;
+    public TerrainType internalValue;
 }
