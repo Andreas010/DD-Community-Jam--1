@@ -221,15 +221,15 @@ namespace DD_JAM.LevelGeneration
             curLevel[x, y] = renderer.internalValue;
             tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y)), CalculateTile(renderer, x, y));
             
-            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x - 1, y - (levelSize.y / 2) + transform.position.y)), CalculateTile(render, x - 1, y));
-            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x + 1, y - (levelSize.y / 2) + transform.position.y)), CalculateTile(render, x + 1, y));
-            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y - 1)), CalculateTile(render, x, y - 1));
-            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y + 1)), CalculateTile(render, x, y + 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x - 1, y - (levelSize.y / 2) + transform.position.y)), CalculateTile(GetTile(x - 1, y).render, x - 1, y));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x + 1, y - (levelSize.y / 2) + transform.position.y)), CalculateTile(GetTile(x + 1, y).render, x + 1, y));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y - 1)), CalculateTile(GetTile(x ,y - 1).render, x, y - 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y + 1)), CalculateTile(GetTile(x ,y + 1).render, x, y + 1));
 
-            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x + 1, y - (levelSize.y / 2) + transform.position.y + 1)), CalculateTile(render, x + 1, y + 1));
-            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x + 1, y - (levelSize.y / 2) + transform.position.y - 1)), CalculateTile(render, x + 1, y - 1));
-            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x - 1, y - (levelSize.y / 2) + transform.position.y - 1)), CalculateTile(render, x - 1, y - 1));
-            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x - 1, y - (levelSize.y / 2) + transform.position.y + 1)), CalculateTile(render, x - 1, y + 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x + 1, y - (levelSize.y / 2) + transform.position.y + 1)), CalculateTile(GetTile(x+1,y+1).render, x + 1, y + 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x + 1, y - (levelSize.y / 2) + transform.position.y - 1)), CalculateTile(GetTile(x+1,y-1).render, x + 1, y - 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x - 1, y - (levelSize.y / 2) + transform.position.y - 1)), CalculateTile(GetTile(x-1,y-1).render, x - 1, y - 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x - 1, y - (levelSize.y / 2) + transform.position.y + 1)), CalculateTile(GetTile(x-1,y+1).render, x - 1, y + 1));
         }
         public TerrainType[,] GetLevel()
         {

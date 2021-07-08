@@ -16,3 +16,4 @@ MonoBehaviour:
   tile: {fileID: 11400000, guid: eaf2befb377cea548aa4880cb5811e5f, type: 2}
   value: {r: 0, g: 1, b: 0, a: 1}
   timeToBreak: 2
+  render: {fileID: 11400000, guid: b0cc901c84ae502419ed8de68279afff, type: 2}

@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b634b277dec81de41b39b0540bb1e480, type: 3}
-  m_Name: Air
+  m_Script: {fileID: 11500000, guid: 6d240df0f7d7471439fa27f4ad3572dc, type: 3}
+  m_Name: Torch
   m_EditorClassIdentifier: 
-  name: Air
-  tile: {fileID: 0}
-  value: {r: 0, g: 0, b: 1, a: 1}
-  timeToBreak: 0
-  render: {fileID: 11400000, guid: b29655f35e2610e4187dd9d3ca7c8341, type: 2}
+  displayName: Torch
+  type: 2
+  maxCount: 64
+  scriptObject: {fileID: 11400000, guid: b22b44a8848b3a74693259a432591a99, type: 2}

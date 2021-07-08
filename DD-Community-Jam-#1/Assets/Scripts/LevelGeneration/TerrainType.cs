@@ -10,4 +10,6 @@ public class TerrainType : ScriptableObject
     public Tile tile;
     public Color value;
     public float timeToBreak;
+    public StoneRender render;
+
 }
