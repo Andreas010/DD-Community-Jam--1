@@ -157,7 +157,7 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetButton("Fire1") && atkCooldown <= 0 && inventory.CanAttack() && !inventory.isInventory)
             {
                 //Set params
-                weaponCooldownSlider.maxValue = weapon.weaponCooldown;
+                //weaponCooldownSlider.maxValue = weapon.weaponCooldown;
                 atkCooldown = weapon.weaponCooldown;
                 weaponAnimator.speed = weapon.weaponSpeed;
 
@@ -174,7 +174,9 @@ public class PlayerMovement : MonoBehaviour
             if (atkCooldown > 0) atkCooldown -= Time.deltaTime;
             else if (atkCooldown < 0) atkCooldown = 0;
 
-            weaponCooldownSlider.value = atkCooldown;
+            //weaponCooldownSlider.value = atkCooldown;
+            //if (weaponCooldownSlider.value <= 0) { Color c = weaponCooldownSlider.image.color; weaponCooldownSlider.image.color = new Vector4(c.r, c.g, c.b, c.a - .1f); }
+            //else { Color c = weaponCooldownSlider.image.color; weaponCooldownSlider.image.color = new Vector4(c.r, c.g, c.b, 100); }
             #endregion
 
             //animation

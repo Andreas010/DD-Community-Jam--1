@@ -8,10 +8,17 @@ public class WeaponObject : MonoBehaviour
     PlayerMovement pm;
     bool canAtk = true;
     public Inventory inventory;
+    SpriteRenderer sr;
 
     private void Start()
     {
+        sr = GetComponent<SpriteRenderer>();
         pm = transform.parent.parent.GetComponent<PlayerMovement>();
+    }
+
+    private void Update()
+    {
+        sr.sprite = pm.weapon.sprite;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -21,7 +28,7 @@ public class WeaponObject : MonoBehaviour
             canAtk = false;
             collision.GetComponentInParent<Rigidbody2D>().AddForce((collision.gameObject.transform.position - transform.position) * pm.weapon.weaponKnockback, ForceMode2D.Impulse);
             collision.GetComponentInParent<Rigidbody2D>().AddForce(Vector2.up * pm.weapon.weaponKnockback, ForceMode2D.Impulse);
-            collision.GetComponentInParent<Enemy>().TakeKnockback();
+            collision.GetComponent<Enemy>().TakeKnockback();
             collision.GetComponentInParent<Enemy>().UpdateHealth(-pm.weapon.weaponDamage);
             Invoke("CanAtkTrue", .2f);
         }
