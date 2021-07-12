@@ -19,10 +19,10 @@ public class WeaponObject : MonoBehaviour
         if (collision.gameObject.layer == 10 && canAtk && inventory.CanAttack())
         {
             canAtk = false;
-            collision.GetComponent<Rigidbody2D>().AddForce((collision.gameObject.transform.position - transform.position) * pm.weapon.weaponKnockback, ForceMode2D.Impulse);
-            collision.GetComponent<Rigidbody2D>().AddForce(Vector2.up * pm.weapon.weaponKnockback, ForceMode2D.Impulse);
-            collision.GetComponent<Enemy>().TakeKnockback();
-            collision.GetComponent<Enemy>().UpdateHealth(-pm.weapon.weaponDamage);
+            collision.GetComponentInParent<Rigidbody2D>().AddForce((collision.gameObject.transform.position - transform.position) * pm.weapon.weaponKnockback, ForceMode2D.Impulse);
+            collision.GetComponentInParent<Rigidbody2D>().AddForce(Vector2.up * pm.weapon.weaponKnockback, ForceMode2D.Impulse);
+            collision.GetComponentInParent<Enemy>().TakeKnockback();
+            collision.GetComponentInParent<Enemy>().UpdateHealth(-pm.weapon.weaponDamage);
             Invoke("CanAtkTrue", .2f);
         }
     }

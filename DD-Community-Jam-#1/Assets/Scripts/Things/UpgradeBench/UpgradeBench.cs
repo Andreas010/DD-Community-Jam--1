@@ -5,89 +5,63 @@ using TMPro;
 
 public class UpgradeBench : MonoBehaviour
 {
+    public AnimationCurve hight;
+    public AnimationCurve sizeX;
+    public AnimationCurve sizeY;
+    private float time;
+    public float multiply;
+    private bool open;
 
-    public GameObject canvas;
-    PlayerMovement pm;
-    public TextMeshProUGUI[] costs;
+    public Transform popupObj;
 
-    bool canInteract;
-
-    private void Update()
+    void Start()
     {
-        if(canInteract && Input.GetButtonDown("Interact"))
-        {
-            canvas.SetActive(!canvas.activeSelf);
-            if (!canvas.activeSelf)
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    costs[i].transform.parent.parent.gameObject.SetActive(false);
-                }
-            }
-        }
-        if(pm != null)
-        {
-            for(int i = 0; i < 4; i++)
-            {
-                costs[i].text = Mathf.RoundToInt(IToXYZW(i)).ToString();
-            }
-        }
+        time = 0;
+        popupObj.localPosition = new Vector2(0, hight.Evaluate(0));
+        popupObj.localScale = new Vector2(sizeX.Evaluate(0), sizeY.Evaluate(0));
     }
 
-    float IToXYZW(int i)//converts an index to an x y z or w
+    void FixedUpdate()
     {
-        if (i == 0) return pm.costForUpgrade.x;
-        else if (i == 1) return pm.costForUpgrade.y;
-        else if (i == 2) return pm.costForUpgrade.z;
-        else if (i == 3) return pm.costForUpgrade.w;
-        else return 0;
+        time += Time.deltaTime * (open ? multiply : -multiply);
+        time = Mathf.Clamp01(time);
+
+        popupObj.localPosition = new Vector2(0, hight.Evaluate(time));
+        popupObj.localScale = new Vector2(sizeX.Evaluate(time), sizeY.Evaluate(time));
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.CompareTag("Player"))
-        {
-            canInteract = true;
-            pm = collision.GetComponent<PlayerMovement>();
-        }
+        open = true;
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
-        {
-            canInteract = false;
-            canvas.SetActive(false);
-            for(int i = 0; i < 4; i++)
-            {
-                costs[i].transform.parent.parent.gameObject.SetActive(false);
-            }
-        }
+        open = false;
     }
 
-    public void UpgradeHealth()
-    {
-        if (pm.energyCrystals >= pm.costForUpgrade.w)
-        { pm.UpgradeHealth(); pm.energyCrystals -= Mathf.RoundToInt(pm.costForUpgrade.w); pm.UpdateEnergyCrystalsDisplay(); pm.costForUpgrade.w += 2; }
-    }
-
-    public void UpgradeWeapon(string toUpgrade)
-    {
-        switch (toUpgrade)
-        {
-            case "Speed":
-                if (pm.weapon.weaponCooldown > .15f && pm.energyCrystals >= pm.costForUpgrade.x)
-                { pm.UpgradeWeapon(0, -.1f, 0, 0); pm.energyCrystals -= Mathf.RoundToInt(pm.costForUpgrade.x); pm.UpdateEnergyCrystalsDisplay(); pm.costForUpgrade.x += 2; }
-                break;
-            case "Damage":
-                if (pm.energyCrystals >= pm.costForUpgrade.y)
-                { pm.UpgradeWeapon(.2f, 0, 0, 0); pm.energyCrystals -= Mathf.RoundToInt(pm.costForUpgrade.y); pm.UpdateEnergyCrystalsDisplay(); pm.costForUpgrade.y += 2; }
-                break;
-            case "Knockback":
-                if (pm.energyCrystals >= pm.costForUpgrade.z)
-                { pm.UpgradeWeapon(0, 0, 0, 3); pm.energyCrystals -= Mathf.RoundToInt(pm.costForUpgrade.z); pm.UpdateEnergyCrystalsDisplay(); pm.costForUpgrade.z += 2; }
-                break;
-        }
-    }
-
+    //public void UpgradeHealth()
+    //{
+    //    if (pm.energyCrystals >= pm.costForUpgrade.w)
+    //    { pm.UpgradeHealth(); pm.energyCrystals -= Mathf.RoundToInt(pm.costForUpgrade.w); pm.UpdateEnergyCrystalsDisplay(); pm.costForUpgrade.w += 2; }
+    //}
+    //
+    //public void UpgradeWeapon(string toUpgrade)
+    //{
+    //    switch (toUpgrade)
+    //    {
+    //        case "Speed":
+    //            if (pm.weapon.weaponCooldown > .15f && pm.energyCrystals >= pm.costForUpgrade.x)
+    //            { pm.UpgradeWeapon(0, -.1f, 0, 0); pm.energyCrystals -= Mathf.RoundToInt(pm.costForUpgrade.x); pm.UpdateEnergyCrystalsDisplay(); pm.costForUpgrade.x += 2; }
+    //            break;
+    //        case "Damage":
+    //            if (pm.energyCrystals >= pm.costForUpgrade.y)
+    //            { pm.UpgradeWeapon(.2f, 0, 0, 0); pm.energyCrystals -= Mathf.RoundToInt(pm.costForUpgrade.y); pm.UpdateEnergyCrystalsDisplay(); pm.costForUpgrade.y += 2; }
+    //            break;
+    //        case "Knockback":
+    //            if (pm.energyCrystals >= pm.costForUpgrade.z)
+    //            { pm.UpgradeWeapon(0, 0, 0, 3); pm.energyCrystals -= Mathf.RoundToInt(pm.costForUpgrade.z); pm.UpdateEnergyCrystalsDisplay(); pm.costForUpgrade.z += 2; }
+    //            break;
+    //    }
+    //}
 }
