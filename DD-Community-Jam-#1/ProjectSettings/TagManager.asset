@@ -19,7 +19,7 @@ TagManager:
   - Level
   - Hittable
   - NoCollideWithPlayer
-  - 
+  - Player
   - 
   - 
   - 

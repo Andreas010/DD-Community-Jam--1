@@ -112,8 +112,13 @@ MonoBehaviour:
   cg: {fileID: 0}
   possibleEnemyPositions: []
   isChosen: 0
+  hasGenerated: 0
   isPlayerChunk: 0
   enemy: {fileID: 6026918391313126627, guid: 3c8c14bc7ce0da94e83b6e3a3aebdeaf, type: 3}
+  bossColor: {r: 0, g: 0, b: 1, a: 0}
+  forceColor: {r: 0, g: 1, b: 0, a: 0}
+  enemyColor: {r: 0, g: 0, b: 0.5882353, a: 0}
+  hazardColor: {r: 0, g: 0, b: 0.78431374, a: 0}
 --- !u!1839735485 &4112230609855774734
 Tilemap:
   m_ObjectHideFlags: 0

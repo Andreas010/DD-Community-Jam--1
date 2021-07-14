@@ -58,8 +58,8 @@ public class BossRoomSpikes : IBossChunkable
             }
         }
 
-        if(bossObject != null)
-            Destroy(bossObject);
+        if(currentBoss != null)
+            Destroy(currentBoss);
     }
 
     public override void OnBossChunkStay()

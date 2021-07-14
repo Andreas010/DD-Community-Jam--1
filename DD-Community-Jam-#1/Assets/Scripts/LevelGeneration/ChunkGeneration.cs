@@ -51,7 +51,7 @@ namespace DD_JAM.LevelGeneration
                 new Vector2Int(0, 0),
             };
 
-            Vector2Int currentChunk = new Vector2Int((int)(objectToCheck.position.x / 50f), (int)(objectToCheck.position.y / 50f));
+            Vector2Int currentChunk = new Vector2Int((int)((objectToCheck.position.x + (objectToCheck.position.x > 0 ? 25f : -25f)) / 50f), (int)((objectToCheck.position.y + (objectToCheck.position.y > 0 ? 25f : -25f)) / 50f));
 
             if (playerPosText.gameObject.activeInHierarchy)
             {
@@ -113,6 +113,7 @@ namespace DD_JAM.LevelGeneration
 
                     if (savedChunks.ContainsKey(key))
                     {
+                        newChunk.GetComponent<TileMapGenerator>().hasGenerated = true;
                         newChunk.GetComponent<LevelGenerator>().Generate();
                         newChunk.GetComponent<TileMapGenerator>().ReGenerate(savedChunks[key]);
                     } else

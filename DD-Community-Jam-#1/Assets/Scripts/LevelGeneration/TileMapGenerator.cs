@@ -29,20 +29,27 @@ namespace DD_JAM.LevelGeneration
         private float curThreshhold;
         public Vector2[] possibleEnemyPositions;
         public bool isChosen;
+        public bool hasGenerated;
         public bool isPlayerChunk;
 
         public GameObject enemy;
 
-        private void Update()
-        {
-            if (GameObject.FindGameObjectsWithTag("Enemy").Length < 20)
-                Instantiate(enemy, possibleEnemyPositions[Random.Range(0, possibleEnemyPositions.Length)], Quaternion.identity);
-        }
+        [Space]
+        public Color bossColor;
+        public Color forceColor;
+        public Color enemyColor;
+        public Color hazardColor;
+
+        //private void Update()
+        //{
+        //    if (GameObject.FindGameObjectsWithTag("Enemy").Length < 20)
+        //        Instantiate(enemy, possibleEnemyPositions[Random.Range(0, possibleEnemyPositions.Length)], Quaternion.identity);
+        //}
 
         public void ReGenerate(TerrainType[,] level)
         {
             curLevel = level;
-            Generate();
+            Generate(true);
         }
 
         public void Build(float[,] level, float threshhold)
@@ -87,7 +94,7 @@ namespace DD_JAM.LevelGeneration
             }
         }
 
-        public void Generate()
+        public void Generate(bool mayGenerateBoss = false)
         {
             tilemap = GetComponent<Tilemap>();
 
@@ -132,9 +139,16 @@ namespace DD_JAM.LevelGeneration
                         float green = mask.GetPixel(x, y).g;
 
                         if (green != 0)
+                        {
+                            if(!hasGenerated)
+                                curLevel[x, y] = forceRender.internalValue;
                             tilemap.SetTile(pos, CalculateTile(forceRender, x, y));
-                        else if (r.Next(0, 1000) / 1000f <= red)
+                        }
+                        else if (r.Next(0, 1000) / 1000f <= red && !hasGenerated)
+                        {
+                            curLevel[x, y] = airTile;
                             tilemap.SetTile(pos, airTile.tile);
+                        }
                         else
                             tilemap.SetTile(pos, CalculateTile(render, x, y));
                     }
@@ -143,7 +157,7 @@ namespace DD_JAM.LevelGeneration
 
             GenerateEnemyPositions();
 
-            if(isChosen && isPlayerChunk)
+            if(isChosen && isPlayerChunk && mayGenerateBoss)
             {
                 /* BLUE CHANNEL COLO(u)RS
                  * BLUE = 255 = Boss Position
@@ -238,7 +252,7 @@ namespace DD_JAM.LevelGeneration
         public TerrainType GetTile(int x, int y)
         {
             if (x < 0 || y < 0 || x >= 50 || y >= 50)
-                return null;
+                return airTile;
 
             return curLevel[x, y];
         }
@@ -283,8 +297,8 @@ namespace DD_JAM.LevelGeneration
             {
                 for (int y = 0; y < mask.height; y++)
                 {
-                    if (mask.GetPixel(x, y).b * 255f == 150f)
-                        pos.Add(new Vector2(x + transform.position.x, y + transform.position.y));
+                    if (mask.GetPixel(x, y).b == enemyColor.b)
+                        pos.Add(new Vector2(x + transform.position.x - 25, y + transform.position.y - 25));
                 }
             }
 
@@ -298,8 +312,8 @@ namespace DD_JAM.LevelGeneration
             {
                 for (int y = 0; y < mask.height; y++)
                 {
-                    if (mask.GetPixel(x, y).b * 255f == 200f)
-                        pos.Add(new Vector2(x + transform.position.x, y + transform.position.y));
+                    if (mask.GetPixel(x, y).b == hazardColor.b)
+                        pos.Add(new Vector2(x + transform.position.x - 25, y + transform.position.y - 25));
                 }
             }
 
@@ -311,8 +325,8 @@ namespace DD_JAM.LevelGeneration
             {
                 for (int y = 0; y < mask.height; y++)
                 {
-                    if(mask.GetPixel(x, y).b * 255f == 1f)
-                        return new Vector2(x + transform.position.x, y + transform.position.y);
+                    if(mask.GetPixel(x, y).b == bossColor.b)
+                        return new Vector2(x + transform.position.x - 25, y + transform.position.y - 25);
                 }
             }
 
