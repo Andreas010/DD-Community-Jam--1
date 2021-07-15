@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject eButton;
     public TextMeshProUGUI energyCrystalsText;
     public Inventory inventory;
+    public GameObject bulletPrefab;
 
     [Header("Parameters")]
     public Vector2 speeds; //speeds.x = normal speed speeds.y = running speed
@@ -166,6 +167,14 @@ public class PlayerMovement : MonoBehaviour
                 else if (y > 0) weaponAnimator.SetTrigger("Up");
                 else if (x > 0 || facingRight) weaponAnimator.SetTrigger("Right");
                 else if (x < 0 || !facingRight) weaponAnimator.SetTrigger("Left");
+
+                if(weapon.type.ToString() == "Ranged")
+                {
+                    GameObject b = Instantiate(bulletPrefab, weaponScript.gameObject.transform.position, Quaternion.identity);
+                    b.transform.parent = transform.parent;
+                    bulletPrefab.GetComponent<SpriteRenderer>().sprite = weapon.bulletSprite;
+                    bulletPrefab.GetComponent<Bullet>().speed = weapon.bulletSpeed;
+                }
             }
 
             weaponScript.enabled = weaponAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name != "Idle";
