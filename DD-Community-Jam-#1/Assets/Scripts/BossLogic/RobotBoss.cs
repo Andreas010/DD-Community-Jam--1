@@ -10,6 +10,7 @@ public class RobotBoss : MonoBehaviour
     public bool isAttacking;
     public Collider2D fistCollider;
     public Collider2D footCollider;
+    public Enemy enemyScript;
 
     public float speed;
     public float jumpStrengh;
@@ -43,7 +44,7 @@ public class RobotBoss : MonoBehaviour
 
         Vector2 newMove = rb.velocity;
 
-        if (isActivated && !isAttacking)
+        if (isActivated && !isAttacking && !enemyScript.takingKnockback)
         {
             //Run logic
 

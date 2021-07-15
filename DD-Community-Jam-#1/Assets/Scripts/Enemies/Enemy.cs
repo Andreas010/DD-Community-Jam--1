@@ -8,9 +8,11 @@ public class Enemy : MonoBehaviour
 
     public Slider healthBar;
     public GameObject hitParticles;
-    Rigidbody2D rig;
+    public Rigidbody2D rig;
     public PhysicsMaterial2D[] physicsMaterials; // i 0 = no friction i 1 = has friction
     public GameObject energyCrystalPickup;
+    public GameObject objectToDestroy; //Object that gets destroyed apon death
+    public SetActiveInRange setActiveInRangeScript;
 
     public float chanceToDropEnergyCrystal;
     public float maxEnergyCrystalDropAmt;
@@ -23,7 +25,6 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        rig = GetComponent<Rigidbody2D>();
         health = maxHealth;
         healthBar.maxValue = maxHealth;
         healthBar.value = health;
@@ -51,7 +52,7 @@ public class Enemy : MonoBehaviour
         health += addHealth;
         if (health <= 0)
         {
-            Destroy(transform.parent.gameObject);
+            Destroy(objectToDestroy);
             if( Mathf.RoundToInt(Random.Range(0, chanceToDropEnergyCrystal)) == 0)
             {
                 for(int i = 0; i < Mathf.RoundToInt(Random.Range(1, maxEnergyCrystalDropAmt)); i++ )

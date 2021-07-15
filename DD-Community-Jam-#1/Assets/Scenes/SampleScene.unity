@@ -2945,7 +2945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a78dab64b48298e43879ff587507aad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bossObject: {fileID: 3399291515742782088, guid: c2611b8e23160de46acb0806d5495116,
+  bossObject: {fileID: 8318088554164362101, guid: bcfca0cc8a30ab5439312e76ad0545c1,
     type: 3}
   minionTypes: []
   spikeTypes: []

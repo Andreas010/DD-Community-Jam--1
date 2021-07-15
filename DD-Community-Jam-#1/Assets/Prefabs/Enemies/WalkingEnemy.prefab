@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 6026918390648039685}
   m_Layer: 10
   m_Name: Code
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -246,11 +246,14 @@ MonoBehaviour:
   healthBar: {fileID: 6026918391976851323}
   hitParticles: {fileID: 2931001047605922113, guid: 76a10be18832fe249b643da4abba1bf1,
     type: 3}
+  rig: {fileID: 6026918390648039684}
   physicsMaterials:
   - {fileID: 6200000, guid: 5fcd2bdd4a3c4b74a9d479e8ce22cd9d, type: 2}
   - {fileID: 6200000, guid: 19e6c5d7b5738d2499680df8fab4c6b7, type: 2}
   energyCrystalPickup: {fileID: 9219496511405887575, guid: c2c341f3280e8c84bbb8d3e1212bbcd3,
     type: 3}
+  objectToDestroy: {fileID: 6026918391313126627}
+  setActiveInRangeScript: {fileID: 408456312971728987}
   chanceToDropEnergyCrystal: 1
   maxEnergyCrystalDropAmt: 2
   maxHealth: 5
@@ -437,7 +440,7 @@ GameObject:
   - component: {fileID: 408456312971728987}
   m_Layer: 0
   m_Name: WalkingEnemy
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -471,7 +474,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToActivify: {fileID: 6026918390648039929}
   distanceObject: {fileID: 0}
-  maxDistance: 15
+  maxDistance: 20
   distance: 0
   usePlayerPosAsDistanceObject: 1
 --- !u!1 &6026918391417083809

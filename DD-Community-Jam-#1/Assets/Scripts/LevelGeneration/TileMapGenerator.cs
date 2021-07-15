@@ -40,11 +40,14 @@ namespace DD_JAM.LevelGeneration
         public Color enemyColor;
         public Color hazardColor;
 
-        //private void Update()
-        //{
-        //    if (GameObject.FindGameObjectsWithTag("Enemy").Length < 20)
-        //        Instantiate(enemy, possibleEnemyPositions[Random.Range(0, possibleEnemyPositions.Length)], Quaternion.identity);
-        //}
+        private void Update()
+        {
+            /*Debug.Log(FindObjectsOfType<Enemy>().Length);
+            if (FindObjectsOfType<Enemy>().Length < 5)
+            {
+                Instantiate(enemy, possibleEnemyPositions[Random.Range(0, possibleEnemyPositions.Length)], Quaternion.identity);
+            }*/
+        }
 
         public void ReGenerate(TerrainType[,] level)
         {
@@ -348,7 +351,7 @@ namespace DD_JAM.LevelGeneration
         private void OnDestroy()
         {
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("Enemy"))   
-            { if(go.GetComponent<SetActiveInRange>().distance >15) Destroy(go); }
+            { if(go.GetComponent<Enemy>().setActiveInRangeScript.distance >20) Destroy(go.GetComponent<Enemy>().objectToDestroy); }
         }
     }
 }
