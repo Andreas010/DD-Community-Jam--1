@@ -64,6 +64,10 @@ public class Inventory : MonoBehaviour
 
     public Transform player;
 
+    public static Inventory instance;
+
+    void Awake() => instance = this;
+
     void Start()
     {
         items = new InventoryItem[slots.Length];
@@ -129,7 +133,7 @@ public class Inventory : MonoBehaviour
 
             else if (items[i].item.type == Item.ItemType.Block)
             {
-                slotImg[i].sprite = (items[i].item.scriptObject as StoneRender).SG.sprite;
+                slotImg[i].sprite = (items[i].item.scriptObject as StoneRender).internalValue.tile.sprite;
                 slotImg[i].color = new Color(1, 1, 1, 1);
             }
 

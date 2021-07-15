@@ -11,6 +11,7 @@ public class TerrainEditor : MonoBehaviour
     public StoneRender placeTile;
     public StoneRender airTile;
     public Inventory inventory;
+    public GameObject droppedItem;
 
     public LayerMask chunkLayer;
 
@@ -54,8 +55,24 @@ public class TerrainEditor : MonoBehaviour
 
                     if (distance < range / 2) {
                         //GetComponent<Inventory>().AddItem(generators[i].GetTile(x, y));
-						generators[i].SetTile(x, y, tile);
-					}
+
+                        TerrainType curType = generators[i].GetTile(x, y);
+
+                        if (curType.item != null && curType.render.internalValue.name != tile.internalValue.name && curType.render.SG != null)
+                        {
+                            //Debug.Log($"\"{curType.render.internalValue.name}\"/\"{tile.internalValue.name}\"");
+
+                            GameObject item = Instantiate(droppedItem, new Vector2(generators[i].transform.position.x - 25 + x + 0.5f, generators[i].transform.position.y - 25 + y + 0.5f), Quaternion.identity);
+
+                            item.GetComponent<SpriteRenderer>().sprite = curType.render.SG.sprite;
+
+                            item.GetComponentInChildren<DroppedItem>().inventory = Inventory.instance;
+                            item.GetComponentInChildren<DroppedItem>().item = curType.item;
+                            item.GetComponentInChildren<DroppedItem>().count = 1;
+                        }
+
+                        generators[i].SetTile(x, y, tile);
+                    }
                 }
             }
         }

@@ -17,3 +17,4 @@ MonoBehaviour:
   value: {r: 1, g: 0, b: 0, a: 1}
   timeToBreak: 1
   render: {fileID: 11400000, guid: b0cc901c84ae502419ed8de68279afff, type: 2}
+  item: {fileID: 11400000, guid: c6eb27634aae4214e90ce7dcdb6a48b9, type: 2}

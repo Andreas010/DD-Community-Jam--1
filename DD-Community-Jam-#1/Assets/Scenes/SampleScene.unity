@@ -1315,6 +1315,8 @@ MonoBehaviour:
   placeTile: {fileID: 11400000, guid: b0cc901c84ae502419ed8de68279afff, type: 2}
   airTile: {fileID: 11400000, guid: b29655f35e2610e4187dd9d3ca7c8341, type: 2}
   inventory: {fileID: 27856113}
+  droppedItem: {fileID: 6932593435660223094, guid: 991c89ac8c3c6c4498e2b43043dd411e,
+    type: 3}
   chunkLayer:
     serializedVersion: 2
     m_Bits: 512

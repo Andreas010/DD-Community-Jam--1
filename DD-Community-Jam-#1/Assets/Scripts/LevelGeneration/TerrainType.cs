@@ -11,5 +11,5 @@ public class TerrainType : ScriptableObject
     public Color value;
     public float timeToBreak;
     public StoneRender render;
-
+    public Item item;
 }
