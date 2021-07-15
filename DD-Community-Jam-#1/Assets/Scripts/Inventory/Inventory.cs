@@ -39,7 +39,7 @@ public class Inventory : MonoBehaviour
 
     InventoryItem selected;
     InventoryItem selectedWeapon;
-    InventoryItem currItem;
+    public InventoryItem currItem;
     InventoryItem currStatItem;
 
     TerrainEditor editor;

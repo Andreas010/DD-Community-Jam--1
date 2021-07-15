@@ -2723,7 +2723,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.21960784}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3225,7 +3225,53 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1893275608, guid: 5010dac9eaa478240bf1ad26708541ac, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1893275609, guid: 5010dac9eaa478240bf1ad26708541ac, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1893275609, guid: 5010dac9eaa478240bf1ad26708541ac, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1893275610, guid: 5010dac9eaa478240bf1ad26708541ac, type: 3}
+      propertyPath: m_text
+      value: '
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1893275610, guid: 5010dac9eaa478240bf1ad26708541ac, type: 3}
+      propertyPath: m_textInfo.characterCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1893275610, guid: 5010dac9eaa478240bf1ad26708541ac, type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1893275610, guid: 5010dac9eaa478240bf1ad26708541ac, type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1893275610, guid: 5010dac9eaa478240bf1ad26708541ac, type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1893275610, guid: 5010dac9eaa478240bf1ad26708541ac, type: 3}
+      propertyPath: m_firstOverflowCharacterIndex
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1893275610, guid: 5010dac9eaa478240bf1ad26708541ac, type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1893275610, guid: 5010dac9eaa478240bf1ad26708541ac, type: 3}
+      propertyPath: m_enableWordWrapping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1893275610, guid: 5010dac9eaa478240bf1ad26708541ac, type: 3}
+      propertyPath: m_textAlignment
+      value: 514
       objectReference: {fileID: 0}
     - target: {fileID: 1976955970, guid: 5010dac9eaa478240bf1ad26708541ac, type: 3}
       propertyPath: m_AnchoredPosition.y
