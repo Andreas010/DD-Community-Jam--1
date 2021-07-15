@@ -22,4 +22,5 @@ public class Weapon : ScriptableObject
     [Header("For ranged weapons only:")]
     public Sprite bulletSprite;
     public float bulletSpeed;
+    public float bulletDamage;
 }

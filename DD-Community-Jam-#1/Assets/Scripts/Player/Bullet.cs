@@ -8,6 +8,7 @@ public class Bullet : MonoBehaviour
     public float speed;
     Rigidbody2D rig;
     PlayerMovement pm;
+    public float damage;
 
     private void Start()
     {
@@ -37,7 +38,7 @@ public class Bullet : MonoBehaviour
             collision.GetComponent<Enemy>().rig.AddForce((collision.gameObject.transform.position - transform.position) * pm.weapon.weaponKnockback, ForceMode2D.Impulse);
             collision.GetComponent<Enemy>().rig.AddForce(Vector2.up * pm.weapon.weaponKnockback, ForceMode2D.Impulse);
             collision.GetComponent<Enemy>().TakeKnockback();
-            collision.GetComponentInParent<Enemy>().UpdateHealth(-pm.weapon.weaponDamage);
+            collision.GetComponentInParent<Enemy>().UpdateHealth(damage);
             Destroy(gameObject);
         }
     }
