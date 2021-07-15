@@ -51,6 +51,12 @@ public class PlayerHealth : MonoBehaviour
 
     public void MakeInvincible(float time)
     {
+        if(curInvincibleTime <= 0)
+            curInvincibleTime = time;
+    }
+
+    public void SetInvincible(float time)
+    {
         curInvincibleTime = time;
     }
 
