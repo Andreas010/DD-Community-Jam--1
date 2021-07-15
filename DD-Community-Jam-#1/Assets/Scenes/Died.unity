@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -443,8 +443,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2070566779}
-        m_MethodName: LoadScene
-        m_Mode: 5
+        m_MethodName: Revive
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -822,6 +822,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2070566774}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a8fe349d8886994f8d129e0ed726c68, type: 3}
+  m_Script: {fileID: 11500000, guid: e64dc20c42038254b988cf2f7498484a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

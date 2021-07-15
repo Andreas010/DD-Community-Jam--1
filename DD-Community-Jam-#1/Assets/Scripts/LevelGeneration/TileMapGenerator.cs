@@ -42,11 +42,16 @@ namespace DD_JAM.LevelGeneration
 
         private void Update()
         {
-            /*Debug.Log(FindObjectsOfType<Enemy>().Length);
-            if (FindObjectsOfType<Enemy>().Length < 5)
+            if (transform.childCount <= 5)
             {
-                Instantiate(enemy, possibleEnemyPositions[Random.Range(0, possibleEnemyPositions.Length)], Quaternion.identity);
-            }*/
+                Vector2 newPos = Vector2.zero;
+
+                do { newPos = possibleEnemyPositions[Random.Range(0, possibleEnemyPositions.Length)]; }
+                while (Vector2.Distance(newPos, PlayerHealth.instance.gameObject.transform.position) < 10);
+                
+
+                Instantiate(enemy, newPos, Quaternion.identity, transform);
+            }
         }
 
         public void ReGenerate(TerrainType[,] level)

@@ -76,7 +76,7 @@ public class Inventory : MonoBehaviour
         selected = null;
         defRange = editor.range;
 
-        transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(1).gameObject.SetActive(false);
         info.SetActive(false);
         stats.SetActive(false);
         drop.SetActive(false);
@@ -103,7 +103,7 @@ public class Inventory : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            transform.GetChild(0).gameObject.SetActive(!transform.GetChild(0).gameObject.activeInHierarchy);
+            transform.GetChild(1).gameObject.SetActive(!transform.GetChild(1).gameObject.activeInHierarchy);
             isInventory = !isInventory;
             if(isInventory)
                 InventoryGUI();
@@ -392,7 +392,7 @@ public class Inventory : MonoBehaviour
 
         Transform statsText = stats.transform.GetChild(0);
 
-        statsText.gameObject.GetComponent<TMP_Text>().text = $"Cooldown: {(currStatItem.item.scriptObject as Weapon).weaponCooldown}\n";
+        statsText.gameObject.GetComponent<TMP_Text>().text  = $"Cooldown: {(currStatItem.item.scriptObject as Weapon).weaponCooldown}\n";
         statsText.gameObject.GetComponent<TMP_Text>().text += $"Speed: {(currStatItem.item.scriptObject as Weapon).weaponSpeed}\n";
         statsText.gameObject.GetComponent<TMP_Text>().text += $"Damage: {(currStatItem.item.scriptObject as Weapon).weaponDamage}\n";
         statsText.gameObject.GetComponent<TMP_Text>().text += $"Knockback: {(currStatItem.item.scriptObject as Weapon).weaponKnockback}\n";

@@ -14,7 +14,7 @@ public class Walker : MonoBehaviour
     public float jumpForce;
     public float speed;
     public float minDistFromGround = 1;
-    public float damage;
+    public int damage;
 
     public bool damageInAir;
     bool grounded;
@@ -75,7 +75,8 @@ public class Walker : MonoBehaviour
 
     void DamagePlayer(Collider2D collision)
     {
-        collision.GetComponent<PlayerMovement>().TakeDamage(damage);
+        collision.GetComponent<PlayerHealth>().ModifyHealth(-damage);
+        collision.GetComponent<PlayerHealth>().MakeInvincible(0.5f);
     }
 
 }

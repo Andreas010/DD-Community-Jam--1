@@ -17,8 +17,6 @@ public class PlayerMovement : MonoBehaviour
     Animator animator;
     public Slider weaponCooldownSlider;
     public WeaponObject weaponScript;
-    public Transform healthCanvas;
-    public GameObject heartCanvasObject;
     public GameObject eButton;
     public TextMeshProUGUI energyCrystalsText;
     public Inventory inventory;
@@ -32,10 +30,7 @@ public class PlayerMovement : MonoBehaviour
     public float fallMultiplier = 2.5f;
     public float downwardJumpForce = -3;
     public float minDistFromGround = 0.6f;
-    public float invincibleTime;
     float atkCooldown;
-    float health = 3;
-    float maxHealth = 3;
 
     [HideInInspector] public Vector4 costForUpgrade = new Vector4(5, 5, 5, 5);
 
@@ -45,7 +40,6 @@ public class PlayerMovement : MonoBehaviour
     bool sprinting;
     bool isJumping;
     bool facingRight;
-    bool invincible;
     bool canInteract;
 
     //Current weapon params
@@ -60,7 +54,6 @@ public class PlayerMovement : MonoBehaviour
         animator = transform.parent.GetComponent<Animator>();
         cam = transform.parent.GetComponentInChildren<Camera>().gameObject;
 
-        UpdateHealthDisplay();
         UpdateEnergyCrystalsDisplay();
     }
 
@@ -199,41 +192,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void UpdateHealthDisplay()
-    {
-        for (int i = 0; i < healthCanvas.transform.childCount; i++) 
-        {
-            Destroy(healthCanvas.transform.GetChild(i).gameObject); 
-        }
-        for (int i = 0; i < Mathf.RoundToInt(health); i++)
-        { Instantiate( heartCanvasObject , healthCanvas); }
-    }
-
-    public void UpgradeHealth()
-    {
-        maxHealth++;
-        health = maxHealth;
-        UpdateHealthDisplay();
-    }
-
-    public void TakeDamage(float damage)
-    {
-        if (!invincible)
-        {
-            health -= damage;
-            if (health <= 0) SceneManager.LoadScene("Died");
-            cam.GetComponent<CameraScript>().CameraShake(1);
-            invincible = true;
-            Invoke("UnInvincible", invincibleTime);
-            UpdateHealthDisplay();
-        }
-    }
-
-    void UnInvincible()
-    {
-        invincible = false;
-    }
-
     public void UpgradeWeapon(float addDmg, float addCooldown, float addSpeed, float addKnockback)
     {
         weapon.weaponDamage += addDmg;
@@ -270,5 +228,4 @@ public class PlayerMovement : MonoBehaviour
             canInteract = false;
         }
     }
-
 }
