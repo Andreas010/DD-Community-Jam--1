@@ -101,6 +101,16 @@ public class Inventory : MonoBehaviour
 
     void Update()
     {
+        if (ConsoleManager.instance.isConsole)
+        {
+            info.SetActive(false);
+            stats.SetActive(false);
+            drop.SetActive(false);
+            isInventory = false;
+            transform.GetChild(1).gameObject.SetActive(false);
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
             transform.GetChild(1).gameObject.SetActive(!transform.GetChild(1).gameObject.activeInHierarchy);

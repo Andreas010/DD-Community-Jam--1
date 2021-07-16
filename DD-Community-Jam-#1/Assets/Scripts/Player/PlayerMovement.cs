@@ -92,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
 
         //movement
         #region
-        if (!inventory.isInventory)
+        if (!inventory.isInventory && !ConsoleManager.instance.isConsole)
         {
             sprinting = Input.GetButton("Sprint");
             float x = Input.GetAxisRaw("Horizontal");
@@ -148,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
 
             //attack
             #region
-            if (Input.GetButton("Fire1") && atkCooldown <= 0 && inventory.CanAttack() && !inventory.isInventory)
+            if (Input.GetButton("Fire1") && atkCooldown <= 0 && inventory.CanAttack() && !inventory.isInventory && !ConsoleManager.instance.isConsole)
             {
                 //Set params
                 //weaponCooldownSlider.maxValue = weapon.weaponCooldown;

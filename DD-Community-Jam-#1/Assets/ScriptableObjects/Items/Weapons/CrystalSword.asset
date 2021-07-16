@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d240df0f7d7471439fa27f4ad3572dc, type: 3}
   m_Name: CrystalSword
   m_EditorClassIdentifier: 
-  displayName: 
+  displayName: Crystal Sword
   type: 1
   maxCount: 1
   scriptObject: {fileID: 11400000, guid: e5ce0e87c9ea4674ea8703fb06cd9a92, type: 2}

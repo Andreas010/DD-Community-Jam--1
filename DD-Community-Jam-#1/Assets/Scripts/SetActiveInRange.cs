@@ -18,7 +18,7 @@ public class SetActiveInRange : MonoBehaviour
             distanceObject = FindObjectOfType<PlayerMovement>().transform;
     }
 
-    void Update()
+    void LateUpdate()
     {
         distance = Vector2.Distance(transform.position, distanceObject.position);
         objectToActivify.SetActive(distance < maxDistance);
