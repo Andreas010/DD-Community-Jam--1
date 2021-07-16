@@ -13,7 +13,7 @@ public class WeaponObject : MonoBehaviour
     private void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-        pm = transform.parent.parent.GetComponent<PlayerMovement>();
+        pm = transform.parent.parent.parent.GetComponent<PlayerMovement>();
     }
 
     private void Update()

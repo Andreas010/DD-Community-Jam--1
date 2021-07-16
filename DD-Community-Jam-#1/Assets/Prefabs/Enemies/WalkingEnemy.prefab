@@ -256,7 +256,7 @@ MonoBehaviour:
   setActiveInRangeScript: {fileID: 408456312971728987}
   chanceToDropEnergyCrystal: 1
   maxEnergyCrystalDropAmt: 2
-  maxHealth: 5
+  maxHealth: 3
 --- !u!114 &6026918390648039687
 MonoBehaviour:
   m_ObjectHideFlags: 0

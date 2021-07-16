@@ -22,6 +22,7 @@ public class CameraScript : MonoBehaviour
         {
             originalPos = player.position;
             transform.position = originalPos + Random.insideUnitSphere * frequency;
+            transform.position = new Vector3(transform.position.x, transform.position.y, -10);
         }
     }
 }

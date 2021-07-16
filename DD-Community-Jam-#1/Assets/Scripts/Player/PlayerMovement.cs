@@ -167,7 +167,7 @@ public class PlayerMovement : MonoBehaviour
                     b.transform.parent = transform.parent;
                     bulletPrefab.GetComponent<SpriteRenderer>().sprite = weapon.bulletSprite;
                     bulletPrefab.GetComponent<Bullet>().speed = weapon.bulletSpeed;
-                    bulletPrefab.GetComponent<Bullet>().damage = weapon.bulletSpeed;
+                    bulletPrefab.GetComponent<Bullet>().damage = weapon.bulletDamage;
                 }
             }
 

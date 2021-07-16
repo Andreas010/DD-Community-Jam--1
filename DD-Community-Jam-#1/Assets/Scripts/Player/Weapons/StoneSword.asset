@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 04344bb28e6ea6b499bd9677043f6938, type: 3}
-  m_Name: WoodBow
+  m_Name: StoneSword
   m_EditorClassIdentifier: 
   name: 
-  type: 1
-  sprite: {fileID: -51108053034676142, guid: 0cc961223a24d8c4095b30064f5a19af, type: 3}
-  weaponCooldown: 0.6
+  type: 0
+  sprite: {fileID: 21300000, guid: e884377af15c68547ac8eaf58ef36b7a, type: 3}
+  weaponCooldown: 0.85
   weaponSpeed: 0.7
-  weaponDamage: 0.25
-  weaponKnockback: 7
-  mineSpeed: 5
-  bulletSprite: {fileID: 21300000, guid: 29d8b11eba8e86941abc32d5848acd7a, type: 3}
-  bulletSpeed: 10
-  bulletDamage: 0.75
+  weaponDamage: 0.5
+  weaponKnockback: 8
+  mineSpeed: 7
+  bulletSprite: {fileID: 0}
+  bulletSpeed: 0
+  bulletDamage: 0
