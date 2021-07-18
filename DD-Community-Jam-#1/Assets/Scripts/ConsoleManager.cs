@@ -33,6 +33,8 @@ public class ConsoleManager : MonoBehaviour
             transform.GetChild(0).gameObject.SetActive(true);
         else
             transform.GetChild(0).gameObject.SetActive(false);
+
+        
     }
 
     public void UnderstandCommand(string command)

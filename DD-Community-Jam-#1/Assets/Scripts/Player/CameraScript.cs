@@ -10,7 +10,7 @@ public class CameraScript : MonoBehaviour
 
     public float lerpTime;
 
-    void FixedUpdate()
+    void LateUpdate()
     {
         transform.position = Vector3.Lerp(transform.position, new Vector3(player.position.x, player.position.y, -10), lerpTime);
     }

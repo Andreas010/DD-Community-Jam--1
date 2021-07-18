@@ -355,8 +355,21 @@ namespace DD_JAM.LevelGeneration
 
         private void OnDestroy()
         {
+            if (GameObject.FindGameObjectsWithTag("Enemy") == null)
+                return;
+
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("Enemy"))   
-            { if(go.GetComponent<Enemy>().setActiveInRangeScript.distance >20) Destroy(go.GetComponent<Enemy>().objectToDestroy); }
+            {
+                if (go == null)
+                    return;
+                if (go.GetComponent<Enemy>() == null)
+                    return;
+                if (go.GetComponent<Enemy>().setActiveInRangeScript == null)
+                    return;
+
+                if(go.GetComponent<Enemy>().setActiveInRangeScript.distance > 20)
+                    Destroy(go.GetComponent<Enemy>().objectToDestroy);
+            }
         }
     }
 }
