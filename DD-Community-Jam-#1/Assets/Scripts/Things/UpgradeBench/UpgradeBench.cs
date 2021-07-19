@@ -32,12 +32,10 @@ public class UpgradeBench : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D collision)
     {
-        open = true;
-    }
-
-    void OnTriggerExit2D(Collider2D collision)
-    {
-        open = false;
+        if (collision.CompareTag("Player") && Input.GetKeyDown(KeyCode.E))
+        {
+                ShopManager.instance.Open();
+        }
     }
 
     //public void UpgradeHealth()

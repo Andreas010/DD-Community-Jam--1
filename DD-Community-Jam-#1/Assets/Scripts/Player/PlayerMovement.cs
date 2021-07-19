@@ -92,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
 
         //movement
         #region
-        if (!inventory.isInventory && !ConsoleManager.instance.isConsole)
+        if (!inventory.isInventory && !ConsoleManager.instance.isConsole && !ShopManager.instance.isOpen)
         {
             sprinting = Input.GetButton("Sprint");
             float x = Input.GetAxisRaw("Horizontal");

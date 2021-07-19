@@ -30,13 +30,13 @@ public class PlayerHealth : MonoBehaviour
 
     void Update()
     {
-        if (curInvincibleTime > 0)
+        if (curInvincibleTime > 0 && !ShopManager.instance.isOpen)
             curInvincibleTime -= Time.deltaTime;
     }
 
     public void ModifyHealth(int value)
     {
-        if (godMode || curInvincibleTime >= 0)
+        if (godMode || curInvincibleTime >= 0 && !ShopManager.instance.isOpen)
             return;
 
         curHealth += value;

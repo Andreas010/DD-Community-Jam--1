@@ -22,7 +22,7 @@ public class TerrainEditor : MonoBehaviour
 
     void Update()
     {
-        if (!inventory.isInventory)
+        if (!inventory.isInventory && !ShopManager.instance.isOpen)
         {
 		    if (Input.GetMouseButton(0) && inventory.CanAttack())
                 Work(airTile);
