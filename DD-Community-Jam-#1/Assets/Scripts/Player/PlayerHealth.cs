@@ -30,13 +30,26 @@ public class PlayerHealth : MonoBehaviour
 
     void Update()
     {
-        if (curInvincibleTime > 0 && !ShopManager.instance.isOpen)
+        if (curInvincibleTime > 0 && !ShopManager.instance.isOpen) 
             curInvincibleTime -= Time.deltaTime;
+
+        if (curInvincibleTime >= 0)
+            invincible = true;
+        else
+            invincible = false;
+    }
+
+    void FixedUpdate()
+    {
+        if (invincible)
+            GetComponent<SpriteRenderer>().enabled = !GetComponent<SpriteRenderer>().enabled;
+        else
+            GetComponent<SpriteRenderer>().enabled = true;
     }
 
     public void ModifyHealth(int value)
     {
-        if (godMode || curInvincibleTime >= 0 && !ShopManager.instance.isOpen)
+        if (godMode || invincible && !ShopManager.instance.isOpen)
             return;
 
         curHealth += value;
@@ -68,6 +81,7 @@ public class PlayerHealth : MonoBehaviour
     public void Heal()
     {
         curHealth = maxHealth;
+        UpdateHealthDisplay();
     }
 
     public void UpdateHealthDisplay()
@@ -89,6 +103,8 @@ public class PlayerHealth : MonoBehaviour
     public void UpgradeHealth(int count)
     {
         maxHealth += count;
+        if (maxHealth <= 0)
+            maxHealth = 1;
         UpdateHealthDisplay();
     }
 }

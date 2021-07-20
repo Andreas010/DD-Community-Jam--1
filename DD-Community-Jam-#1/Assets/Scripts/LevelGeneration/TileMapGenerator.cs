@@ -141,7 +141,7 @@ namespace DD_JAM.LevelGeneration
 
                     if (!isChosen || transform.position == Vector3.zero)
                         tilemap.SetTile(pos, CalculateTile(render, x, y));
-                    else
+                    else if (isChosen)
                     {
                         float red = mask.GetPixel(x, y).r;
                         float green = mask.GetPixel(x, y).g;

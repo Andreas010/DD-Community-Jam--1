@@ -34,7 +34,7 @@ public class UpgradeBench : MonoBehaviour
     {
         if (collision.CompareTag("Player") && Input.GetKeyDown(KeyCode.E))
         {
-                ShopManager.instance.Open();
+            ShopManager.instance.Open();
         }
     }
 
