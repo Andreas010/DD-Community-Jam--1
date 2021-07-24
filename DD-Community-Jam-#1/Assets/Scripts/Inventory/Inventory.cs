@@ -58,8 +58,6 @@ public class Inventory : MonoBehaviour
     bool slotIsLeft;
     bool slotIsTop;
 
-    float defRange;
-
     int itemsToDrop;
 
     public Transform player;
@@ -74,7 +72,6 @@ public class Inventory : MonoBehaviour
         editor = FindObjectOfType<TerrainEditor>();
         movement = FindObjectOfType<PlayerMovement>();
         selected = null;
-        defRange = editor.range;
 
         transform.GetChild(1).gameObject.SetActive(false);
         info.SetActive(false);
@@ -361,8 +358,6 @@ public class Inventory : MonoBehaviour
 
     public void ClickedToSelect()
     {
-        editor.range = defRange;
-
         switch (currItem.item.type)
         {
             case Item.ItemType.Block:

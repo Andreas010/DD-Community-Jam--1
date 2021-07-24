@@ -6,14 +6,12 @@ using DD_JAM.LevelGeneration;
 
 public class TerrainEditor : MonoBehaviour
 {
-    public float range;
     private Camera cam;
     public StoneRender placeTile;
     public StoneRender airTile;
     public Inventory inventory;
     public GameObject droppedItem;
-
-    public LayerMask chunkLayer;
+    public ChunkGeneration chunkGenerator;
 
     void Start()
     {
@@ -22,7 +20,7 @@ public class TerrainEditor : MonoBehaviour
 
     void Update()
     {
-        if (!inventory.isInventory && !ShopManager.instance.isOpen)
+        if (!inventory.isInventory && !ShopManager.instance.isOpen && !ConsoleManager.instance.isConsole)
         {
 		    if (Input.GetMouseButton(0) && inventory.CanAttack())
                 Work(airTile);
@@ -33,48 +31,36 @@ public class TerrainEditor : MonoBehaviour
 
     public void Work(StoneRender tile)
     {
+        /*
+        
         Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
 
-        Collider2D[] chunks = Physics2D.OverlapCircleAll(mousePosition, range, chunkLayer);
-        List<TileMapGenerator> generators = new List<TileMapGenerator>();
+        Vector2Int curPos = new Vector2Int((int)((mousePosition.x + (mousePosition.x > 0 ? 25f : -25f)) / 50f), (int)((mousePosition.y + (mousePosition.y > 0 ? 25f : -25f)) / 50f));
 
-        for (int i = 0; i < chunks.Length; i++)
-        {
-            TileMapGenerator tmpGen = chunks[i].GetComponent<TileMapGenerator>();
-            if (tmpGen != null)
-                generators.Add(tmpGen);
-        }
+        chunkGenerator.currentChunks.TryGetValue(curPos, out GameObject chunk);
 
-        for (int i = 0; i < generators.Count; i++)
+        if(chunk != null)
         {
-            for (int x = 0; x < 50; x++)
+            TileMapGenerator generator = chunk.GetComponent<TileMapGenerator>();
+
+            TerrainType curType = generator.GetTile((int)mousePosition.x - curPos.x * 50, (int)mousePosition.y - curPos.y * 50);
+
+            if (curType.item != null && curType.render.internalValue.name != tile.internalValue.name && curType.render.SG != null)
             {
-                for (int y = 0; y < 50; y++)
-                {
-                    float distance = Vector2.Distance(new Vector2(generators[i].transform.position.x - 25 + x + 0.5f, generators[i].transform.position.y - 25 + y + 0.5f), mousePosition);
+                //Debug.Log($"\"{curType.render.internalValue.name}\"/\"{tile.internalValue.name}\"");
 
-                    if (distance < range / 2) {
-                        //GetComponent<Inventory>().AddItem(generators[i].GetTile(x, y));
+                GameObject item = Instantiate(droppedItem, new Vector2(generator.transform.position.x - 25 + ((int)mousePosition.x - curPos.x * 50) + 0.5f, generator.transform.position.y - 25 + ((int)mousePosition.y - curPos.y * 50) + 0.5f), Quaternion.identity);
 
-                        TerrainType curType = generators[i].GetTile(x, y);
+                item.GetComponent<SpriteRenderer>().sprite = curType.render.SG.sprite;
 
-                        if (curType.item != null && curType.render.internalValue.name != tile.internalValue.name && curType.render.SG != null)
-                        {
-                            //Debug.Log($"\"{curType.render.internalValue.name}\"/\"{tile.internalValue.name}\"");
-
-                            GameObject item = Instantiate(droppedItem, new Vector2(generators[i].transform.position.x - 25 + x + 0.5f, generators[i].transform.position.y - 25 + y + 0.5f), Quaternion.identity);
-
-                            item.GetComponent<SpriteRenderer>().sprite = curType.render.SG.sprite;
-
-                            item.GetComponentInChildren<DroppedItem>().inventory = Inventory.instance;
-                            item.GetComponentInChildren<DroppedItem>().item = curType.item;
-                            item.GetComponentInChildren<DroppedItem>().count = 1;
-                        }
-
-                        generators[i].SetTile(x, y, tile);
-                    }
-                }
+                item.GetComponentInChildren<DroppedItem>().inventory = Inventory.instance;
+                item.GetComponentInChildren<DroppedItem>().item = curType.item;
+                item.GetComponentInChildren<DroppedItem>().count = 1;
             }
+
+            generator.SetTile((int)mousePosition.x - curPos.x*50, (int)mousePosition.y - curPos.y*50, tile);
         }
+
+        */
     }
 }

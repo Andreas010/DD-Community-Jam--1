@@ -2842,15 +2842,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec1b0cb95a8140409758ad7625b241e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 1
   placeTile: {fileID: 11400000, guid: b0cc901c84ae502419ed8de68279afff, type: 2}
   airTile: {fileID: 11400000, guid: b29655f35e2610e4187dd9d3ca7c8341, type: 2}
   inventory: {fileID: 27856113}
   droppedItem: {fileID: 6932593435660223094, guid: 991c89ac8c3c6c4498e2b43043dd411e,
     type: 3}
-  chunkLayer:
-    serializedVersion: 2
-    m_Bits: 512
+  chunkGenerator: {fileID: 178698885}
 --- !u!114 &713126525
 MonoBehaviour:
   m_ObjectHideFlags: 0
