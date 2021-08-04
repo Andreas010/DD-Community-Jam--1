@@ -15,6 +15,10 @@ namespace DD_JAM.LevelGeneration
         [Header("What does exist?")]
         public StoneRender render;
         public StoneRender forceRender;
+        public StoneRender oreRenderer;
+        [Range(0, 100)]
+        public float oreFrequency;
+
         public TerrainType renderReplacement;
         public TerrainType[] types;
         public TerrainType forcedGround;
@@ -141,6 +145,7 @@ namespace DD_JAM.LevelGeneration
             GetComponentInParent<MapManager>().PlaceChunk(new Vector2Int((int)(transform.position.x / 50f), (int)(transform.position.y / 50f)), chunkType);
 
             System.Random r = new System.Random((int)(transform.position.x * 45558 + transform.position.y * 1452));
+            System.Random r1 = new System.Random((int)(transform.position.x + transform.position.y));
 
             for (int x = 0; x < levelSize.x; x++)
             {
@@ -149,7 +154,16 @@ namespace DD_JAM.LevelGeneration
                     Vector3Int pos = tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y));
 
                     if (!isChosen || transform.position == Vector3.zero)
-                        tilemap.SetTile(pos, CalculateTile(render, x, y));
+                    {
+                        if(r1.Next(0, 101) > oreFrequency)
+                        {
+                            curLevel[x, y] = GetTile(x, y) == airTile ? airTile : oreRenderer.internalValue;
+                            tilemap.SetTile(pos, CalculateTile(oreRenderer, x, y));
+                        }
+                        else
+                            tilemap.SetTile(pos, CalculateTile(render, x, y));
+                    }
+
                     else if (isChosen)
                     {
                         float red = mask.GetPixel(x, y).r;
@@ -167,7 +181,15 @@ namespace DD_JAM.LevelGeneration
                             tilemap.SetTile(pos, airTile.tile);
                         }
                         else
-                            tilemap.SetTile(pos, CalculateTile(render, x, y));
+                        {
+                            if (r1.Next(0, 101) > oreFrequency)
+                            {
+                                curLevel[x, y] = GetTile(x, y) == airTile ? airTile : oreRenderer.internalValue;
+                                tilemap.SetTile(pos, CalculateTile(oreRenderer, x, y));
+                            }
+                            else
+                                tilemap.SetTile(pos, CalculateTile(render, x, y));
+                        }
                     }
                 }
             }
@@ -268,71 +290,10 @@ namespace DD_JAM.LevelGeneration
         }
         public TerrainType GetTile(int x, int y)
         {
-            /*if ((x < 0 || y < 0 || x >= 50 || y >= 50) && allowBorders)
-                return TryGetOOBTile(x, y);
-            else */if (x < 0 || y < 0 || x >= 50 || y >= 50)
+            if (x < 0 || y < 0 || x >= 50 || y >= 50)
                 return airTile;
 
             return curLevel[x, y];
-        }
-        TerrainType TryGetOOBTile(int x, int y)
-        {
-            //Where can we check?
-            bool up = localPos.y != 1;
-            bool down = localPos.y != -1;
-            bool left = localPos.x != -1;
-            bool right = localPos.x != 1;
-
-            if (x < 0 && left)
-            {
-                GameObject chunkToCheck = null;
-                if (localPos.y == 1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[1];
-                else if (localPos.y == 0)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[0];
-                else if (localPos.y == -1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[7];
-
-                return chunkToCheck.GetComponent<TileMapGenerator>().GetTile(x + 50, y);
-            }
-            if (y < 0 && !left)
-            {
-                GameObject chunkToCheck = null;
-                if (localPos.x == 1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[7];
-                else if (localPos.x == 0)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[6];
-                else if (localPos.x == -1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[5];
-
-                return chunkToCheck.GetComponent<TileMapGenerator>().GetTile(x, y + 50);
-            }
-            if (x >= 50 && right)
-            {
-                GameObject chunkToCheck = null;
-                if (localPos.y == 1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[3];
-                else if (localPos.y == 0)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[4];
-                else if (localPos.y == -1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[5];
-
-                return chunkToCheck.GetComponent<TileMapGenerator>().GetTile(x - 50, y);
-            }
-            if (y >= 50 && up)
-            {
-                GameObject chunkToCheck = null;
-                if (localPos.x == 1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[3];
-                else if (localPos.x == 0)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[2];
-                else if (localPos.x == -1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[1];
-
-                return chunkToCheck.GetComponent<TileMapGenerator>().GetTile(x, y - 50);
-            }
-
-            return airTile;
         }
 
         float QuickMaths(float val, float min)

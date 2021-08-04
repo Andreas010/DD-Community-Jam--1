@@ -63,14 +63,14 @@ public class SoundManager : MonoBehaviour
             volumes[1] = Calc(volumes[1], false);
 
         if (curMusic == Musics.Shopping)
-            volumes[1] = Calc(volumes[2], true);
+            volumes[2] = Calc(volumes[2], true);
         else
-            volumes[1] = Calc(volumes[2], false);
+            volumes[2] = Calc(volumes[2], false);
 
         if (curMusic == Musics.Boss)
-            volumes[1] = Calc(volumes[3], true);
+            volumes[3] = Calc(volumes[3], true);
         else
-            volumes[1] = Calc(volumes[3], false);
+            volumes[3] = Calc(volumes[3], false);
 
         mixer.SetFloat("Volume_Cave_Calm", volumes[0]);
         mixer.SetFloat("Volume_Cave_Tense", volumes[1]);

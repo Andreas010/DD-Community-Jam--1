@@ -149,6 +149,12 @@ public class Inventory : MonoBehaviour
                 slotImg[i].sprite = (items[i].item.scriptObject as Weapon).sprite;
                 slotImg[i].color = new Color(1, 1, 1, 1);
             }
+
+            else if(items[i].item.type == Item.ItemType.Resource)
+            {
+                slotImg[i].sprite = (items[i].item.scriptObject as TerrainType).tile.sprite;
+                slotImg[i].color = new Color(1, 1, 1, 1);
+            }
         }
     }
 
@@ -185,8 +191,11 @@ public class Inventory : MonoBehaviour
                 continue;
             if (items[i].count + count > maxCount)
                 continue;
-            if ((items[i].item.scriptObject as StoneRender).internalValue.name != terrainType.internalValue.name)
-                continue;
+            if (items[i].item.scriptObject as StoneRender != null)
+            {
+                if((items[i].item.scriptObject as StoneRender).internalValue.name != terrainType.internalValue.name)
+                    continue;
+            }
             index = i;
         }
 
@@ -265,7 +274,7 @@ public class Inventory : MonoBehaviour
 
         if(selected != null)
         {
-            if (selected.slotID == item.slotID)
+            if (selected.slotID == item.slotID && item.item.type != Item.ItemType.Resource)
             {
                 info.transform.GetChild(2).GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Already Selected";
                 info.transform.GetChild(2).gameObject.GetComponent<Button>().interactable = false;
@@ -273,7 +282,14 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        if(selectedWeapon != null)
+        if (item.item.type == Item.ItemType.Resource)
+        {
+            info.transform.GetChild(2).GetChild(0).gameObject.GetComponent<TMP_Text>().text = "Can't be selected";
+            info.transform.GetChild(2).gameObject.GetComponent<Button>().interactable = false;
+            hasValidID = true;
+        }
+
+        if (selectedWeapon != null)
         {
             if (selectedWeapon.slotID == item.slotID)
             {
@@ -386,7 +402,7 @@ public class Inventory : MonoBehaviour
 
         currStatItem = item;
 
-        if (item.item.type == Item.ItemType.None || item.item.type == Item.ItemType.Block)
+        if (item.item.type == Item.ItemType.None || item.item.type == Item.ItemType.Block || item.item.type == Item.ItemType.Resource)
             return;
 
         Clicked(currStatItem.slotID);
@@ -546,6 +562,8 @@ public class Inventory : MonoBehaviour
             item.GetComponent<SpriteRenderer>().sprite = (currItem.item.scriptObject as StoneRender).SG.sprite;
         else if (currItem.item.type == Item.ItemType.Weapon)
             item.GetComponent<SpriteRenderer>().sprite = (currItem.item.scriptObject as Weapon).sprite;
+        else if (currItem.item.type == Item.ItemType.Resource)
+            item.GetComponent<SpriteRenderer>().sprite = (currItem.item.scriptObject as TerrainType).tile.sprite;
 
         item.GetComponentInChildren<DroppedItem>().inventory = this;
         item.GetComponentInChildren<DroppedItem>().item = currItem.item;
