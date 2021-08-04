@@ -1841,6 +1841,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 713126523}
   lerpTime: 0.3
+  offset: {x: 0, y: 0, z: -10}
+  smoothing: 0.1
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0

@@ -776,6 +776,7 @@ PlayerSettings:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled:
+    Collab: 1
     UNet: 1
   luminIcon:
     m_Name: 
@@ -789,10 +790,10 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   apiCompatibilityLevel: 6
-  cloudProjectId: 
+  cloudProjectId: 73bddfc3-8913-40d8-925f-228472071ff5
   framebufferDepthMemorylessMode: 0
-  projectName: 
-  organizationId: 
+  projectName: DD-Community-Jam-#1
+  organizationId: acommonmorning
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
