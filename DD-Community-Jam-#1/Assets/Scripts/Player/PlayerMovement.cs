@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     public TextMeshProUGUI energyCrystalsText;
     public Inventory inventory;
     public GameObject bulletPrefab;
+    PlayerHealth ph;
 
     [Header("Parameters")]
     public Vector2 speeds; //speeds.x = normal speed speeds.y = running speed
@@ -41,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
     bool isJumping;
     bool facingRight;
     bool canInteract;
+    bool wasGrounded;
 
     //Current weapon params
     public Weapon weapon;
@@ -49,6 +51,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        ph = GetComponent<PlayerHealth>();
         rig = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         animator = transform.parent.GetComponent<Animator>();
@@ -69,16 +72,22 @@ public class PlayerMovement : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(position, direction, distance, groundLayer);
             if (hit.collider != null)
             {
+                if (wasGrounded == false && rig.velocity.y < -20)
+                {
+                    ph.ModifyHealth(-1);
+                    ph.MakeInvincible(0.5f); 
+                }
+                wasGrounded = true;
                 return true;
             }
-
+            wasGrounded = false;
             return false;
         }
         bool IsTouchingCeiling()
         {
             Vector2 position = transform.position;
             Vector2 direction = Vector2.up;
-            float distance = minDistFromGround;
+            float distance = .5f ;
 
             RaycastHit2D hit = Physics2D.Raycast(position, direction, distance, groundLayer);
             if (hit.collider != null)
