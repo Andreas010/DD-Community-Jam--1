@@ -69,6 +69,22 @@ public class TerrainEditor : MonoBehaviour
 
         TileMapGenerator curGenerator = chunkGenerator.currentChunks[currentChunk].GetComponent<TileMapGenerator>();
 
-        curGenerator.SetTile((int)mousePosition.x + (25 + (mousePosition.x > 0 ? 0 : -1)) + (currentChunk.x > 0 ? -(Mathf.Abs(currentChunk.x) * 50) : (Mathf.Abs(currentChunk.x) * 50)), (int)mousePosition.y + (25 + (mousePosition.y > 0 ? 0 : -1)) + (currentChunk.y > 0 ? -(Mathf.Abs(currentChunk.y) * 50) : (Mathf.Abs(currentChunk.y) * 50)), tile);
+        Vector2Int generatorPos = new Vector2Int((int)mousePosition.x + (25 + (mousePosition.x > 0 ? 0 : -1)) + (currentChunk.x > 0 ? -(Mathf.Abs(currentChunk.x) * 50) : (Mathf.Abs(currentChunk.x) * 50)), (int)mousePosition.y + (25 + (mousePosition.y > 0 ? 0 : -1)) + (currentChunk.y > 0 ? -(Mathf.Abs(currentChunk.y) * 50) : (Mathf.Abs(currentChunk.y) * 50)));
+
+        TerrainType curType = curGenerator.GetTile(generatorPos.x, generatorPos.y);
+        curGenerator.SetTile(generatorPos.x, generatorPos.y, tile);
+
+        //(int)mousePosition.x + (25 + (mousePosition.x > 0 ? 0 : -1)) + (currentChunk.x > 0 ? -(Mathf.Abs(currentChunk.x) * 50) : (Mathf.Abs(currentChunk.x) * 50)), (int)mousePosition.y + (25 + (mousePosition.y > 0 ? 0 : -1)) + (currentChunk.y > 0 ? -(Mathf.Abs(currentChunk.y) * 50) : (Mathf.Abs(currentChunk.y) * 50))
+
+        if (curType.item != null && curType.render.internalValue.name != tile.internalValue.name && curType.render.SG != null)
+        {
+            GameObject item = Instantiate(droppedItem, new Vector2((int)mousePosition.x + (mousePosition.x > 0 ? 0.5f : -0.5f), (int)mousePosition.y + (mousePosition.y > 0 ? 0.5f : -0.5f)), Quaternion.identity, curGenerator.transform);
+
+            item.GetComponent<SpriteRenderer>().sprite = curType.render.SG.sprite;
+
+            item.GetComponentInChildren<DroppedItem>().inventory = Inventory.instance;
+            item.GetComponentInChildren<DroppedItem>().item = curType.item;
+            item.GetComponentInChildren<DroppedItem>().count = 1;
+        }
     }
 }

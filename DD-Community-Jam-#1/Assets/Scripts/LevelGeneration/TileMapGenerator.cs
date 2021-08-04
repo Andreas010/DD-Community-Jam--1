@@ -15,6 +15,11 @@ namespace DD_JAM.LevelGeneration
         [Header("What does exist?")]
         public StoneRender render;
         public StoneRender forceRender;
+        public StoneRender oreRenderer;
+        [Range(0, 1)]
+        public float oreFrequency;
+        public float oreNoiseScale;
+
         public TerrainType renderReplacement;
         public TerrainType[] types;
         public TerrainType forcedGround;
@@ -44,13 +49,20 @@ namespace DD_JAM.LevelGeneration
 
         private void Update()
         {
-            if (transform.childCount <= 5)
+            int enemyCount = 0;
+
+            foreach (Transform child in transform)
+            {
+                if (child.CompareTag("Enemy"))
+                    enemyCount++;
+            }
+
+            if(enemyCount <= 5)
             {
                 Vector2 newPos = Vector2.zero;
 
                 do { newPos = possibleEnemyPositions[Random.Range(0, possibleEnemyPositions.Length)]; }
                 while (Vector2.Distance(newPos, PlayerHealth.instance.gameObject.transform.position) < 10);
-                
 
                 Instantiate(enemy, newPos, Quaternion.identity, transform);
             }
@@ -102,6 +114,15 @@ namespace DD_JAM.LevelGeneration
                     }
                 }
             }
+
+            for (int x = 0; x < levelSize.x; x++)
+            {
+                for (int y = 0; y < levelSize.y; y++)
+                {
+                    if (Mathf.PerlinNoise((x + transform.position.x) / 50f * oreNoiseScale, (y + transform.position.y) / 50f * oreNoiseScale) > oreFrequency && curLevel[x, y] == render.internalValue)
+                        curLevel[x, y] = oreRenderer.internalValue;
+                }
+            }
         }
 
         public void Generate(bool mayGenerateBoss = false)
@@ -142,7 +163,15 @@ namespace DD_JAM.LevelGeneration
                     Vector3Int pos = tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y));
 
                     if (!isChosen || transform.position == Vector3.zero)
-                        tilemap.SetTile(pos, CalculateTile(render, x, y));
+                    {
+                        if(curLevel[x, y] == oreRenderer.internalValue)
+                        {
+                            tilemap.SetTile(pos, CalculateTile(oreRenderer, x, y));
+                        }
+                        else
+                            tilemap.SetTile(pos, CalculateTile(render, x, y));
+                    }
+
                     else if (isChosen)
                     {
                         float red = mask.GetPixel(x, y).r;
@@ -160,7 +189,14 @@ namespace DD_JAM.LevelGeneration
                             tilemap.SetTile(pos, airTile.tile);
                         }
                         else
-                            tilemap.SetTile(pos, CalculateTile(render, x, y));
+                        {
+                            if (curLevel[x, y] == oreRenderer.internalValue)
+                            {
+                                tilemap.SetTile(pos, CalculateTile(oreRenderer, x, y));
+                            }
+                            else
+                                tilemap.SetTile(pos, CalculateTile(render, x, y));
+                        }
                     }
                 }
             }
@@ -261,71 +297,10 @@ namespace DD_JAM.LevelGeneration
         }
         public TerrainType GetTile(int x, int y)
         {
-            /*if ((x < 0 || y < 0 || x >= 50 || y >= 50) && allowBorders)
-                return TryGetOOBTile(x, y);
-            else */if (x < 0 || y < 0 || x >= 50 || y >= 50)
+            if (x < 0 || y < 0 || x >= 50 || y >= 50)
                 return airTile;
 
             return curLevel[x, y];
-        }
-        TerrainType TryGetOOBTile(int x, int y)
-        {
-            //Where can we check?
-            bool up = localPos.y != 1;
-            bool down = localPos.y != -1;
-            bool left = localPos.x != -1;
-            bool right = localPos.x != 1;
-
-            if (x < 0 && left)
-            {
-                GameObject chunkToCheck = null;
-                if (localPos.y == 1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[1];
-                else if (localPos.y == 0)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[0];
-                else if (localPos.y == -1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[7];
-
-                return chunkToCheck.GetComponent<TileMapGenerator>().GetTile(x + 50, y);
-            }
-            if (y < 0 && !left)
-            {
-                GameObject chunkToCheck = null;
-                if (localPos.x == 1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[7];
-                else if (localPos.x == 0)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[6];
-                else if (localPos.x == -1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[5];
-
-                return chunkToCheck.GetComponent<TileMapGenerator>().GetTile(x, y + 50);
-            }
-            if (x >= 50 && right)
-            {
-                GameObject chunkToCheck = null;
-                if (localPos.y == 1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[3];
-                else if (localPos.y == 0)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[4];
-                else if (localPos.y == -1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[5];
-
-                return chunkToCheck.GetComponent<TileMapGenerator>().GetTile(x - 50, y);
-            }
-            if (y >= 50 && up)
-            {
-                GameObject chunkToCheck = null;
-                if (localPos.x == 1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[3];
-                else if (localPos.x == 0)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[2];
-                else if (localPos.x == -1)
-                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[1];
-
-                return chunkToCheck.GetComponent<TileMapGenerator>().GetTile(x, y - 50);
-            }
-
-            return airTile;
         }
 
         float QuickMaths(float val, float min)
@@ -404,17 +379,6 @@ namespace DD_JAM.LevelGeneration
 
             Debug.LogError("NO VALID BOSS POSITION", gameObject);
             return new Vector2(float.NaN, float.NaN);
-        }
-
-        void OnDrawGizmosSelected()
-        {
-            if (possibleEnemyPositions == null)
-                return;
-
-            for (int i = 0; i < possibleEnemyPositions.Length; i++)
-            {
-                Gizmos.DrawWireSphere(possibleEnemyPositions[i], 0.5f);
-            }
         }
 
         private void OnDestroy()

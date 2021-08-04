@@ -8,6 +8,8 @@ namespace DD_JAM.LevelGeneration
 {
     public class ChunkGeneration : MonoBehaviour
     {
+        public static ChunkGeneration instance;
+
         public Transform objectToCheck;
         public GameObject chunk;
 
@@ -38,6 +40,10 @@ namespace DD_JAM.LevelGeneration
         public BossRoomType[] rooms;
         [Range(0f, 100f)]
         public float maskApplyanceChance;
+
+        public bool playerIsInBossChunk;
+
+        void Awake() => instance = this;
 
         void Start()
         {
@@ -111,12 +117,14 @@ namespace DD_JAM.LevelGeneration
                     TileMapGenerator tmg = newChunk.GetComponent<TileMapGenerator>();
 
                     if (r.Next(0, 100000) / 1000f <= maskApplyanceChance)
-                        newChunk.GetComponent<TileMapGenerator>().isChosen = true;
+                        tmg.isChosen = true;
 
                     tmg.cg = this;
                     tmg.localPos = chunkPositions[i];
                     tmg.isPlayerChunk = chunkPositions[i] == new Vector2Int(0, 0);
                     tmg.allowBorders = false;
+
+                    playerIsInBossChunk = tmg.isChosen && tmg.isPlayerChunk;
 
                     if (savedChunks.ContainsKey(key))
                     {
