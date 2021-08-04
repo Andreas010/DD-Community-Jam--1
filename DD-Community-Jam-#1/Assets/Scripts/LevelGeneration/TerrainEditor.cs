@@ -78,7 +78,7 @@ public class TerrainEditor : MonoBehaviour
 
         if (curType.item != null && curType.render.internalValue.name != tile.internalValue.name && curType.render.SG != null)
         {
-            GameObject item = Instantiate(droppedItem, new Vector2((int) (mousePosition.x - 0.5f), (int) (mousePosition.y - 0.5f)), Quaternion.identity);
+            GameObject item = Instantiate(droppedItem, new Vector2((int)mousePosition.x + (mousePosition.x > 0 ? 0.5f : -0.5f), (int)mousePosition.y + (mousePosition.y > 0 ? 0.5f : -0.5f)), Quaternion.identity, curGenerator.transform);
 
             item.GetComponent<SpriteRenderer>().sprite = curType.render.SG.sprite;
 

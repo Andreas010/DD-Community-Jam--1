@@ -44,13 +44,20 @@ namespace DD_JAM.LevelGeneration
 
         private void Update()
         {
-            if (transform.childCount <= 5)
+            int enemyCount = 0;
+
+            foreach (Transform child in transform)
+            {
+                if (child.CompareTag("Enemy"))
+                    enemyCount++;
+            }
+
+            if(enemyCount <= 5)
             {
                 Vector2 newPos = Vector2.zero;
 
                 do { newPos = possibleEnemyPositions[Random.Range(0, possibleEnemyPositions.Length)]; }
                 while (Vector2.Distance(newPos, PlayerHealth.instance.gameObject.transform.position) < 10);
-                
 
                 Instantiate(enemy, newPos, Quaternion.identity, transform);
             }

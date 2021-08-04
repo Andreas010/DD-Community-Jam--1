@@ -8,7 +8,7 @@ public class PlayerHealth : MonoBehaviour
     public static PlayerHealth instance;
 
     public int maxHealth;
-    private int curHealth;
+    public int curHealth;
 
     public Transform healthCanvas;
     public Image healthRadial;
