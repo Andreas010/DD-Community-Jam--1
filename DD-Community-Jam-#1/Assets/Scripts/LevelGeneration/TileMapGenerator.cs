@@ -83,8 +83,6 @@ namespace DD_JAM.LevelGeneration
 
             curLevel = new TerrainType[levelSize.x, levelSize.y];
 
-            System.Random r1 = new System.Random((int)(transform.position.x + transform.position.y));
-
             for (int x = 0; x < levelSize.x; x++)
             {
                 for (int y = 0; y < levelSize.y; y++)
@@ -114,6 +112,15 @@ namespace DD_JAM.LevelGeneration
                         //tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y)), types[index].tile);
                         curLevel[x, y] = types[index];
                     }
+                }
+            }
+
+            for (int x = 0; x < levelSize.x; x++)
+            {
+                for (int y = 0; y < levelSize.y; y++)
+                {
+                    if (Mathf.PerlinNoise((x + transform.position.x) / 50f * oreNoiseScale, (y + transform.position.y) / 50f * oreNoiseScale) > oreFrequency && curLevel[x, y] == render.internalValue)
+                        curLevel[x, y] = oreRenderer.internalValue;
                 }
             }
         }
@@ -157,7 +164,7 @@ namespace DD_JAM.LevelGeneration
 
                     if (!isChosen || transform.position == Vector3.zero)
                     {
-                        if(curLevel[x, y].render == oreRenderer)
+                        if(curLevel[x, y] == oreRenderer.internalValue)
                         {
                             tilemap.SetTile(pos, CalculateTile(oreRenderer, x, y));
                         }
@@ -183,7 +190,7 @@ namespace DD_JAM.LevelGeneration
                         }
                         else
                         {
-                            if (curLevel[x, y].render == oreRenderer)
+                            if (curLevel[x, y] == oreRenderer.internalValue)
                             {
                                 tilemap.SetTile(pos, CalculateTile(oreRenderer, x, y));
                             }
