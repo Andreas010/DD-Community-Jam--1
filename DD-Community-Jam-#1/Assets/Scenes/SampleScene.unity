@@ -3023,7 +3023,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &765433748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7858,6 +7858,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2087083328}
     m_Modifications:
+    - target: {fileID: 2793703690637423042, guid: 5010dac9eaa478240bf1ad26708541ac,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793703690637423042, guid: 5010dac9eaa478240bf1ad26708541ac,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793703690637423042, guid: 5010dac9eaa478240bf1ad26708541ac,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2941171611326331718, guid: 5010dac9eaa478240bf1ad26708541ac,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7972,6 +7987,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Inventory Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097186426619149728, guid: 5010dac9eaa478240bf1ad26708541ac,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097186426619149728, guid: 5010dac9eaa478240bf1ad26708541ac,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097186426619149728, guid: 5010dac9eaa478240bf1ad26708541ac,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4097186426619149728, guid: 5010dac9eaa478240bf1ad26708541ac,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5010dac9eaa478240bf1ad26708541ac, type: 3}

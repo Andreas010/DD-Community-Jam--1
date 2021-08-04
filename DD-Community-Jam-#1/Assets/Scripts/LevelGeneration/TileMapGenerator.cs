@@ -16,8 +16,9 @@ namespace DD_JAM.LevelGeneration
         public StoneRender render;
         public StoneRender forceRender;
         public StoneRender oreRenderer;
-        [Range(0, 100)]
+        [Range(0, 1)]
         public float oreFrequency;
+        public float oreNoiseScale;
 
         public TerrainType renderReplacement;
         public TerrainType[] types;
@@ -82,6 +83,8 @@ namespace DD_JAM.LevelGeneration
 
             curLevel = new TerrainType[levelSize.x, levelSize.y];
 
+            System.Random r1 = new System.Random((int)(transform.position.x + transform.position.y));
+
             for (int x = 0; x < levelSize.x; x++)
             {
                 for (int y = 0; y < levelSize.y; y++)
@@ -145,7 +148,6 @@ namespace DD_JAM.LevelGeneration
             GetComponentInParent<MapManager>().PlaceChunk(new Vector2Int((int)(transform.position.x / 50f), (int)(transform.position.y / 50f)), chunkType);
 
             System.Random r = new System.Random((int)(transform.position.x * 45558 + transform.position.y * 1452));
-            System.Random r1 = new System.Random((int)(transform.position.x + transform.position.y));
 
             for (int x = 0; x < levelSize.x; x++)
             {
@@ -155,9 +157,8 @@ namespace DD_JAM.LevelGeneration
 
                     if (!isChosen || transform.position == Vector3.zero)
                     {
-                        if(r1.Next(0, 101) > oreFrequency)
+                        if(curLevel[x, y].render == oreRenderer)
                         {
-                            curLevel[x, y] = GetTile(x, y) == airTile ? airTile : oreRenderer.internalValue;
                             tilemap.SetTile(pos, CalculateTile(oreRenderer, x, y));
                         }
                         else
@@ -182,9 +183,8 @@ namespace DD_JAM.LevelGeneration
                         }
                         else
                         {
-                            if (r1.Next(0, 101) > oreFrequency)
+                            if (curLevel[x, y].render == oreRenderer)
                             {
-                                curLevel[x, y] = GetTile(x, y) == airTile ? airTile : oreRenderer.internalValue;
                                 tilemap.SetTile(pos, CalculateTile(oreRenderer, x, y));
                             }
                             else
@@ -372,17 +372,6 @@ namespace DD_JAM.LevelGeneration
 
             Debug.LogError("NO VALID BOSS POSITION", gameObject);
             return new Vector2(float.NaN, float.NaN);
-        }
-
-        void OnDrawGizmosSelected()
-        {
-            if (possibleEnemyPositions == null)
-                return;
-
-            for (int i = 0; i < possibleEnemyPositions.Length; i++)
-            {
-                Gizmos.DrawWireSphere(possibleEnemyPositions[i], 0.5f);
-            }
         }
 
         private void OnDestroy()

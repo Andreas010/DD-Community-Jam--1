@@ -97,7 +97,8 @@ MonoBehaviour:
   render: {fileID: 11400000, guid: b0cc901c84ae502419ed8de68279afff, type: 2}
   forceRender: {fileID: 11400000, guid: b0cc901c84ae502419ed8de68279afff, type: 2}
   oreRenderer: {fileID: 11400000, guid: 0c190b687cba4b94d99483c969d8aee2, type: 2}
-  oreFrequency: 90
+  oreFrequency: 0.6
+  oreNoiseScale: 10
   renderReplacement: {fileID: 11400000, guid: cc0d9c3259f21b44da48a751bbdde0d9, type: 2}
   types:
   - {fileID: 11400000, guid: cc0d9c3259f21b44da48a751bbdde0d9, type: 2}
