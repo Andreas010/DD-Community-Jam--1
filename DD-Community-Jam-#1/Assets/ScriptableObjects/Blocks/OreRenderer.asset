@@ -27,10 +27,10 @@ MonoBehaviour:
   HL: {fileID: 11400000, guid: 181397e00d4921441a58f93a84093d0e, type: 2}
   HM: {fileID: 11400000, guid: fc76ad31705192245b06926c4b626753, type: 2}
   HR: {fileID: 11400000, guid: 911e80eea03e2bd4bac07062031c62a5, type: 2}
-  ELU: {fileID: 11400000, guid: d25dcfef28f2e924685302ba7126e634, type: 2}
-  ERU: {fileID: 11400000, guid: b117e5652765aa44ab56bff1da9caa3d, type: 2}
-  ELB: {fileID: 11400000, guid: 3cdb0f3ad457f3f42b8fdc4862e2d99e, type: 2}
-  ERB: {fileID: 11400000, guid: dbe7e1739b2996a49bff2e0362768a9a, type: 2}
+  ELU: {fileID: 11400000, guid: dbe7e1739b2996a49bff2e0362768a9a, type: 2}
+  ERU: {fileID: 11400000, guid: 3cdb0f3ad457f3f42b8fdc4862e2d99e, type: 2}
+  ELB: {fileID: 11400000, guid: b117e5652765aa44ab56bff1da9caa3d, type: 2}
+  ERB: {fileID: 11400000, guid: d25dcfef28f2e924685302ba7126e634, type: 2}
   SG: {fileID: 11400000, guid: d5aeac81554b1ec4cbf5077f95b06dff, type: 2}
   canPlaceInAir: 0
   internalValue: {fileID: 11400000, guid: 61752e5540cbda44cb50c11848cd6916, type: 2}
