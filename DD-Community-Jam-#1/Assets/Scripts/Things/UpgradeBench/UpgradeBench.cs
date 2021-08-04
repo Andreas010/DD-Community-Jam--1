@@ -10,7 +10,9 @@ public class UpgradeBench : MonoBehaviour
     public AnimationCurve sizeY;
     private float time;
     public float multiply;
+#pragma warning disable CS0649
     private bool open;
+#pragma warning restore CS0649
 
     public Transform popupObj;
 

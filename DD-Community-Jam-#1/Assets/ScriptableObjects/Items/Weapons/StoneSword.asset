@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d240df0f7d7471439fa27f4ad3572dc, type: 3}
   m_Name: StoneSword
   m_EditorClassIdentifier: 
-  displayName: 
+  displayName: Stone Sword
   type: 1
   maxCount: 1
   scriptObject: {fileID: 11400000, guid: 12811d66789c12a4598e43efe947bd02, type: 2}

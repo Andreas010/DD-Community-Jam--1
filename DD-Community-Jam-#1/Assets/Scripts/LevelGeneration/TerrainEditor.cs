@@ -62,5 +62,13 @@ public class TerrainEditor : MonoBehaviour
         }
 
         */
+
+        Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
+
+        Vector2Int currentChunk = new Vector2Int((int)((mousePosition.x + (mousePosition.x > 0 ? 25f : -25f)) / 50f), (int)((mousePosition.y + (mousePosition.y > 0 ? 25f : -25f)) / 50f));
+
+        TileMapGenerator curGenerator = chunkGenerator.currentChunks[currentChunk].GetComponent<TileMapGenerator>();
+
+        curGenerator.SetTile((int)mousePosition.x + (25 + (mousePosition.x > 0 ? 0 : -1)) + (currentChunk.x > 0 ? -(Mathf.Abs(currentChunk.x) * 50) : (Mathf.Abs(currentChunk.x) * 50)), (int)mousePosition.y + (25 + (mousePosition.y > 0 ? 0 : -1)) + (currentChunk.y > 0 ? -(Mathf.Abs(currentChunk.y) * 50) : (Mathf.Abs(currentChunk.y) * 50)), tile);
     }
 }

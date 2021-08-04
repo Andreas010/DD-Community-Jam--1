@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04344bb28e6ea6b499bd9677043f6938, type: 3}
   m_Name: StoneSword
   m_EditorClassIdentifier: 
-  name: 
+  name: Stone Sword
   type: 0
   sprite: {fileID: 21300000, guid: e884377af15c68547ac8eaf58ef36b7a, type: 3}
   weaponCooldown: 0.85

@@ -22,6 +22,8 @@ namespace DD_JAM.LevelGeneration
         [HideInInspector]
         public ChunkGeneration cg;
         private BossRoomThinker bossRoomThinker;
+        public Vector2Int localPos;
+        public bool allowBorders;
 
         private Tilemap tilemap;
         private Vector2Int levelSize;
@@ -242,16 +244,16 @@ namespace DD_JAM.LevelGeneration
         {
             curLevel[x, y] = renderer.internalValue;
             tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y)), CalculateTile(renderer, x, y));
-            
+
             tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x - 1, y - (levelSize.y / 2) + transform.position.y)), CalculateTile(GetTile(x - 1, y).render, x - 1, y));
             tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x + 1, y - (levelSize.y / 2) + transform.position.y)), CalculateTile(GetTile(x + 1, y).render, x + 1, y));
-            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y - 1)), CalculateTile(GetTile(x ,y - 1).render, x, y - 1));
-            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y + 1)), CalculateTile(GetTile(x ,y + 1).render, x, y + 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y - 1)), CalculateTile(GetTile(x, y - 1).render, x, y - 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x, y - (levelSize.y / 2) + transform.position.y + 1)), CalculateTile(GetTile(x, y + 1).render, x, y + 1));
 
-            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x + 1, y - (levelSize.y / 2) + transform.position.y + 1)), CalculateTile(GetTile(x+1,y+1).render, x + 1, y + 1));
-            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x + 1, y - (levelSize.y / 2) + transform.position.y - 1)), CalculateTile(GetTile(x+1,y-1).render, x + 1, y - 1));
-            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x - 1, y - (levelSize.y / 2) + transform.position.y - 1)), CalculateTile(GetTile(x-1,y-1).render, x - 1, y - 1));
-            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x - 1, y - (levelSize.y / 2) + transform.position.y + 1)), CalculateTile(GetTile(x-1,y+1).render, x - 1, y + 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x + 1, y - (levelSize.y / 2) + transform.position.y + 1)), CalculateTile(GetTile(x + 1, y + 1).render, x + 1, y + 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x + 1, y - (levelSize.y / 2) + transform.position.y - 1)), CalculateTile(GetTile(x + 1, y - 1).render, x + 1, y - 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x - 1, y - (levelSize.y / 2) + transform.position.y - 1)), CalculateTile(GetTile(x - 1, y - 1).render, x - 1, y - 1));
+            tilemap.SetTile(tilemap.WorldToCell(new Vector3(x - (levelSize.x / 2) + transform.position.x - 1, y - (levelSize.y / 2) + transform.position.y + 1)), CalculateTile(GetTile(x - 1, y + 1).render, x - 1, y + 1));
         }
         public TerrainType[,] GetLevel()
         {
@@ -259,11 +261,73 @@ namespace DD_JAM.LevelGeneration
         }
         public TerrainType GetTile(int x, int y)
         {
-            if (x < 0 || y < 0 || x >= 50 || y >= 50)
+            /*if ((x < 0 || y < 0 || x >= 50 || y >= 50) && allowBorders)
+                return TryGetOOBTile(x, y);
+            else */if (x < 0 || y < 0 || x >= 50 || y >= 50)
                 return airTile;
 
             return curLevel[x, y];
         }
+        TerrainType TryGetOOBTile(int x, int y)
+        {
+            //Where can we check?
+            bool up = localPos.y != 1;
+            bool down = localPos.y != -1;
+            bool left = localPos.x != -1;
+            bool right = localPos.x != 1;
+
+            if (x < 0 && left)
+            {
+                GameObject chunkToCheck = null;
+                if (localPos.y == 1)
+                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[1];
+                else if (localPos.y == 0)
+                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[0];
+                else if (localPos.y == -1)
+                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[7];
+
+                return chunkToCheck.GetComponent<TileMapGenerator>().GetTile(x + 50, y);
+            }
+            if (y < 0 && !left)
+            {
+                GameObject chunkToCheck = null;
+                if (localPos.x == 1)
+                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[7];
+                else if (localPos.x == 0)
+                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[6];
+                else if (localPos.x == -1)
+                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[5];
+
+                return chunkToCheck.GetComponent<TileMapGenerator>().GetTile(x, y + 50);
+            }
+            if (x >= 50 && right)
+            {
+                GameObject chunkToCheck = null;
+                if (localPos.y == 1)
+                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[3];
+                else if (localPos.y == 0)
+                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[4];
+                else if (localPos.y == -1)
+                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[5];
+
+                return chunkToCheck.GetComponent<TileMapGenerator>().GetTile(x - 50, y);
+            }
+            if (y >= 50 && up)
+            {
+                GameObject chunkToCheck = null;
+                if (localPos.x == 1)
+                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[3];
+                else if (localPos.x == 0)
+                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[2];
+                else if (localPos.x == -1)
+                    chunkToCheck = GetComponentInParent<ChunkGeneration>().publicCurrentChunks[1];
+
+                return chunkToCheck.GetComponent<TileMapGenerator>().GetTile(x, y - 50);
+            }
+
+            return airTile;
+        }
+
         float QuickMaths(float val, float min)
         {
             if (val == 0)

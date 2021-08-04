@@ -20,6 +20,20 @@ namespace DD_JAM.LevelGeneration
         private bool firstFrame;
 
         public TMP_Text playerPosText;
+        private bool isGenerating;
+
+        [HideInInspector]
+        public Vector2Int[] chunkPositions = {
+                new Vector2Int(-1, 0),
+                new Vector2Int(-1, 1),
+                new Vector2Int(0, 1),
+                new Vector2Int(1, 1),
+                new Vector2Int(1, 0),
+                new Vector2Int(1, -1),
+                new Vector2Int(0, -1),
+                new Vector2Int(-1, -1),
+                new Vector2Int(0, 0),
+            };
 
         public BossRoomType[] rooms;
         [Range(0f, 100f)]
@@ -37,30 +51,17 @@ namespace DD_JAM.LevelGeneration
             if (Input.GetKeyDown(KeyCode.F3))
                 playerPosText.gameObject.SetActive(!playerPosText.gameObject.activeInHierarchy);
 
-
-
-            Vector2Int[] chunkPositions = {
-                new Vector2Int(-1, 0),
-                new Vector2Int(-1, 1),
-                new Vector2Int(0, 1),
-                new Vector2Int(1, 1),
-                new Vector2Int(1, 0),
-                new Vector2Int(1, -1),
-                new Vector2Int(0, -1),
-                new Vector2Int(-1, -1),
-                new Vector2Int(0, 0),
-            };
-
             Vector2Int currentChunk = new Vector2Int((int)((objectToCheck.position.x + (objectToCheck.position.x > 0 ? 25f : -25f)) / 50f), (int)((objectToCheck.position.y + (objectToCheck.position.y > 0 ? 25f : -25f)) / 50f));
 
             if (playerPosText.gameObject.activeInHierarchy)
             {
-                playerPosText.text = $"X:{currentChunk.x:00} Y:{currentChunk.y:00} x:{(objectToCheck.position.x - (currentChunk.x * 50)):00.00} y:{(objectToCheck.position.y - (currentChunk.y * 50)):00.00}";
+                playerPosText.text = $"X:{currentChunk.x:00} Y:{currentChunk.y:00} x:{(objectToCheck.position.x - (currentChunk.x * 50)):00.00} y:{(objectToCheck.position.y - (currentChunk.y * 50)):00.00} FPS:{1/Time.deltaTime:00.00}";
             }
 
-            if (currentChunk != lastChunk)
+            if (currentChunk != lastChunk && !isGenerating)
             {
-                //Something changed
+                isGenerating = true;
+
                 Rigidbody2D objRb = objectToCheck.GetComponent<Rigidbody2D>();
                 Vector2 position = objRb.position;
                 Vector2 speed = objRb.velocity;
@@ -83,12 +84,14 @@ namespace DD_JAM.LevelGeneration
                             savedChunks[key] = chunkData;
                         else
                             savedChunks.Add(key, chunkData);
-                        if(chunkToDelete.GetComponent<BossRoomThinker>() != null)
+                        if (chunkToDelete.GetComponent<BossRoomThinker>() != null)
                         {
                             chunkToDelete.GetComponent<BossRoomThinker>().canUpdate = false;
                             chunkToDelete.GetComponent<BossRoomThinker>().StopThinking();
                         }
-                        Destroy(chunkToDelete);
+                        chunkToDelete.GetComponent<UnityEngine.Tilemaps.TilemapCollider2D>().enabled = false;
+                        chunkToDelete.GetComponent<UnityEngine.Tilemaps.TilemapRenderer>().enabled = false;
+                        Destroy(chunkToDelete, i);
                         currentChunks.Remove(key);
                     }
                 }
@@ -105,18 +108,23 @@ namespace DD_JAM.LevelGeneration
 
                     System.Random r = new System.Random(key.x * key.y);
 
+                    TileMapGenerator tmg = newChunk.GetComponent<TileMapGenerator>();
+
                     if (r.Next(0, 100000) / 1000f <= maskApplyanceChance)
                         newChunk.GetComponent<TileMapGenerator>().isChosen = true;
 
-                    newChunk.GetComponent<TileMapGenerator>().cg = this;
-                    newChunk.GetComponent<TileMapGenerator>().isPlayerChunk = chunkPositions[i] == new Vector2Int(0, 0);
+                    tmg.cg = this;
+                    tmg.localPos = chunkPositions[i];
+                    tmg.isPlayerChunk = chunkPositions[i] == new Vector2Int(0, 0);
+                    tmg.allowBorders = false;
 
                     if (savedChunks.ContainsKey(key))
                     {
-                        newChunk.GetComponent<TileMapGenerator>().hasGenerated = true;
+                        tmg.hasGenerated = true;
                         newChunk.GetComponent<LevelGenerator>().Generate();
-                        newChunk.GetComponent<TileMapGenerator>().ReGenerate(savedChunks[key]);
-                    } else
+                        tmg.ReGenerate(savedChunks[key]);
+                    }
+                    else
                     {
                         newChunk.GetComponent<LevelGenerator>().Generate();
                     }
@@ -133,10 +141,20 @@ namespace DD_JAM.LevelGeneration
                     firstFrame = true;
                 }
 
+                for (int i = 0; i < chunkPositions.Length; i++)
+                {
+                    GameObject newChunk = publicCurrentChunks[i];
+                    TileMapGenerator tmg = newChunk.GetComponent<TileMapGenerator>();
+                    tmg.allowBorders = true;
+                    tmg.Generate();
+                }
+
                 lastChunk = currentChunk;
                 objRb.bodyType = RigidbodyType2D.Dynamic;
                 objRb.position = position;
                 objRb.velocity = speed;
+
+                isGenerating = false;
             }
         }
     }
