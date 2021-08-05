@@ -2846,12 +2846,13 @@ MonoBehaviour:
   inventory: {fileID: 27856113}
   bulletPrefab: {fileID: 7631254342689153885, guid: bd95306488f9a974498784c503e09c06,
     type: 3}
-  speeds: {x: 8, y: 10}
+  speeds: {x: 7, y: 8.5}
   jumpForce: 10
   jumpTime: 0.17
   fallMultiplier: 2.5
   downwardJumpForce: -3
   minDistFromGround: 1
+  dashForce: 10
   costForUpgrade: {x: 5, y: 5, z: 5, w: 5}
   weapon: {fileID: 11400000, guid: 02f9da6071604854498d4af879de9990, type: 2}
   weaponDamage: 0.5
@@ -3025,7 +3026,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &765433748
 MonoBehaviour:
   m_ObjectHideFlags: 0

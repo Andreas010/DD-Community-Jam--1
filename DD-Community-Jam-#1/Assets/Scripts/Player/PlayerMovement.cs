@@ -25,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Parameters")]
     public Vector2 speeds; //speeds.x = normal speed speeds.y = running speed
+    Vector2 xtraVel; //extra velocities added to the player such as a dash or getting bumped when attacking
     public float jumpForce = 16;
     float jumpTimeCounter;
     public float jumpTime = 0.2f;
@@ -32,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     public float downwardJumpForce = -3;
     public float minDistFromGround = 0.6f;
     float atkCooldown;
+    public float dashForce;
 
     [HideInInspector] public Vector4 costForUpgrade = new Vector4(5, 5, 5, 5);
 
@@ -101,6 +103,18 @@ public class PlayerMovement : MonoBehaviour
 
         //movement
         #region
+
+        //Dash
+        #region
+        Debug.Log(xtraVel.x);
+        if(Input.GetButtonDown("Dash")) 
+        {
+            Debug.Log("yuh");
+            if(facingRight) xtraVel = new Vector2(xtraVel.x + dashForce, xtraVel.y);
+            else xtraVel = new Vector2(xtraVel.x - dashForce, xtraVel.y);
+        }
+        #endregion
+
         if (!inventory.isInventory && !ConsoleManager.instance.isConsole && !ShopManager.instance.isOpen)
         {
             sprinting = Input.GetButton("Sprint");
@@ -111,15 +125,15 @@ public class PlayerMovement : MonoBehaviour
             sr.flipX = !facingRight;
 
             //horizontal Movement
-            if (!sprinting) rig.velocity = new Vector2(x * speeds.x, rig.velocity.y); //speeds.x = normal speed
-            else rig.velocity = new Vector2(x * speeds.y, rig.velocity.y); //speeds.y = sprinting speed
+            if (!sprinting) rig.velocity = new Vector2(x * speeds.x, rig.velocity.y) + xtraVel; //speeds.x = normal speed
+            else rig.velocity = new Vector2(x * speeds.y, rig.velocity.y) + xtraVel; //speeds.y = sprinting speed
 
             //jump
             if (IsGrounded() && (Input.GetButton("Jump")))
             {
                 isJumping = true;
                 jumpTimeCounter = jumpTime;
-                rig.velocity = new Vector2(rig.velocity.x, jumpForce);
+                rig.velocity = new Vector2(rig.velocity.x, jumpForce) + xtraVel;
             }
 
             if ((Input.GetButton("Jump")) && isJumping == true)
@@ -130,13 +144,13 @@ public class PlayerMovement : MonoBehaviour
 
                     if (jumpTimeCounter > 0)
                     {
-                        rig.velocity = new Vector2(rig.velocity.x, t_jumpforce);
+                        rig.velocity = new Vector2(rig.velocity.x, t_jumpforce) + xtraVel;
                         jumpTimeCounter -= Time.deltaTime;
                         t_jumpforce -= Time.deltaTime;
                     }
                     else { isJumping = false; }
                 }
-                else { isJumping = false; if (rig.velocity.y > 0) { rig.velocity = new Vector2(rig.velocity.x, -downwardJumpForce); } }
+                else { isJumping = false; if (rig.velocity.y > 0) { rig.velocity = new Vector2(rig.velocity.x, -downwardJumpForce) + xtraVel; } }
 
             }
             if (Input.GetButtonUp("Jump"))
@@ -144,7 +158,7 @@ public class PlayerMovement : MonoBehaviour
                 isJumping = false;
                 //rig.AddForce(Vector2.up * -5, ForceMode2D.Impulse);
                 if (rig.velocity.y > 0)
-                    rig.velocity = new Vector2(rig.velocity.x, -downwardJumpForce);
+                    rig.velocity = new Vector2(rig.velocity.x, -downwardJumpForce) + xtraVel;
             }
 
             if (rig.velocity.y < 0)
@@ -154,6 +168,15 @@ public class PlayerMovement : MonoBehaviour
             else if (rig.velocity.y > 0 && !(Input.GetButton("Jump")))
             { rig.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime; }
             #endregion
+
+            if (xtraVel.x > 0) xtraVel.x -= Time.deltaTime * 5;
+            if (xtraVel.y > 0) xtraVel.y -= Time.deltaTime * 5;
+            if (xtraVel.x < 0) xtraVel.x += Time.deltaTime * 5;
+            if (xtraVel.y < 0) xtraVel.y += Time.deltaTime * 5;
+            if (xtraVel.x < 8.5f && xtraVel.x > 0) xtraVel.x = 0;
+            if (xtraVel.y < 8.5f && xtraVel.x > 0) xtraVel.y = 0;
+            if (xtraVel.x > -8.5f && xtraVel.x < 0) xtraVel.x = 0;
+            if (xtraVel.y > -8.5f && xtraVel.x < 0) xtraVel.y = 0;
 
             //attack
             #region
@@ -165,7 +188,7 @@ public class PlayerMovement : MonoBehaviour
                 weaponAnimator.speed = weapon.weaponSpeed;
 
                 //Animation
-                if (y < 0) weaponAnimator.SetTrigger("Down");
+                if (y < 0) { weaponAnimator.SetTrigger("Down"); if (rig.velocity.y < -8) xtraVel.y = 1.5f; else xtraVel.y = .7f; }
                 else if (y > 0) weaponAnimator.SetTrigger("Up");
                 else if (x > 0 || facingRight) weaponAnimator.SetTrigger("Right");
                 else if (x < 0 || !facingRight) weaponAnimator.SetTrigger("Left");
