@@ -9,6 +9,7 @@ public class Walker : MonoBehaviour
     Rigidbody2D rig;
     Enemy enemyScript;
     public LayerMask groundLayer;
+    public SpriteRenderer sr;
 
     float xVel;
     public float jumpForce;
@@ -48,6 +49,8 @@ public class Walker : MonoBehaviour
         }
         grounded = IsGrounded();
         #endregion
+
+        sr.flipX = rig.velocity.x > 0;
 
         if (!enemyScript.takingKnockback)
         {

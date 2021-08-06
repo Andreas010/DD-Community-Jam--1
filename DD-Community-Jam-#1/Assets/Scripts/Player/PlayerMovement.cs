@@ -45,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
     bool facingRight;
     bool canInteract;
     bool wasGrounded;
+    bool canDash;
 
     //Current weapon params
     public Weapon weapon;
@@ -59,6 +60,8 @@ public class PlayerMovement : MonoBehaviour
         animator = transform.parent.GetComponent<Animator>();
         cam = transform.parent.GetComponentInChildren<Camera>().gameObject;
 
+        canDash = true;
+        
         UpdateEnergyCrystalsDisplay();
     }
 
@@ -107,11 +110,13 @@ public class PlayerMovement : MonoBehaviour
         //Dash
         #region
         Debug.Log(xtraVel.x);
-        if(Input.GetButtonDown("Dash")) 
+        if(Input.GetButtonDown("Dash") && canDash) 
         {
             Debug.Log("yuh");
             if(facingRight) xtraVel = new Vector2(xtraVel.x + dashForce, xtraVel.y);
             else xtraVel = new Vector2(xtraVel.x - dashForce, xtraVel.y);
+            canDash = false;
+            Invoke("DashCooldown", 1);
         }
         #endregion
 
@@ -223,6 +228,11 @@ public class PlayerMovement : MonoBehaviour
 
             eButton.SetActive(canInteract);
         }
+    }
+
+    void DashCooldown()
+    {
+        canDash = true;
     }
 
     public void UpgradeWeapon(float addDmg, float addCooldown, float addSpeed, float addKnockback)
