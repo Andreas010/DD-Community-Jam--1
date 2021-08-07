@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Stone Sword
   type: 0
   sprite: {fileID: 21300000, guid: e884377af15c68547ac8eaf58ef36b7a, type: 3}
-  weaponCooldown: 0.85
+  weaponCooldown: 0.7
   weaponSpeed: 0.7
   weaponDamage: 0.5
   weaponKnockback: 8

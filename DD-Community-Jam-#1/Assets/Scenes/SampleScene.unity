@@ -4049,43 +4049,133 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   options:
-  - name: Item Test 1
-    description: Hippedy hoppedy, pls work
-    price: 69
-    increaseOfPrice: 0
-    maxBuys: 0
-    image: {fileID: 2800000, guid: d9c8b203f86d4bb4b9ac2ae566f29eaf, type: 3}
-    onBuy:
-      m_PersistentCalls:
-        m_Calls: []
-  - name: Item Test 2
-    description: Hippedy hoppedy, pls work owo
-    price: 100
-    increaseOfPrice: 0
-    maxBuys: 0
-    image: {fileID: 2800000, guid: 5d48e50039334524c9d9dc045615a1f4, type: 3}
-    onBuy:
-      m_PersistentCalls:
-        m_Calls: []
-  - name: Item Test 3
-    description: Does it?
-    price: -1
-    increaseOfPrice: 0
-    maxBuys: 0
-    image: {fileID: 2800000, guid: 29d8b11eba8e86941abc32d5848acd7a, type: 3}
-    onBuy:
-      m_PersistentCalls:
-        m_Calls: []
-  - name: Item Test 4
-    description: May I have the water?
-    price: 999
-    increaseOfPrice: 0
-    maxBuys: 0
+  - name: Health Upgrade
+    description: 'Increase your health!
+
+
+      What did you expect?'
+    price: 5
+    increaseOfPrice: 1
+    maxBuys: 27
     image: {fileID: 2800000, guid: c60f3fad5d4fa6d41b32907bde5ed74a, type: 3}
     onBuy:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 713126525}
+          m_MethodName: UpgradeHealth
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 713126525}
+          m_MethodName: ModifyHealth
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: Attack Upgrade
+    description: Be stronger! Now you can punch... but BETTER!
+    price: 2
+    increaseOfPrice: 2
+    maxBuys: 10
+    image: {fileID: 2800000, guid: b19267a23643c2a40b4a80c459ddeac8, type: 3}
+    onBuy:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 713126519}
+          m_MethodName: UpgradeDamage
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0.5
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: Decrease Cooldown
+    description: 'Makes your weapon lighter, so it''s faster!
+
+      Don''t ask,
+      why it get''s lighter...'
+    price: 3
+    increaseOfPrice: 2
+    maxBuys: 10
+    image: {fileID: 2800000, guid: 3481d46ea7b2d6b4eb714abaff117c53, type: 3}
+    onBuy:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 713126519}
+          m_MethodName: UpgradeCooldown
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: -0.1
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: Upgrade Knockback
+    description: 'You hit enemies so hard, they FLY!!!
+
+
+      Wait, doesn''t that
+      do strength too?'
+    price: 2
+    increaseOfPrice: 2
+    maxBuys: 20
+    image: {fileID: 2800000, guid: e884377af15c68547ac8eaf58ef36b7a, type: 3}
+    onBuy:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 713126519}
+          m_MethodName: UpgradeKnockback
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0.5
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: Upgrade Speed
+    description: 'You hit enemies so hard, they FLY!!!
+
+
+      Wait, doesn''t that
+      do strength too?'
+    price: 2
+    increaseOfPrice: 2
+    maxBuys: 20
+    image: {fileID: 2800000, guid: 29d8b11eba8e86941abc32d5848acd7a, type: 3}
+    onBuy:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 713126519}
+          m_MethodName: UpgradeSpeed
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0.25
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   isOpen: 0
+  player: {fileID: 713126519}
 --- !u!1 &1075074733
 GameObject:
   m_ObjectHideFlags: 0

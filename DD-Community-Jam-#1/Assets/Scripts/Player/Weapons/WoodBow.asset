@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04344bb28e6ea6b499bd9677043f6938, type: 3}
   m_Name: WoodBow
   m_EditorClassIdentifier: 
-  name: 
+  name: Bow
   type: 1
   sprite: {fileID: -51108053034676142, guid: 0cc961223a24d8c4095b30064f5a19af, type: 3}
-  weaponCooldown: 0.6
+  weaponCooldown: 0.7
   weaponSpeed: 0.7
   weaponDamage: 0.25
   weaponKnockback: 7

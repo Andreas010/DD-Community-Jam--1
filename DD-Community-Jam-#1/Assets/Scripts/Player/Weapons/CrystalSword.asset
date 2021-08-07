@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Crystal Sword
   type: 1
   sprite: {fileID: 21300000, guid: 1cf955c4fe74a7845a6de74b3317ff50, type: 3}
-  weaponCooldown: 0.7
+  weaponCooldown: 0.65
   weaponSpeed: 0.9
   weaponDamage: 1.25
   weaponKnockback: 8

@@ -52,6 +52,18 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public float weaponDamage = .5f;
     [HideInInspector] public float weaponKnockback = 8;
 
+    public struct WeaponExtras
+    {
+        public float damage;
+        public float cooldown;
+        public float speed;
+        public float knockdown;
+        public float bulletSpeed;
+        public float bulletDamage;
+    }
+
+    public Dictionary<Weapon, WeaponExtras> updateValues;
+
     void Start()
     {
         ph = GetComponent<PlayerHealth>();
@@ -59,6 +71,8 @@ public class PlayerMovement : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         animator = transform.parent.GetComponent<Animator>();
         cam = transform.parent.GetComponentInChildren<Camera>().gameObject;
+
+        updateValues = new Dictionary<Weapon, WeaponExtras>();
 
         canDash = true;
         
@@ -109,7 +123,6 @@ public class PlayerMovement : MonoBehaviour
 
         //Dash
         #region
-        Debug.Log(xtraVel.x);
         if(Input.GetButtonDown("Dash") && canDash) 
         {
             Debug.Log("yuh");
@@ -185,12 +198,23 @@ public class PlayerMovement : MonoBehaviour
 
             //attack
             #region
-            if (Input.GetButton("Fire1") && atkCooldown <= 0 && inventory.CanAttack() && !inventory.isInventory && !ConsoleManager.instance.isConsole)
+
+            float addCooldown = 0;
+            if (updateValues.ContainsKey(weapon))
+                addCooldown = updateValues[weapon].cooldown;
+
+            if (Input.GetButton("Fire1") && atkCooldown + addCooldown <= 0 && inventory.CanAttack() && !inventory.isInventory && !ConsoleManager.instance.isConsole)
             {
                 //Set params
                 //weaponCooldownSlider.maxValue = weapon.weaponCooldown;
-                atkCooldown = weapon.weaponCooldown;
-                weaponAnimator.speed = weapon.weaponSpeed;
+
+                atkCooldown = weapon.weaponCooldown + addCooldown;
+
+                float addSpeed = 0;
+                if (updateValues.ContainsKey(weapon))
+                    addSpeed = updateValues[weapon].speed;
+
+                weaponAnimator.speed = weapon.weaponSpeed + addSpeed;
 
                 //Animation
                 if (y < 0) { weaponAnimator.SetTrigger("Down"); if (rig.velocity.y < -8) xtraVel.y = 1.5f; else xtraVel.y = .7f; }
@@ -203,8 +227,18 @@ public class PlayerMovement : MonoBehaviour
                     GameObject b = Instantiate(bulletPrefab, weaponScript.gameObject.transform.position, Quaternion.identity);
                     b.transform.parent = transform.parent;
                     bulletPrefab.GetComponent<SpriteRenderer>().sprite = weapon.bulletSprite;
-                    bulletPrefab.GetComponent<Bullet>().speed = weapon.bulletSpeed;
-                    bulletPrefab.GetComponent<Bullet>().damage = weapon.bulletDamage;
+
+                    float addBulletSpeed = 0;
+                    if (updateValues.ContainsKey(weapon))
+                        addBulletSpeed = updateValues[weapon].bulletSpeed;
+
+                    bulletPrefab.GetComponent<Bullet>().speed = weapon.bulletSpeed + addBulletSpeed;
+
+                    float addBulletDamage = 0;
+                    if (updateValues.ContainsKey(weapon))
+                        addBulletDamage = updateValues[weapon].bulletDamage;
+
+                    bulletPrefab.GetComponent<Bullet>().damage = weapon.bulletDamage + addBulletDamage;
                 }
             }
 
@@ -235,14 +269,30 @@ public class PlayerMovement : MonoBehaviour
         canDash = true;
     }
 
+    public void UpgradeDamage(float value) => UpgradeWeapon(value, 0, 0, 0);
+    public void UpgradeCooldown(float value) => UpgradeWeapon(0, value, 0, 0);
+    public void UpgradeSpeed(float value) => UpgradeWeapon(0, 0, value, 0);
+    public void UpgradeKnockback(float value) => UpgradeWeapon(0, 0, 0, value);
+
     public void UpgradeWeapon(float addDmg, float addCooldown, float addSpeed, float addKnockback)
     {
-        weapon.weaponDamage += addDmg;
-        weapon.weaponCooldown += addCooldown;
-        weapon.weaponSpeed += addSpeed;
-        weapon.weaponKnockback += addKnockback;
-        if (weapon.weaponCooldown < .15f) weapon.weaponCooldown = .15f;
-        energyCrystals -= 5;
+        if (updateValues.ContainsKey(weapon))
+        {
+            WeaponExtras stats = updateValues[weapon];
+
+            stats.damage += addDmg;
+            stats.cooldown += addCooldown;
+            stats.speed += addSpeed;
+            stats.knockdown += addKnockback;
+            if (stats.cooldown < .15f) stats.cooldown += .15f;
+        } else
+        {
+            WeaponExtras stats = new WeaponExtras();
+
+            updateValues.Add(weapon, stats);
+        }
+
+
     }
 
     void ChangeWeapon(Weapon newWeapon)

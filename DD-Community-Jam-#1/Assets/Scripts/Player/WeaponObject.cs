@@ -26,11 +26,15 @@ public class WeaponObject : MonoBehaviour
         if (collision.gameObject.layer == 10 && canAtk && inventory.CanAttack())
         {
             canAtk = false;
-            collision.GetComponent<Enemy>().rig.AddForce((collision.gameObject.transform.position - transform.position) * pm.weapon.weaponKnockback, ForceMode2D.Impulse);
-            collision.GetComponent<Enemy>().rig.AddForce(Vector2.up * pm.weapon.weaponKnockback, ForceMode2D.Impulse);
+
+            PlayerMovement.WeaponExtras stats;
+            pm.updateValues.TryGetValue(pm.weapon, out stats);
+
+            collision.GetComponent<Enemy>().rig.AddForce((collision.gameObject.transform.position - transform.position) * (pm.weapon.weaponKnockback + stats.knockdown), ForceMode2D.Impulse);
+            collision.GetComponent<Enemy>().rig.AddForce(Vector2.up * (pm.weapon.weaponKnockback + stats.knockdown), ForceMode2D.Impulse);
             collision.GetComponent<Enemy>().TakeKnockback();
-            collision.GetComponentInParent<Enemy>().UpdateHealth(-pm.weapon.weaponDamage);
-            Invoke(nameof(CanAtkTrue), .2f);
+            collision.GetComponentInParent<Enemy>().UpdateHealth(-(pm.weapon.weaponDamage + stats.damage));
+            Invoke(nameof(CanAtkTrue), pm.weapon.weaponCooldown + stats.cooldown);
         }
     }
 

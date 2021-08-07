@@ -32,6 +32,8 @@ public class ShopManager : MonoBehaviour
     private Button upArrow;
     private Button downArrow;
 
+    public PlayerMovement player;
+
     void Awake() => instance = this;
 
     void Start()
@@ -80,8 +82,16 @@ public class ShopManager : MonoBehaviour
             return;
 
         description.text = options[newIndex].description;
-        if(oldIndex == newIndex)
+        description.text += "\n\nLeft: " + options[newIndex].maxBuys;
+        if(oldIndex == newIndex && options[newIndex].price <= player.energyCrystals && options[newIndex].maxBuys > 0)
+        {
             options[newIndex].onBuy.Invoke();
+            options[newIndex].maxBuys--;
+            player.energyCrystals -= options[newIndex].price;
+            player.UpdateEnergyCrystalsDisplay();
+            options[newIndex].price += options[newIndex].increaseOfPrice;
+            UpdateUI();
+        }
         oldIndex = newIndex;
     }
 
@@ -116,19 +126,19 @@ public class ShopManager : MonoBehaviour
         int newIndex = curIndex + 0;
 
         option1_name.text = options[newIndex].name;
-        option1_price.text = options[newIndex].price.ToString();
+        option1_price.text = (options[newIndex].maxBuys == -1 ? "??" : options[newIndex].price.ToString());
         option1_icon.texture = options[newIndex].image;
 
         newIndex = curIndex + 1;
 
         option2_name.text = options[newIndex].name;
-        option2_price.text = options[newIndex].price.ToString();
+        option2_price.text = (options[newIndex].maxBuys == -1 ? "??" : options[newIndex].price.ToString());
         option2_icon.texture = options[newIndex].image;
 
         newIndex = curIndex + 2;
 
         option3_name.text = options[newIndex].name;
-        option3_price.text = options[newIndex].price.ToString();
+        option3_price.text = (options[newIndex].maxBuys == -1 ? "??" : options[newIndex].price.ToString());
         option3_icon.texture = options[newIndex].image;
     }
 }
