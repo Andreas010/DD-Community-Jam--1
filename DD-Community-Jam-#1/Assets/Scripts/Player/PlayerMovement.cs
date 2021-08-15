@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
 
     [HideInInspector] public Vector4 costForUpgrade = new Vector4(5, 5, 5, 5);
 
-    [System.NonSerialized] public int energyCrystals = 999;
+    [System.NonSerialized] public int energyCrystals = 0;
 
     //bools
     bool sprinting;
