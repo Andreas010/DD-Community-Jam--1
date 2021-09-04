@@ -168,6 +168,10 @@ public class Inventory : MonoBehaviour
             case Item.ItemType.Block:
                 terrainType = item.scriptObject as StoneRender;
                 break;
+            case Item.ItemType.Resource:
+                player.GetComponent<PlayerMovement>().energyCrystals++;
+                player.GetComponent<PlayerMovement>().UpdateEnergyCrystalsDisplay();
+                return;
             default:
                 break;
         }

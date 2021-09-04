@@ -164,12 +164,15 @@ namespace DD_JAM.LevelGeneration
 
                     if (!isChosen || transform.position == Vector3.zero)
                     {
-                        if(curLevel[x, y] == oreRenderer.internalValue)
-                        {
-                            tilemap.SetTile(pos, CalculateTile(oreRenderer, x, y));
-                        }
-                        else
-                            tilemap.SetTile(pos, CalculateTile(render, x, y));
+                        //if(curLevel[x, y] == oreRenderer.internalValue)
+                        //{
+                        //tilemap.SetTile(pos, CalculateTile(oreRenderer, x, y));
+
+                        //}
+                        //else
+                        //    tilemap.SetTile(pos, CalculateTile(render, x, y));
+
+                        tilemap.SetTile(pos, CalculateTile(curLevel[x, y].render, x, y));
                     }
 
                     else if (isChosen)
@@ -190,12 +193,14 @@ namespace DD_JAM.LevelGeneration
                         }
                         else
                         {
-                            if (curLevel[x, y] == oreRenderer.internalValue)
-                            {
-                                tilemap.SetTile(pos, CalculateTile(oreRenderer, x, y));
-                            }
-                            else
-                                tilemap.SetTile(pos, CalculateTile(render, x, y));
+                            //if (curLevel[x, y] == oreRenderer.internalValue)
+                            //{
+                            //    tilemap.SetTile(pos, CalculateTile(oreRenderer, x, y));
+                            //}
+                            //else
+                            //    tilemap.SetTile(pos, CalculateTile(render, x, y));
+
+                            tilemap.SetTile(pos, CalculateTile(curLevel[x, y].render, x, y));
                         }
                     }
                 }
