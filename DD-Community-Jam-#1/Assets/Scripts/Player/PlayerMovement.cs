@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
 
     [HideInInspector] public Vector4 costForUpgrade = new Vector4(5, 5, 5, 5);
 
-    [System.NonSerialized] public int energyCrystals = 5;
+    [System.NonSerialized] public int energyCrystals = 0;
 
     //bools
     bool sprinting;
@@ -222,10 +222,10 @@ public class PlayerMovement : MonoBehaviour
                 else if (x > 0 || facingRight) weaponAnimator.SetTrigger("Right");
                 else if (x < 0 || !facingRight) weaponAnimator.SetTrigger("Left");
 
-                if(weapon.type == Weapon.WeaponType.Ranged)
+                if(weapon.type.ToString() == "Ranged")
                 {
-                    //GameObject b = Instantiate(bulletPrefab, weaponScript.gameObject.transform.position, Quaternion.identity);
-                    //b.transform.parent = transform.parent;
+                    GameObject b = Instantiate(bulletPrefab, weaponScript.gameObject.transform.position, Quaternion.identity);
+                    b.transform.parent = transform.parent;
                     bulletPrefab.GetComponent<SpriteRenderer>().sprite = weapon.bulletSprite;
 
                     float addBulletSpeed = 0;
@@ -239,9 +239,6 @@ public class PlayerMovement : MonoBehaviour
                         addBulletDamage = updateValues[weapon].bulletDamage;
 
                     bulletPrefab.GetComponent<Bullet>().damage = weapon.bulletDamage + addBulletDamage;
-
-                    GameObject b = Instantiate(bulletPrefab, weaponScript.gameObject.transform.position, Quaternion.identity);
-                    b.transform.parent = transform.parent;
                 }
             }
 
